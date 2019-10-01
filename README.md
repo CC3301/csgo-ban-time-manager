@@ -1,0 +1,1 @@
+# CSGO Ban Time manager
