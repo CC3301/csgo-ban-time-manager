@@ -8,7 +8,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use DBI;
 
 # make the database handle, for now sqlite3
-my $dbfile = "../../data/database.db";
+my $dbfile = "../../../data/cooldowns.db";
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "");
 
 my $exec = "

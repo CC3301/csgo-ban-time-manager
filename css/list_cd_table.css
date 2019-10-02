@@ -1,0 +1,35 @@
+#victimlist {
+  font-family: Arial;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#victimlist td, #victimlist th {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+#victimlist tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#victimlist tr:hover {
+  background-color: red;
+  color: white;
+}
+
+#victimlist th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: black;
+  color: white;
+}
+
+#victimlist a {
+  color: black;
+}
+
+#victimlist a:hover {
+  color: white;
+}
