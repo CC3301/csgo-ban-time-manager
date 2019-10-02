@@ -1,22 +1,83 @@
-body {
-  background-color: slategrey;
-  font-family: cursive;
+
+/* MAIN SECTION */
+.main {
+  margin-left: 160px;
+  padding: 0px 10px;
 }
 
 h1 {
   text-align: center;
-  font-size: 40px;
-  text-shadow:
-     0 1px 0 hsl(15,40%,60%),
-     0 1px 0 hsl(15,40%,58%),
-     0 3px 0 hsl(15,40%,56%),
-     0 4px 0 hsl(15,40%,54%),
-     0 5px 0 hsl(15,40%,52%),
-     0 6px 1px hsl(15,40%,50%),
-     0 0 5px hsl(15,20%,60%),
-     0 1px 3px hsl(15,20%,58%),
-     0 3px 5px hsl(15,20%,56%),
-     0 5px 10px hsl(15,20%,54%),
-     0 10px 10px hsl(15,20%,52%),
-     0 15px 15px hsl(15,20%,50%);
+  font-size: 300%;
+}
+
+h2 {
+  text-align: center;
+  font-size: 200%;
+}
+
+h3 {
+  text-align: left;
+  font-size: 100%;
+}
+
+/* NAVBAR */
+.navbar {
+  overflow: hidden;
+  background-color: black;
+  font-family: Arial;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }
