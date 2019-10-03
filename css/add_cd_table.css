@@ -1,0 +1,14 @@
+#victimadd {
+  font-family: Arial;
+  width: 400px;
+}
+
+#victimadd tr:hover {
+  background-color: red;
+  color: white;
+}
+
+#victimadd th {
+  background-color: white;
+  color: black;
+}
