@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use CGI;
-use CGI::Carp qw(fatalsToBrowser);
+use CGI::Carp qw(fatalsToBrowser warningsToBrowser);
 use DBI;
 use JSON;
 use LWP::Simple;
@@ -13,26 +13,30 @@ use Data::Dumper;
 # make the database handle, for now sqlite3
 my $dbfile = "../../../data/cooldowns.db";
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "");
+my $exec = undef;
+
+# check for init and init the database
+if ($ARGV[0] eq 'init') {
+  $exec = "
+  CREATE TABLE cooldowns(
+    steam_username VARCHAR,
+    steam_id64 INTEGER,
+    steam_avatar_url VARCHAR,
+    steam_cooldowntime INTEGER,
+    steam_cooldownreason VARCHAR,
+    steam_profile_visibility VARCHAR,
+    UNIQUE(steam_id64)
+  )
+  ";
+  $exec = $dbh->prepare($exec);
+  $exec->execute();
+  exit();
+}
 
 # steam api key
-open(my $fh, '<<', "data/api_key.txt") or die "Failed to read steam api key";
+open(my $fh, '<', "../../../data/api_key.txt") or die "Failed to read steam api key: $!";
   my $steam_api_key = <$fh>;
 close $fh; 
-
-# init db
-my $exec = "
-CREATE TABLE cooldowns(
-  steam_username VARCHAR,
-  steam_id64 INTEGER,
-  steam_avatar_url VARCHAR,
-  steam_cooldowntime INTEGER,
-  steam_cooldownreason VARCHAR,
-  UNIQUE(steam_id64)
-)
-";
-#$exec = $dbh->prepare($exec);
-#$exec->execute();
-#exit();
 
 # start the html/cgi part
 my $query = new CGI;
@@ -61,10 +65,76 @@ my $steam_api_response = get("http://api.steampowered.com/ISteamUser/GetPlayerSu
 $steam_api_response = decode_json($steam_api_response);
 my $steam_avatar_url = $steam_api_response->{response}->{players}[0]->{avatarmedium};
 my $steam_username   = $steam_api_response->{response}->{players}[0]->{personaname};
+my $steam_profile_visibility = $steam_api_response->{response}->{players}[0]->{communityvisibilitystate};
 
-# add to database
-$exec = $dbh->prepare(qq(INSERT INTO cooldowns(steam_username, steam_id64, steam_avatar_url, steam_cooldowntime, steam_cooldownreason) VALUES ('$steam_username', '$steam_id64', '$steam_avatar_url', '$steam_cooldowntime', '$steam_cooldownreason');));
+# define communityvisibilitystates
+my %communityvisibilitystates = (
+  1 => 'Private',
+  2 => 'Friends Only',
+  3 => 'Public',
+);
+$steam_profile_visibility = $communityvisibilitystates{$steam_profile_visibility};
+
+
+# check if we have a entry with the same steam_id64
+$exec = "
+  SELECT steam_id64 FROM cooldowns WHERE steam_id64 = $steam_id64;
+";
+$exec = $dbh->prepare($exec);
 $exec->execute();
+
+# get id if there is a matching one
+my @ids = ();
+while (my @row = $exec->fetchrow_array){
+  push @ids, join(", ", @row);
+}
+
+# check for if the id already exists
+if ($steam_id64 == $ids[0]) {
+
+  # read old cooldowntime
+  my @cooldowntime = ();
+  $exec = "
+    SELECT steam_cooldowntime FROM cooldowns WHERE steam_id64 = $steam_id64;
+  ";
+  $exec = $dbh->prepare($exec);
+  $exec->execute();
+
+
+  while (my @row = $exec->fetchrow_array) {
+    push @cooldowntime, join (", ", @row);
+  }
+  $steam_cooldowntime = $steam_cooldowntime + $cooldowntime[0];
+
+  # read old reasons
+  my @cooldownreasons = ();
+  $exec = "
+    SELECT steam_cooldownreason FROM cooldowns WHERE steam_id64 = $steam_id64;
+  ";
+  $exec = $dbh->prepare($exec);
+  $exec->execute();
+
+  while (my @row = $exec->fetchrow_array) {
+    push @cooldownreasons, join (", ", @row);
+  }
+  $steam_cooldownreason = $steam_cooldownreason . "</br>$cooldownreasons[0]";
+
+  # write updated data
+  $exec = "
+    UPDATE cooldowns SET steam_cooldowntime = '$steam_cooldowntime', steam_avatar_url = '$steam_avatar_url', steam_username = '$steam_username', steam_profile_visibility = '$steam_profile_visibility', steam_cooldownreason = '$steam_cooldownreason' WHERE steam_id64 = '$steam_id64';
+  ";
+  $exec = $dbh->prepare($exec);
+  $exec->execute();
+
+} else {
+
+  # we dont have the id, so we add a new victim, thus all the data needs to be saved
+  $exec = "
+    INSERT INTO cooldowns(steam_username, steam_id64, steam_avatar_url, steam_cooldowntime, steam_cooldownreason, steam_profile_visibility) VALUES ('$steam_username', '$steam_id64', '$steam_avatar_url', '$steam_cooldowntime', '$steam_cooldownreason', '$steam_profile_visibility');
+  ";
+  $exec = $dbh->prepare($exec);
+  $exec->execute();
+}
 
 # print success and redirect to other page
 print $query->redirect(

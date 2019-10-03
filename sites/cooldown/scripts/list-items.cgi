@@ -152,7 +152,7 @@ if(!$query->param()) {
         print $data[0];
       print $query->end_td();
       print $query->start_td();
-        print "<a target=\"_blank\" href=\"http://steamcommunity.com/profiles/$data[1]\">Profile</a>";
+        print "<a target=\"_blank\" href=\"http://steamcommunity.com/profiles/$data[1]\">Profile ($data[5])</a>";
       print $query->end_td();
       print $query->start_td();
         print $data[1];
