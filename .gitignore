@@ -1,3 +1,2 @@
 data/api_key.txt
-data/cooldowns.db
-data/vacs.db
+data/*
