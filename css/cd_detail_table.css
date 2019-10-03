@@ -1,0 +1,18 @@
+#victimdetail {
+  font-family: Arial;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#victimdetail td, #victimdetail th {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+#victimdetail th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: black;
+  color: white;
+}

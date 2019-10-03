@@ -4,20 +4,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta http-equiv="refresh" content="2; url=../../index.html">
   <link rel="stylesheet" type="text/css" href="../../css/main.css">
+  <link rel="stylesheet" type="text/css" href="../../css/add_cd_table.css">
   <title>Add ban victim</title>
 </head>
 <body>
-  <h1>Add victim</h1>
-  <div class="add_victim">
-    <form action="scripts/add-item.cgi" method="POST">
-      <font size="2" color="grey">Steam ID64: </font> <input type="text" name="steam_id64" value="123456789" size="20" maxlength="50"/>
-      </br>
-      <font size="2" color="grey">Steam Username: </font> <input type="text" name="steam_username" value="Steam Username" size="20" maxlength="50"/>
-      </br>
-      <input type="submit" value="Add victim"/>
-    </form>
+<div class="navbar">
+    <a href="../../index.html">Start</a>
+    <div class="dropdown">
+      <button class="dropbtn">Cooldown
+        <i class="fa fa-caret-down">
+      </button>
+      <div class="dropdown-content">
+        <a href="../../sites/cooldown/add.html">Add victims</a>
+        <a href="../../sites/cooldown/scripts/list-items.cgi">List victims</a>
+      </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">VAC
+          <i class="fa fa-caret-down">
+        </button>
+        <div class="dropdown-content">
+          <a href="../../sites/vac/add.html">Add suspects</a>
+          <a href="../../sites/vac/list.html">List suspects</a>
+        </div>
+      </div>
+  </div>
+  <div class="main">
+    <h1>Add victim</h1>
+    <div class="add_victim">
+        <form action="scripts/add-item.cgi" method="POST">
+          <table id="victimadd">
+            <tr>
+              <td>
+                <font>Steam ID64: </font>
+              </td>
+              <td>
+                <input type="text" name="steam_id64" value="" size="20" maxlength="50"/>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <font>Cooldown Time: </font>
+              </td>
+              <td>
+                  <select name="steam_cooldowntime">
+                    <option value="30">30 Minute cooldown</option>
+                    <option value="120">2 Hour cooldown</option>
+                    <option value="1500">24 Hour cooldown</option>
+                    <option value="10500">7 Day cooldown</option>
+                  </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <font>Ban Reason (description): </font>
+              </td>
+              <td>
+                <select name="steam_cooldownreason">
+                  <option value="this pussy rage quitted">Rage Quit</option>
+                  <option value="too much teamdamage">Team damage</option>
+                  <option value="killed to many teammates">Team kills</option>
+                  <option value="went AFK, got kicked and cooldown after 3 minutes">AFK Timeout</option>
+                  <option value="we dunno">Other</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                </br><input type="submit" value="Add victim"/>
+              </th>
+            </tr>        
+          </table>  
+        </form>
+      </div>  
   </div>
 </body>
 </html>
