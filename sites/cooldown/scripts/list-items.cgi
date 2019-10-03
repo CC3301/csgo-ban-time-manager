@@ -8,7 +8,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use DBI;
 
 # make the database handle, for now sqlite3
-my $dbfile = "../../../data/cooldowns.db";
+my $dbfile = "..\\..\\..\\data\\cooldowns.db";
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "");
 
 # make the html part

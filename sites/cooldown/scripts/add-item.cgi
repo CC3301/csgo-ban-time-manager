@@ -11,7 +11,7 @@ use LWP::Simple;
 use Data::Dumper;
 
 # make the database handle, for now sqlite3
-my $dbfile = "../../../data/cooldowns.db";
+my $dbfile = "..\\..\\..\\data\\cooldowns.db";
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "");
 my $exec = undef;
 
