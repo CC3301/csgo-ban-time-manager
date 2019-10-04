@@ -28,8 +28,8 @@ if (!$query->param('steam_id64')) {
 print $query->start_html({
   -title => $title,
   -head => CGI::Link({-rel => 'stylesheet', -type => 'text/css', -href => '../../../css/main.css'})
-    . CGI::Link({-rel => 'stylesheet', -type => 'text/css', -href => '../../../css/list_cd_table.css'})
-    . CGI::Link({-rel => 'stylesheet', -type => 'text/css', -href => '../../../css/cd_detail_table.css'}
+    . CGI::Link({-rel => 'stylesheet', -type => 'text/css', -href => '../../../css/list_vb_table.css'})
+    . CGI::Link({-rel => 'stylesheet', -type => 'text/css', -href => '../../../css/vb_detail_table.css'}
   ),
 });
 
@@ -61,7 +61,7 @@ print "<div class=\"navbar\">
 if(!$query->param()) {
 
   # read database, and store into table
-  my $exec = qq(SELECT steam_id64 FROM cooldowns;);
+  my $exec = qq(SELECT steam_id64 FROM vacs;);
   $exec = $dbh->prepare($exec);
   $exec->execute();
 
@@ -74,12 +74,12 @@ if(!$query->param()) {
   }
 
   # headline
-  print "<center><h1>List of all steam id's and data for cooldown (total: $counter)</h1></center>";
+  print "<center><h1>List of all steam id's and data of suspects (total: $counter)</h1></center>";
   print $query->br();
 
   # print the table
   print $query->start_table(
-    {-id => "victimlist" }
+    {-id => "suspectlist" }
   );
     # table head
     print $query->start_Tr();
@@ -98,7 +98,7 @@ if(!$query->param()) {
           print $steam_id64;
         print $query->end_td();
         print $query->start_td();
-          print "<a href=\"list-items.cgi?steam_id64=$steam_id64\">Details</a>";
+          print "<a href=\"list-suspects.cgi?steam_id64=$steam_id64\">Details</a>";
         print $query->end_td();
       print $query->end_Tr();
     }
@@ -108,7 +108,7 @@ if(!$query->param()) {
 
 } else {
   my $steam_id64 = $query->param('steam_id64');
-  my $exec = "SELECT * FROM cooldowns WHERE steam_id64 = $steam_id64;";
+  my $exec = "SELECT * FROM vacs WHERE steam_id64 = $steam_id64;";
   $exec = $dbh->prepare($exec);
   $exec->execute();
 
@@ -122,7 +122,7 @@ if(!$query->param()) {
 
   # detail table
   print $query->start_table(
-    { -id => "victimdetail" },
+    { -id => "suspectdetail" },
   );
 
     # table head
@@ -137,10 +137,16 @@ if(!$query->param()) {
         print "Steam 64 ID";
       print $query->end_th();
       print $query->start_th();
-        print "Cooldown Time";
+        print "VAC ban";
       print $query->end_th();
       print $query->start_th();
-        print "Cooldown Reason";
+        print "Game ban";
+      print $query->end_th();
+      print $query->start_th();
+        print "Trade Ban";
+      print $query->end_th();
+      print $query->start_th();
+        print "Community Ban";
       print $query->end_th();
       print $query->start_th();
         print "Last modified";
@@ -156,25 +162,44 @@ if(!$query->param()) {
         print $data[1];
       print $query->end_td();
       print $query->start_td();
-        print "<a target=\"_blank\" href=\"http://steamcommunity.com/profiles/$data[0]\">Profile ($data[5])</a>";
+        print "<a target=\"_blank\" href=\"http://steamcommunity.com/profiles/$data[0]\">Profile ($data[7])</a>";
       print $query->end_td();
       print $query->start_td();
         print $data[0];
       print $query->end_td();
       print $query->start_td();
-        print int ($data[2]) . " Minutes</br>";
-        print int ($data[2] / 60) . " Hour(s)</br>";
-        print int ($data[2] / 60 / 24) . " Day(s)</br>";
-        print int ($data[2] / 60 / 24 / 7) . " Week(s)</br>";
+        if ($data[2]){
+          print "<font color=\"red\">&#10008</font>($data[2])";
+        } else {
+          print "<font color=\"green\">&#10004</font>";
+        }
       print $query->end_td();
       print $query->start_td();
-        print $data[3];
+        if ($data[3]){
+          print "<font color=\"red\">&#10008</font>($data[3])";
+        } else {
+          print "<font color=\"green\">&#10004</font>";
+        }
       print $query->end_td();
       print $query->start_td();
-        print $data[6];
+        if ($data[4]){
+          print "<font color=\"red\">&#10008</font>($data[4])";
+        } else {
+          print "<font color=\"green\">&#10004</font>";
+        }
       print $query->end_td();
       print $query->start_td();
-        print "<img src=\"$data[4]\" alt=\"avatar_img\" align=\"middle\">";
+        if ($data[5]){
+          print "<font color=\"red\">&#10008</font>($data[5])";
+        } else {
+          print "<font color=\"green\">&#10004</font>";
+        }
+      print $query->end_td();
+      print $query->start_td();
+        print $data[8];
+      print $query->end_td();
+      print $query->start_td();
+        print "<img src=\"$data[6]\" alt=\"avatar_img\" align=\"middle\">";
       print $query->end_td();
     print $query->end_Tr();
 

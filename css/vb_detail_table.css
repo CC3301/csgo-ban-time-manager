@@ -1,0 +1,18 @@
+#suspectdetail {
+  font-family: Arial;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#suspectdetail td, #suspectdetail th {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+#suspectdetail th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: black;
+  color: white;
+}
