@@ -37,7 +37,7 @@ if ($ARGV[0] eq 'init') {
 open(my $fh, '<', "../../../data/api_key.txt") or die "Failed to read steam api key: $!";
   my $steam_api_key = <$fh>;
 close $fh; 
-
+chomp $steam_api_key;
 # start the html/cgi part
 my $query = new CGI;
 
