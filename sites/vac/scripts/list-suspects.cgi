@@ -98,7 +98,7 @@ if(!$query->param()) {
           print $steam_id64;
         print $query->end_td();
         print $query->start_td();
-          print "<a href=\"list-suspects.cgi?steam_id64=$steam_id64\">Details</a>";
+          print "<form action=\"list-suspects.cgi\" method=\"post\" id=\"form$steam_id64.1\"><input type=\"hidden\" value=\"$steam_id64\" name=\"steam_id64\"/></form><form action=\"add-suspect.cgi\" method=\"post\" id=\"form$steam_id64.2\"><input type=\"hidden\" value=\"$steam_id64\" name=\"steam_id64\"/></form><button type=\"submit\" form=\"form$steam_id64.1\" value=\"submit\">Details</button><button type=\"submit\" form=\"form$steam_id64.2\" value=\"submit\">Refresh data</button>";
         print $query->end_td();
       print $query->end_Tr();
     }
