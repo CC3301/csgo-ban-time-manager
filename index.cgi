@@ -80,7 +80,7 @@ sub Main() {
           <i class=\"fa fa-caret-down\">
         </button>
         <div class=\"dropdown-content\">
-          <a href=\"\sites/vac/add.html\">Add suspects</a>
+          <a href=\"sites/vac/add.html\">Add suspects</a>
           <a href=\"sites/vac/scripts/list-suspects.cgi\">List suspects</a>
         </div>
       </div>
