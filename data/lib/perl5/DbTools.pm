@@ -32,7 +32,7 @@ package DbTools {
     # create the database handle
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     unless( -r $dbfile && -w $dbfile ) {
-      die("Failed to acces database: permission denied or file does not exist");
+      die("Failed to acces database: permission denied or file does not exist($dbfile)");
     }
     my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", "", "");
 

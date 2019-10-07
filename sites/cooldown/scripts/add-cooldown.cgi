@@ -1,5 +1,5 @@
-#!C:\Strawberry\perl\bin\perl.exe
 #!/usr/bin/perl
+#!C:\Strawberry\perl\bin\perl.exe
 
 ################################################################################
 # add a issued cooldown
