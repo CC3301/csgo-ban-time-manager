@@ -79,7 +79,7 @@ sub Main() {
       steam_avatar_url = '$steam_avatar_url',
       steam_profile_visibility = '$steam_profile_visibility',
       steam_last_modified = '$steam_last_modified'
-      ;
+      WHERE steam_id64 = '$steam_id64';
     ";
     $query = $dbh->prepare($query);
     $query->execute();
