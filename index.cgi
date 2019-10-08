@@ -96,9 +96,6 @@ sub Main() {
 
   # headline
   print $cgi->br();
-  print $cgi->br();
-  print $cgi->br();
-  print $cgi->br();
 
 
   # print the cooldown table
