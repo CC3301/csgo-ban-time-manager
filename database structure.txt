@@ -1,0 +1,33 @@
+btm.db:
+	table(cooldowns):
+		column(steam_id64): INTEGER, UNIQUE
+		column(steam_username): VARCHAR
+		column(steam_cooldown_time): INTEGER
+		column(steam_cooldown_reason): VARCHAR
+		column(steam_avatar_url): VARCHAR
+		column(steam_profile_visibility): INTEGER
+		column(steam_last_modified): VARCHAR
+
+	table(vacs):
+		column(steam_id64): INTEGER, UNIQUE
+    column(steam_username): VARCHAR
+		column(steam_ban_vac): BOOLEAN
+		column(steam_ban_trade): BOOLEAN
+		column(steam_ban_community): BOOLEAN
+		column(steam_ban_game): BOOLEAN
+		column(steam_avatar_url): VARCHAR
+		column(steam_profile_visibility): INTEGER
+		column(steam_last_modified): VARCHAR
+
+	table(statistics):
+		column(cooldown_reason_team_kills_at_round_start): INTEGER
+		column(cooldown_reason_team_kills): INTEGER
+		column(cooldown_reason_team_damage): INTEGER
+		column(cooldown_reason_rage_quit): INTEGER
+		column(cooldown_reason_team_afk_timeout): INTEGER
+		column(ban_vac): INTEGER
+		column(ban_game): INTEGER
+		column(ban_trade): INTEGER
+		column(ban_community): INTEGER
+		column(cooldown_time_total): INTEGER
+		column(cooldown_users_total): INTEGER

@@ -1,0 +1,23 @@
+#statistics {
+  font-family: Arial;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#statistics td, #statistics th {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+#statistics th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: black;
+  color: white;
+}
+
+#statistics tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
