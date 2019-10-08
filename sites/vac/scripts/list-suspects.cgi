@@ -88,6 +88,9 @@ if(!$query->param()) {
         print "STEAM 64 ID";
       print $query->end_th();
       print $query->start_th();
+        print "STEAM PROFILENAME";
+      print $query->end_th();
+      print $query->start_th();
         print "Details";
       print $query->end_th();
     print $query->end_Tr();
@@ -97,6 +100,15 @@ if(!$query->param()) {
       print $query->start_Tr();
         print $query->start_td();
           print $steam_id64;
+        print $query->end_td();
+        print $query->start_td();
+          $exec = "SELECT steam_username FROM vacs WHERE steam_id64 = '$steam_id64';";
+          $exec = $dbh->prepare($exec);
+          $exec->execute();
+
+          while(my @row = $exec->fetchrow_array()){
+            print join(", ", @row);
+          }
         print $query->end_td();
         print $query->start_td();
           print "<form action=\"list-suspects.cgi\" method=\"post\" id=\"form$steam_id64.1\"><input type=\"hidden\" value=\"$steam_id64\" name=\"steam_id64\"/></form><form action=\"add-suspect.cgi\" method=\"post\" id=\"form$steam_id64.2\"><input type=\"hidden\" value=\"$steam_id64\" name=\"steam_id64\"/></form><button type=\"submit\" form=\"form$steam_id64.1\" value=\"submit\">Details</button><button type=\"submit\" form=\"form$steam_id64.2\" value=\"submit\">Refresh data</button>";
