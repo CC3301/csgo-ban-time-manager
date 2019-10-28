@@ -174,6 +174,7 @@ package Utils {
     $template->param(
       DISPLAY_USER_NAME => $args{display_user_name},
       DISPLAY_CURRENT_DATE => $args{display_current_date},
+      SHOW_USERNAME => $args{show_username},
     );
 
     # return the output of the template

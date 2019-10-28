@@ -9,11 +9,14 @@
       text-align: right;
       float: right;
     }
+    .username {
+      display: <TMPL_VAR NAME=SHOW_USERNAME>;
+    }
   </style>
   <div class="footer">
     <p>
       <span id="left"><TMPL_VAR NAME=DISPLAY_CURRENT_DATE></span>
-      <span id="right">Logged in as "<TMPL_VAR NAME=DISPLAY_USER_NAME>"</span>
+      <span class="username" id="right">Logged in as "<TMPL_VAR NAME=DISPLAY_USER_NAME>"</span>
     </p>
   </div>
 </main>
