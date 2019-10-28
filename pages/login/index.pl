@@ -1,5 +1,5 @@
-#!C:\Strawberry\perl\bin\perl.exe
 #!/usr/bin/perl
+#!C:\Strawberry\perl\bin\perl.exe
 
 ################################################################################
 # Import modules
@@ -37,10 +37,6 @@ sub Index() {
     $tmpl_file = "/login.tmpl";
   } elsif ($cgi->param("action") eq "confirm-login") {
     $tmpl_file = "/login.tmpl";
-  } elsif ($cgi->param("action") eq "register") {
-    $tmpl_file = "/register.tmpl";
-  } elsif ($cgi->param("action") eq "confirm-register") {
-    $tmpl_file = "/register.tmpl";
   } elsif ($cgi->param("action") eq "logout") {
     $tmpl_file = "/logout.tmpl";
   }
@@ -73,41 +69,6 @@ sub Index() {
     $template->param(MSG => "Logged in as $username");
     my $cookie = $cgi->cookie(CGISESSIONID => $session_id);
     print $cgi->header( -cookie => $cookie );
-    print $template->output();
-
-  } elsif ($cgi->param("action") eq "register") {
-
-    # print template and wait for data
-    $template->param(MSG => "Please enter a desired username and password");
-    print $cgi->header();
-    print $template->output();
-
-  } elsif ($cgi->param("action") eq "confirm-register") {
-
-    # get username and password for database comparison
-    my $username = $cgi->param("username");
-
-    # print the template and an error if the username is already in use
-    unless (DbTools::CheckDoubleUsername(DBFILE, $username)) {
-      $template->param(MSG => "Username already allocated");
-      print $cgi->header();
-      print $template->output();
-      exit();
-    }
-
-    # get the rest of the data
-    my $password = $cgi->param("password");
-
-    # if the registration fails, print an error
-    unless (DbTools::RegisterUser(DBFILE, $username, $password)) {
-      $template->param(MSG => "Registration failed");
-      print $cgi->header();
-      print $template->output();
-      exit();
-    }
-
-    $template->param(MSG => "Registration successfull, you can log in now");
-    print $cgi->header();
     print $template->output();
 
   } elsif ($cgi->param("action") eq "logout") {

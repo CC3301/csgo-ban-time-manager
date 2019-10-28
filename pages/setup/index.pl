@@ -1,5 +1,5 @@
-#!C:\Strawberry\perl\bin\perl.exe
 #!/usr/bin/perl
+#!C:\Strawberry\perl\bin\perl.exe
 
 ################################################################################
 # Import modules
@@ -31,6 +31,14 @@ sub Index() {
   # check for the cgi parameter, which tells us to either the setup or to just
   # display the information page
   if ($cgi->param("action") eq "confirm") {
+    # check if the database is already initialized, then throw an error if it is
+    if ( -f DBFILE) {
+      Utils::ErrorPage(
+        message => "Database already initialized",
+        link => "../../index.html",
+        link_desc => "Start page",
+      );
+    }
     _run_setup();
   } elsif ($cgi->param("action") eq "init_admin") {
     if (-f DBFILE) {

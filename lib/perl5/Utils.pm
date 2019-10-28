@@ -12,7 +12,6 @@ package Utils {
   use Cwd;
   use CGI;
   use HTML::Template;
-  use experimental qw(declared_refs);
 
   # own modules and library
   use lib getcwd();
@@ -28,6 +27,7 @@ package Utils {
     my $session_id = shift();
     my $dbfile = shift();
     my $skip_auth = shift() || 0;
+    my $login_link = shift() || "../login/index.pl?action=login";
 
     # check if the database is initialized
     unless (DbTools::CheckDBState($dbfile)) {
@@ -42,7 +42,7 @@ package Utils {
     unless (DbTools::CheckUserAuthState($dbfile, $session_id) || $skip_auth) {
       ErrorPage(
         message => "User not authenticated",
-        link => "../pages/login/index.pl?action=login",
+        link => $login_link,
         link_desc => "Login now",
       );
     }
@@ -115,6 +115,37 @@ package Utils {
     exit();
 
   }
+
+  ##############################################################################
+  # NavBar subroutine
+  ##############################################################################
+  sub NavBar {
+
+    # get data passed to function
+    my %args = @_;
+
+    # create a new html template
+    my $template = HTML::Template->new(
+      filename => $args{template_file},
+    );
+
+    # replace template vars
+    $template->param(
+      LINK_HOME => $args{link_home},
+      LINK_ADMIN => $args{link_admin},
+      LINK_LOGIN => $args{link_login},
+      LINK_LOGOUT => $args{link_logout},
+      LINK_STRAT_GEN => $args{link_strat_gen},
+      LINK_VAC_MANAGER => $args{link_vac_manager},
+      LINK_COOLDOWN_MANAGER => $args{link_cooldown_manager},
+      DISPLAY_USER_NAME => $args{display_user_name},
+    );
+
+    # return the template object, so that it can be printed later
+    return $template->output();
+
+  }
+
   ##############################################################################
   # perl needs this
   ##############################################################################

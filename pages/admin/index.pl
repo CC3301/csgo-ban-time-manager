@@ -1,5 +1,5 @@
-#!C:\Strawberry\perl\bin\perl.exe
 #!/usr/bin/perl
+#!C:\Strawberry\perl\bin\perl.exe
 
 ################################################################################
 # Import modules
@@ -33,7 +33,7 @@ sub Index() {
   unless (DbTools::GetUserNameBySessionID(DBFILE, $session_id) eq "admin") {
     Utils::ErrorPage(
       message => "You do not have the required powa!",
-      link => "../login/index.pl?action=login",
+      link => "../../login/index.pl?action=login",
       link_desc => "Log in as different user",
     );
   }
