@@ -1,10 +1,10 @@
 body {
   background-color: #1d2021;
+  color: darkgrey;
 }
 
 main {
   text-align: center;
-  color: white;
   margin-top: 40px;
 }
 
@@ -13,16 +13,27 @@ main {
   border-radius: 10px;
   padding: 10px;
   margin: 10px;
-  color: white;
+  color: inherit;
 }
 
 .section h1 {
   font-size: 20px;
 }
 
-.statistics-table {
-  border: 1px solid black;
-  widht: 500px;
+/* statistics table */
+.statistics-table table {
+  border-collapse: collapse;
+}
+.statistics-table table, th, td {
+  border: 2px solid #3c3836;
+  border-radius: 10px;
+}
+.statistics-table th {
+  height: 50px;
+  font-size: 20px;
+}
+.statistics-table tr:hover {
+  background-color: #32302f;
 }
 
 /* FOOTER */

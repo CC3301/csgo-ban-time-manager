@@ -66,7 +66,7 @@ package Utils {
           }
           main {
             text-align: center;
-            color: white;
+            color: darkgrey;
             margin-top: 100px;
           }
           h1 {
