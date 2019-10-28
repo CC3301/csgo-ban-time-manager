@@ -27,7 +27,7 @@ sub Index() {
 
   # create a new CGI object and a new Session
   my $cgi = new CGI;
-  my $session = new CGI::Session(undef, $cgi, {Directory => '/../data/tmp'});
+  my $session = new CGI::Session(undef, $cgi, {Directory => '../../data/tmp'});
 
   Utils::PageInit($cgi, undef, DBFILE, 1);
 
@@ -75,7 +75,7 @@ sub Index() {
       print $template->output();
 
       # Footer
-      _print_login_footer($cgi);
+      _print_login_footer($cgi, 'none');
 
       # exit
       exit();
@@ -97,7 +97,7 @@ sub Index() {
     print $template->output();
 
     # Footer
-    _print_login_footer($cgi);
+    _print_login_footer($cgi, 'block');
 
 
   } elsif ($cgi->param("action") eq "logout") {
@@ -119,7 +119,7 @@ sub Index() {
       print $template->output();
 
       # Footer
-      _print_login_footer($cgi);
+      _print_login_footer($cgi, 'none');
 
       # exit
       exit();
@@ -143,7 +143,7 @@ sub Index() {
     print $template->output();
 
     # Footer
-    _print_login_footer($cgi);
+    _print_login_footer($cgi, 'none');
 
   } else {
 
@@ -212,7 +212,7 @@ sub _print_login_footer {
 
   # get the cgi object
   my $cgi = shift;
-  my $show_username = shift || "inherit";
+  my $show_username = 'none' || "none";
 
   # get the session id
   my $session_id =  $cgi->cookie("CGISESSIONID") || undef;
@@ -222,7 +222,7 @@ sub _print_login_footer {
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   print Utils::Footer(
     template_file => "../general/footer.tmpl",
-    display_user_name => DbTools::GetUserNameBySessionID($session_id),
+    display_user_name => DbTools::GetUserNameBySessionID(DBFILE, $session_id),
     show_username => $show_username,
   );
   print $cgi->end_html();
