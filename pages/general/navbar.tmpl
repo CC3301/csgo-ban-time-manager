@@ -5,7 +5,8 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background-color: #333;
+      background-color: #282828;
+      border-radius: 10px;
     }
     li {
       float: left;
@@ -16,28 +17,29 @@
       text-align: center;
       padding: 14px 16px;
       text-decoration: none;
+      border-radius: 10px;
     }
     li a:hover {
-      background-color: #555;
+      background-color: #32302f;
     }
-    .small {
-      ;;
-    }
-    ul p {
-      float: right;
-      margin: 2px;
-      margin-left: 20px;
-      font-size: 15px;
+    li p {
+      display: none;
       color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    .admin-page {
+      display: <TMPL_VAR NAME=SHOW_ADMIN>;
     }
   </style>
   <ul>
     <li><a href=<TMPL_VAR NAME=LINK_HOME>>Home</a></li>
-    <li><a href=<TMPL_VAR NAME=LINK_ADMIN>>Admin</a></li>
+    <li><a class="admin-page" href=<TMPL_VAR NAME=LINK_ADMIN>>Admin</a></li>
     <li><a href=<TMPL_VAR NAME=LINK_STRAT_GEN>>CSGO strat generator</a></li>
     <li><a href=<TMPL_VAR NAME=LINK_VAC_MANAGER>>CSGO VAC manager</a></li>
     <li><a href=<TMPL_VAR NAME=LINK_COOLDOWN_MANAGER>>CSGO cooldown manager</a></li>
-    <p style="float:right;">User:</br> <TMPL_VAR NAME=DISPLAY_USER_NAME></p>
+    <li><p style="float:right;"><TMPL_VAR NAME=DISPLAY_USER_NAME></p></li>
     <li style="float:right;"><a class="small" href=<TMPL_VAR NAME=LINK_LOGIN>>Login</a></li>
     <li style="float:right;"><a class="small" href=<TMPL_VAR NAME=LINK_LOGOUT>>Logout</a></li>
   </ul>

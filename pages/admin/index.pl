@@ -38,10 +38,50 @@ sub Index() {
     );
   }
 
-  # start printing the webpage
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # Header and navbar
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   print $cgi->header();
-  print $cgi->start_html();
-  print "You are admin";
+  print $cgi->start_html(
+    -title => "Admin Page",
+    -head=>CGI::Link(
+      {
+        -rel => "stylesheet",
+        -media => "all",
+        -type => "text/css",
+        -href => "../../lib/css/main.css",
+      },
+    ),
+  );
+
+  # get the navbar printed
+  print Utils::NavBar(
+    link_home => "../index.pl",
+    link_admin => "index.pl",
+    link_cooldown_manager => "../cooldown-manager/index.pl",
+    link_login => "../login/index.pl?action=login",
+    link_logout => "../login/index.pl?action=logout",
+    link_strat_gen => "../strat-gen/index.pl",
+    link_vac_manager => "../vac-manager/index.pl",
+    display_user_name => DbTools::GetUserNameBySessionID(DBFILE, $session_id),
+    template_file => "../general/navbar.tmpl",
+  );
+
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # Page content
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  my $admin_panel_template = HTML::Template->new(
+    filename => "../general/admin_panel.tmpl",
+  );
+  print $admin_panel_template->output();
+
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # Footer and end of page
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  print Utils::Footer(
+    template_file => "../general/footer.tmpl",
+    display_user_name => DbTools::GetUserNameBySessionID(DBFILE, $session_id),
+  );
   print $cgi->end_html();
 
   # exit the subroutine with a numeric return value

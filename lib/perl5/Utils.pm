@@ -62,7 +62,7 @@ package Utils {
         <title>Hell nah it\'s dead</title>
         <style media="screen">
           body {
-            background-color: #292935;
+            background-color: #1d2021;
           }
           main {
             text-align: center;
@@ -129,6 +129,13 @@ package Utils {
       filename => $args{template_file},
     );
 
+    # check for Admin User
+    if ($args{display_user_name} eq "admin") {
+      $args{show_admin} = "inherit";
+    } else {
+      $args{show_admin} = "none";
+    }
+
     # replace template vars
     $template->param(
       LINK_HOME => $args{link_home},
@@ -139,9 +146,37 @@ package Utils {
       LINK_VAC_MANAGER => $args{link_vac_manager},
       LINK_COOLDOWN_MANAGER => $args{link_cooldown_manager},
       DISPLAY_USER_NAME => $args{display_user_name},
+      SHOW_ADMIN => $args{show_admin},
     );
 
-    # return the template object, so that it can be printed later
+    # return the output of the template
+    return $template->output();
+
+  }
+
+  ##############################################################################
+  # Footer subroutine
+  ##############################################################################
+  sub Footer {
+
+    # get data passed to function
+    my %args = @_;
+
+    # create a new html template
+    my $template = HTML::Template->new(
+      filename => $args{template_file},
+    );
+
+    # get current localtime
+    $args{display_current_date} = localtime(time());
+
+    # replace template vars
+    $template->param(
+      DISPLAY_USER_NAME => $args{display_user_name},
+      DISPLAY_CURRENT_DATE => $args{display_current_date},
+    );
+
+    # return the output of the template
     return $template->output();
 
   }

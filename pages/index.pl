@@ -9,6 +9,7 @@ use warnings;
 
 use Cwd;
 use CGI;
+use HTML::Template;
 
 # own modules and library
 use lib getcwd() . "/../lib/perl5/";
@@ -29,9 +30,21 @@ sub Index() {
   # call the page init function, with custom Loginlink
   Utils::PageInit($cgi, $session_id, DBFILE, 0, "/pages/login/index.pl?action=login");
 
-  # start printing the webpage
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # Header and navbar
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   print $cgi->header();
-  print $cgi->start_html( -title => "Start Page");
+  print $cgi->start_html(
+    -title => "Start Page",
+    -head=>CGI::Link(
+      {
+        -rel => "stylesheet",
+        -media => "all",
+        -type => "text/css",
+        -href => "../../lib/css/main.css",
+      },
+    ),
+  );
 
   # get the navbar printed
   print Utils::NavBar(
@@ -46,6 +59,21 @@ sub Index() {
     template_file => "general/navbar.tmpl",
   );
 
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # Page content
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  my $start_page_template = HTML::Template->new(
+    filename => "general/start_page.tmpl",
+  );
+  print $start_page_template->output();
+
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # Footer and end of page
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  print Utils::Footer(
+    template_file => "general/footer.tmpl",
+    display_user_name => DbTools::GetUserNameBySessionID(DBFILE, $session_id),
+  );
   print $cgi->end_html();
 
   # exit the subroutine with a numeric return value

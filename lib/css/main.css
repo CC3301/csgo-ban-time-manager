@@ -1,3 +1,44 @@
+body {
+  background-color: #1d2021;
+}
+
 main {
   text-align: center;
+  color: white;
+  margin-top: 40px;
+}
+
+.admin_panel .section {
+  border: 2px solid #282828;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+  color: white;
+}
+
+.start_page .section {
+  border: 2px solid #282828;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+  color: white;
+}
+
+.section h1 {
+  font-size: 20px;
+}
+
+.statistics-table {
+  border: 1px solid black;
+  widht: 500px;
+}
+
+/* FOOTER */
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  font-size: 13px;
+  background-color: #282828;
 }

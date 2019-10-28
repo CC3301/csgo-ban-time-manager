@@ -177,7 +177,7 @@ sub _run_setup {
       password VARCHAR,
       session_id VARCHAR,
       auth_state BOOLEAN,
-      UNIQUE(session_id)
+      UNIQUE(username)
     );
   ";
   $query = $dbh->prepare($query);
@@ -278,13 +278,13 @@ sub _show_setup_page {
   # decide what template to load and what vars to replace
   my $tmpl_file = undef;
   if ($action eq "default") {
-    $tmpl_file = "/step1.tmpl";
+    $tmpl_file = "/../general/setup/step1.tmpl";
   } elsif ($action eq "step1_done") {
-    $tmpl_file = "/step1_done.tmpl";
+    $tmpl_file = "/../general/setup/step1_done.tmpl";
   } elsif ($action eq "step2_done") {
-    $tmpl_file = "/step2_done.tmpl"
+    $tmpl_file = "/../general/setup/step2_done.tmpl"
   } elsif ($action eq "step2") {
-    $tmpl_file = "/step2.tmpl";
+    $tmpl_file = "/../general/setup/step2.tmpl";
   }
 
   # create new html template object

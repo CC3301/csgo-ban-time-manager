@@ -34,11 +34,11 @@ sub Index() {
   # decide what tempalte to use
   my $tmpl_file = undef;
   if ($cgi->param("action") eq "login") {
-    $tmpl_file = "/login.tmpl";
+    $tmpl_file = "/../general/login/login.tmpl";
   } elsif ($cgi->param("action") eq "confirm-login") {
-    $tmpl_file = "/login.tmpl";
+    $tmpl_file = "/../general/login/login.tmpl";
   } elsif ($cgi->param("action") eq "logout") {
-    $tmpl_file = "/logout.tmpl";
+    $tmpl_file = "/../general/login/logout.tmpl";
   }
 
   # create the html template
@@ -97,6 +97,18 @@ sub Index() {
 
     $template->param(MSG => "Please log in");
     print $cgi->header();
+    # print $cgi->start_html(
+    #   -title => "VAC Manager",
+    #   -head=>CGI::Link(
+    #     {
+    #       -rel => "stylesheet",
+    #       -media => "all",
+    #       -type => "text/css",
+    #       -href => "../../lib/css/main.css",
+    #     },
+    #   ),
+    # );
+
     print $template->output();
 
   }
