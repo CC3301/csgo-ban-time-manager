@@ -50,8 +50,8 @@ sub Index() {
   if ($cgi->param("action") eq "confirm-login") {
 
     # get username and password for database comparison
-    my $username = $cgi->param("username");
-    my $password = $cgi->param("password");
+    my $username = $cgi->param("username") || "username";
+    my $password = $cgi->param("password") || "password";
 
     # create a session id if the user can be authenticated
     my $session_id = DbTools::AuthenticateUser(DBFILE, $username, $password, $session);
@@ -91,14 +91,9 @@ sub Index() {
     print $cgi->header(
       -cookie => $cookie,
     );
-    _print_login_navbar($cgi);
 
-    # main page content
-    print $template->output();
-
-    # Footer
-    _print_login_footer($cgi, 'block');
-
+    # print a redirect
+    print "<html><head><meta http-equiv=\"refresh\" content=\"0; url=../index.pl\"></head></html>";
 
   } elsif ($cgi->param("action") eq "logout") {
 
@@ -211,19 +206,19 @@ sub _print_login_navbar {
 sub _print_login_footer {
 
   # get the cgi object
-  my $cgi = shift;
-  my $show_username = 'none' || "none";
+  my $cgi = shift();
+  my $show_username = shift() || "none";
 
   # get the session id
-  my $session_id =  $cgi->cookie("CGISESSIONID") || undef;
+  my $session_id = $cgi->cookie("CGISESSIONID") || undef;
 
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # Footer and end of page
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   print Utils::Footer(
     template_file => "../general/footer.tmpl",
-    display_user_name => DbTools::GetUserNameBySessionID(DBFILE, $session_id),
     show_username => $show_username,
+    display_user_name => DbTools::GetUserNameBySessionID(DBFILE, $session_id),
   );
   print $cgi->end_html();
 

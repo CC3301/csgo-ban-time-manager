@@ -149,7 +149,7 @@ package DbTools {
     my $password = shift();
 
     # create the database handle
-    my $dbh = DBI->connect("dbi:SQLite:$dbfile");
+    my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile");
     my $query = "
       INSERT INTO users (
         username,
@@ -182,6 +182,11 @@ package DbTools {
     # get data passed to function
     my $dbfile = shift();
     my $session_id = shift();
+
+    # check if we got a valid session id
+    if (! defined $session_id) {
+      return "DB_ERR: Invalid Session ID on initial call";
+    }
 
     # create db handle
     my $dbh = DBI->connect("dbi:SQLite:$dbfile");
@@ -219,6 +224,58 @@ package DbTools {
 
   }
 
+  ##############################################################################
+  # RemoveUser subroutine
+  ##############################################################################
+  sub RemoveUser {
+
+    # get data passed to function
+    my $dbfile = shift();
+    my $username = shift();
+
+    # check if the username is empty
+    if ($username eq "username") {
+      return "Please enter a valid username";
+    }
+
+    # check if user exists, we can use the CheckDoubleUsername sub here
+    if (CheckDoubleUsername($dbfile, $username)) {
+      return "User '$username' does not exist";
+    }
+
+    # create new database handle
+    my $dbh = DBI->connect("dbi:SQLite:$dbfile");
+    my $query = "DELETE FROM users WHERE username = '$username'";
+    $query = $dbh->prepare($query);
+
+    # catch any failure in query execution
+    eval {
+      $query->execute();
+    };
+    if ($@) {
+      return "Failed to delete user: '$username'";
+    } else {
+      return "User '$username' has been deleted";
+    }
+
+
+  }
+
+  ##############################################################################
+  # ListUsers subroutine
+  ##############################################################################
+  sub ListUsers {
+
+    # get data passed to function
+    my $dbfile = shift();
+
+    # create new dbhandle and query the database
+    my $dbh = DBI->connect("dbi:SQLite:$dbfile");
+    
+    # return the data
+    return $dbh->selectcol_arrayref('SELECT username FROM users');
+
+  }
 
   ##############################################################################
   # Perl needs this

@@ -8,6 +8,7 @@ main {
   margin-top: 40px;
 }
 
+/* Sections */
 .section {
   border: 2px solid #282828;
   border-radius: 10px;
@@ -32,8 +33,25 @@ main {
   height: 50px;
   font-size: 20px;
 }
-.statistics-table tr:hover {
+/*.statistics-table tr:hover {
   background-color: #32302f;
+  background-clip: border-box;
+}*/
+
+/* notify class */
+.notify {
+  margin: 5px;
+  padding: 5px;
+  color: white;
+}
+
+.notiy span {
+  background-color: #282828;
+  color: inherit;
+  border: 2px solid #32302f;
+  border-radius: 10px;
+  margin: inherit;
+  padding: inherit;
 }
 
 /* FOOTER */
