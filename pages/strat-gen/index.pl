@@ -61,6 +61,39 @@ sub Index() {
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # Page content
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # get action
+  my $action = $cgi->param("action") || "";
+  my ($form_default) = "";
+  my $msg = "";
+
+  # get default form template
+  my $form_default_template = HTML::Template->new(
+    filename => "../general/strat-gen/default.tmpl",
+  );
+
+  # decide what action needs to be performed
+  if ($action eq "new_strat") {
+
+  } elsif ($action eq "show_strat") {
+
+  }
+
+  # get main template
+  my $template = HTML::Template->new(
+    filename => "../general/strat-gen/strat-gen.tmpl",
+  );
+
+  # get form default output and set form default vars
+  $form_default_template->param(
+    MSG => $msg,
+  );
+  $form_default = $form_default_template->output();
+
+  # set main template vars
+  $template->param(
+    FORM_DEFAULT => $form_default,
+  );
+  print $template->output();
 
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # Footer and end of page

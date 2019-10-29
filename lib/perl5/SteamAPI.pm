@@ -12,6 +12,10 @@ package SteamAPI {
   use LWP::Simple;
   use JSON;
   use Data::Dumper;
+  use Carp::Always;
+
+  use lib getcwd();
+  use Utils;
 
   ##############################################################################
   # GetUserAvatarUrl subroutine
@@ -26,7 +30,7 @@ package SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # other vars
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $steam_api_url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/";
+    my $steam_api_url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/';
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send api request
@@ -183,7 +187,14 @@ package SteamAPI {
     # send the request
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $request = "$steam_api_url?key=$steam_api_key&steamids=$steam_id64";
-    my $response = get($request);
+    my $response = get "$request";
+    unless (defined $response) {
+      Utils::ErrorPage(
+        message => "Request to steam API failed <p>$request</p>",
+        link => "",
+        link_desc => "",
+      );
+    }
     $response = decode_json($response);
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

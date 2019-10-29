@@ -157,7 +157,8 @@ sub _run_setup {
       ban_trade INTEGER,
       ban_community INTEGER,
       cooldown_time_total INTEGER,
-      cooldown_users_total INTEGER
+      cooldown_users_total INTEGER,
+      total_users_in_db INTEGER
     );
   ";
   $query = $dbh->prepare($query);
@@ -207,8 +208,10 @@ sub _run_setup {
       ban_trade,
       ban_community,
       cooldown_time_total,
-      cooldown_users_total
+      cooldown_users_total,
+      total_users_in_db
     )VALUES(
+      0,
       0,
       0,
       0,

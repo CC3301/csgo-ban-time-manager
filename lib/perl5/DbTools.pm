@@ -271,9 +271,85 @@ package DbTools {
 
     # create new dbhandle and query the database
     my $dbh = DBI->connect("dbi:SQLite:$dbfile");
-    
+
     # return the data
     return $dbh->selectcol_arrayref('SELECT username FROM users');
+
+  }
+
+  ##############################################################################
+  # CheckDoubleSteamID subroutine
+  ##############################################################################
+  sub CheckDoubleSteamID {
+
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # get vars passed to function
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    my $dbfile = shift;
+    my $steam_id64 = shift;
+    my $table = shift;
+
+    # get database dbhandle
+    my $dbh = DBI->connect("dbi:SQLite:$dbfile");
+
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # other vars
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    my @ids = ();
+    my $query = undef;
+    my $return = 0;
+
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # check for the steam_id64 in the database
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    $query = "
+      SELECT steam_id64 FROM $table;
+    ";
+    $query = $dbh->prepare($query);
+    $query->execute();
+
+    # get all the ids
+    while(my @row = $query->fetchrow_array()) {
+      push @ids, join(", ", @row);
+    }
+
+    # check if we find a matching id
+    foreach (@ids) {
+      if ($_ == $steam_id64) {
+        $return = 1;
+      }
+    }
+
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # return either true or false
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    return($return);
+
+  }
+
+  ##############################################################################
+  # Custom subroutine
+  ##############################################################################
+  sub Custom {
+
+    # get data passed to function
+    my $dbfile = shift();
+    my $query = shift() || die "Need query to run custom query";
+
+    # get database dbhandle
+    my $dbh = DBI->connect("dbi:SQLite:$dbfile");
+
+    # run $query
+    $query = $dbh->prepare($query);
+
+    eval {
+      $query->execute();
+    };
+    if ($@) {
+      return 0;
+    } else {
+      return 1;
+    }
 
   }
 

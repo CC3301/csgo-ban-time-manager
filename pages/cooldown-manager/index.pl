@@ -60,6 +60,42 @@ sub Index() {
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # Page content
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # get action
+  my $action = $cgi->param("action") || "";
+  my $subaction = $cgi->param("subaction") || "";
+  my ($form_default) = "";
+  my $msg = "";
+
+  # get default form template
+  my $form_default_template = HTML::Template->new(
+    filename => "../general/cooldown-manager/default.tmpl",
+  );
+
+  # decide what action needs to be performed
+  if ($action eq "add_suspect") {
+
+  } elsif ($action eq "list_suspects") {
+    if ($subaction eq "list_suspect_detail") {
+
+    }
+  }
+
+  # get main template
+  my $template = HTML::Template->new(
+    filename => "../general/cooldown-manager/cooldown-manager.tmpl",
+  );
+
+  # get form default output and set form default vars
+  $form_default_template->param(
+    MSG => $msg,
+  );
+  $form_default = $form_default_template->output();
+
+  # set main template vars
+  $template->param(
+    FORM_DEFAULT => $form_default,
+  );
+  print $template->output();
 
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # Footer and end of page

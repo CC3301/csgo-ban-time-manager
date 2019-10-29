@@ -13,6 +13,7 @@ use CGI;
 # own modules and library
 use lib getcwd() . "/../../lib/perl5/";
 use Utils;
+use SteamAPI;
 
 # database file
 use constant DBFILE => getcwd() . "/../../data/database.db";
@@ -61,6 +62,145 @@ sub Index() {
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # Page content
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # get action and subactiom, set vars
+  my $action = $cgi->param("action") || "";
+  my $subaction = $cgi->param("subaction") || "";
+  my ($form_default, $form_add_suspect) = "";
+  my $msg = "";
+
+  # get default form template
+  my $form_default_template = HTML::Template->new(
+    filename => "../general/vac-manager/default.tmpl",
+  );
+
+  # decide what action needs to be performed
+  if ($action eq "add_suspect") {
+    if ($subaction eq "confirm") {
+
+      # get values
+      my $steam_id64 = $cgi->param("steam_id64");
+      if ($steam_id64 =~ m/[0-9]/) {
+
+        # get values from steam API
+        my $steam_avatar_url = SteamAPI::GetUserAvatarUrl($steam_id64);
+        my $steam_profile_name = SteamAPI::GetUserProfileName($steam_id64);
+        my $steam_profile_visibility = SteamAPI::GetUserProfileVisibility($steam_id64);
+        my %steam_ban_state = SteamAPI::GetUserBanState($steam_id64);
+
+        # timestamp
+        my $steam_last_modified = localtime(time());
+
+        # check if we are updating the entry or adding a new one
+        if (DbTool::CheckDoubleSteamID(DBFILE, $steam_id64, 'vacs')) {
+
+          my $query = "
+            UPDATE vacs
+            SET steam_username = '$steam_profile_name',
+            steam_ban_vac = '$steam_ban_state{vac}',
+            steam_ban_game = '$steam_ban_state{game}',
+            steam_ban_trade = '$steam_ban_state{trade}',
+            steam_ban_community = '$steam_ban_state{commnity}',
+            steam_avatar_url = '$steam_avatar_url',
+            steam_profile_visibility = '$steam_profile_visibility',
+            steam_last_modified = '$steam_last_modified'
+            WHERE steam_id64 = '$steam_id64',
+          ";
+
+          if (DbTools::Custom(DBFILE, $query)) {
+            $msg = "Successfully updated steamID: $steam_id64";
+          } else {
+            $msg = "Failed to update steamID: $steam_id64";
+          }
+
+        } else {
+
+          my $query = "
+            INSERT INTO vacs(
+              steam_id64,
+              steam_username,
+              steam_ban_vac,
+              steam_ban_game,
+              steam_ban_trade,
+              steam_ban_community,
+              steam_avatar_url,
+              steam_profile_visibility,
+              steam_last_modified
+            ) VALUES (
+              '$steam_id64',
+              '$steam_profile_name',
+              '$steam_ban_state{vac}',
+              '$steam_ban_state{game}',
+              '$steam_ban_state{trade}',
+              '$steam_ban_state{community}',
+              '$steam_avatar_url',
+              '$steam_profile_visibility',
+              '$steam_last_modified'
+            );
+          ";
+
+          if (DbTools::Custom(DBFILE, $query)) {
+            $msg = "Successfully added steamID: $steam_id64";
+          } else {
+            $msg = "Failed to add steamID: $steam_id64";
+          }
+
+          # increment statistics
+          if ($steam_ban_state{vac}) {
+            Statistics::IncrementStatistics(DBFILE, 'ban_vac');
+          }
+          if ($steam_ban_state{game}) {
+            Statistics::IncrementStatistics(DBFILE, 'ban_game');
+          }
+          if ($steam_ban_state{trade}) {
+            Statistics::IncrementStatistics(DBFILE, 'ban_trade');
+          }
+          if ($steam_ban_state{community}) {
+            Statistics::IncrementStatistics(DBFILE, 'ban_community');
+          }
+
+          Statistics::IncrementStatistics(DBFILE, 'total_users_in_db');
+
+        }
+
+      } else {
+        $msg = "Invalid steam64 ID";
+      }
+
+    } else {
+
+      # get add template
+      my $form_add_suspect_template = HTML::Template->new(
+        filename => "../general/vac-manager/add.tmpl",
+      );
+      $form_add_suspect = $form_add_suspect_template->output();
+
+    }
+
+  } elsif ($action eq "list_suspects") {
+    if ($subaction eq "list_suspect_detail") {
+
+    }
+  }
+
+
+
+  # get main template
+  my $template = HTML::Template->new(
+    filename => "../general/vac-manager/vac-manager.tmpl",
+  );
+
+  # get form default output and set form default vars
+  $form_default_template->param(
+    MSG => $msg,
+  );
+  $form_default = $form_default_template->output();
+
+  # set main template vars
+  $template->param(
+    FORM_DEFAULT => $form_default,
+    FORM_ADD_SUSPECT => $form_add_suspect,
+  );
+  print $template->output();
 
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # Footer and end of page
