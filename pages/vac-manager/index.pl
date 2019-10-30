@@ -9,13 +9,10 @@ use warnings;
 
 use Cwd;
 use CGI;
-use Data::Dumper;
 
 # own modules and library
 use lib getcwd() . "/../../lib/perl5/";
 use Utils;
-use SteamAPI;
-use Statistics;
 
 # database file
 use constant DBFILE => getcwd() . "/../../data/database.db";
@@ -37,7 +34,7 @@ sub Index() {
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   print $cgi->header();
   print $cgi->start_html(
-    -title => "VAC Manager",
+    -title => "Cooldown Manager",
     -head=>CGI::Link(
       {
         -rel => "stylesheet",
@@ -47,16 +44,15 @@ sub Index() {
       },
     ),
   );
-
   # get the navbar printed
   print Utils::NavBar(
     link_home => "../index.pl",
     link_admin => "../admin/index.pl",
-    link_cooldown_manager => "../cooldown-manager/index.pl",
+    link_cooldown_manager => "index.pl",
     link_login => "../login/index.pl?action=login",
     link_logout => "../login/index.pl?action=logout",
     link_strat_gen => "../strat-gen/index.pl",
-    link_vac_manager => "index.pl",
+    link_vac_manager => "../vac-manager/index.pl",
     display_user_name => DbTools::GetUserNameBySessionID(DBFILE, $session_id),
     template_file => "../general/navbar.tmpl",
   );
@@ -64,60 +60,67 @@ sub Index() {
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # Page content
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  # get action and subactiom, set vars
+  # get action
   my $action = $cgi->param("action") || "";
   my $subaction = $cgi->param("subaction") || "";
-  my ($form_default, $form_add_suspect, $form_list_suspects, $form_detail_suspect) = "";
+  my ($form_default) = "";
   my $msg = "";
 
   # get default form template
   my $form_default_template = HTML::Template->new(
-    filename => "../general/vac-manager/default.tmpl",
+    filename => "../general/cooldown-manager/default.tmpl",
   );
 
   # decide what action needs to be performed
   if ($action eq "add_suspect") {
+
+  } elsif ($action eq "list_suspects") {
+    if ($subaction eq "list_suspect_detail") {
+
+    } else {
+      
+    }
+  } elsif ($action eq "del_suspect") {
     if ($subaction eq "confirm") {
 
-      # get values
-      my $steam_id64 = $cgi->param("steam_id64");
-      if ($steam_id64 =~ m/[0-9]/) {
+    } else {
 
-        # get values from steam API
-        my $steam_avatar_url = SteamAPI::GetUserAvatarUrl($steam_id64);
-        my $steam_profile_name = SteamAPI::GetUserProfileName($steam_id64);
-        my $steam_profile_visibility = SteamAPI::GetUserProfileVisibility($steam_id64);
-        my %steam_ban_state = SteamAPI::GetUserBanState($steam_id64);
+    }
+  }
 
-        # timestamp
-        my $steam_last_modified = localtime(time());
+  # get main template
+  my $template = HTML::Template->new(
+    filename => "../general/cooldown-manager/cooldown-manager.tmpl",
+  );
 
-        # check if we are updating the entry or adding a new one
-        if (DbTools::CheckDoubleSteamID(DBFILE, $steam_id64, 'vacs')) {
+  # get form default output and set form default vars
+  $form_default_template->param(
+    MSG => $msg,
+  );
+  $form_default = $form_default_template->output();
 
-          my $query = "
-            UPDATE vacs
-            SET steam_username = '$steam_profile_name',
-            steam_ban_vac = '$steam_ban_state{vac}',
-            steam_ban_game = '$steam_ban_state{game}',
-            steam_ban_trade = '$steam_ban_state{trade}',
-            steam_ban_community = '$steam_ban_state{commnity}',
-            steam_avatar_url = '$steam_avatar_url',
-            steam_profile_visibility = '$steam_profile_visibility',
-            steam_last_modified = '$steam_last_modified'
-            WHERE steam_id64 = '$steam_id64',
-          ";
+  # set main template vars
+  $template->param(
+    FORM_DEFAULT => $form_default,
+  );
+  print $template->output();
 
-          if (DbTools::Custom(DBFILE, $query)) {
-            $msg = "Successfully updated steamID: $steam_id64";
-          } else {
-            $msg = "Failed to update steamID: $steam_id64";
-          }
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # Footer and end of page
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  print Utils::Footer(
+    template_file => "../general/footer.tmpl",
+    display_user_name => DbTools::GetUserNameBySessionID(DBFILE, $session_id),
+  );
+  print $cgi->end_html();
 
-        } else {
+  # exit the subroutine with a numeric return value
+  return 0;
 
-          my $query = "
-            INSERT INTO vacs(
-              steam_id64,
-              steam_username,
-              steam_ban_
+}
+
+
+################################################################################
+# call the index subroutine
+################################################################################
+exit(Index());
