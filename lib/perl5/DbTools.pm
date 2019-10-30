@@ -354,6 +354,36 @@ package DbTools {
   }
 
   ##############################################################################
+  # CustomFetchRowArray subroutine
+  ##############################################################################
+  sub CustomFetchRowArray {
+
+    # get data passed to function
+    my $dbfile = shift();
+    my $query = shift() || die "Need query to run custom query";
+
+    # get database dbhandle
+    my $dbh = DBI->connect("dbi:SQLite:$dbfile");
+
+    # run $query
+    $query = $dbh->prepare($query);
+
+    eval {
+      $query->execute();
+    };
+    if ($@) {
+      return 0;
+    } else {
+      my @data = ();
+      while(my @row = $query->fetchrow_array()) {
+        push @data, join(", ", @row);
+      }
+      return (\@data);
+    }
+
+  }
+
+  ##############################################################################
   # Perl needs this
   ##############################################################################
   1;

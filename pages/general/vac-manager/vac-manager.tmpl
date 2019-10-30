@@ -15,11 +15,38 @@
     .default form input:hover {
       background-color: #32302f;
     }
+
+    .suspect-list {
+      margin: 5px;
+      padding: 5px;
+    }
+    .suspect-list table {
+      margin: 5px;
+      padding: 5px;
+    }
+    .suspect-list table td, table td button {
+      font-size: 12px;
+      margin: 1px;
+      padding: 1px;
+      text-align: center;
+    }
+    .suspect-list button {
+      background-color: #282828;
+      color: inherit;
+      margin: inherit;
+      padding: inherit;
+      border: none;
+    }
+    .suspect-list button:hover {
+      background-color: #32302f;
+    }
   </style>
   <div class="section" id="vac-manager">
     <h1>VAC Manager</h1>
     <TMPL_VAR NAME=FORM_DEFAULT>
     <TMPL_VAR NAME=FORM_ADD_SUSPECT>
+    <TMPL_VAR NAME=FORM_LIST_SUSPECTS>
+    <TMPL_VAR NAME=FORM_DETAIL_SUSPECT>
   </div>
   <!---
   <div class="section" id="database-manager">

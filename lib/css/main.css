@@ -3,6 +3,16 @@ body {
   color: darkgrey;
 }
 
+main a {
+  color: white;
+}
+
+main a:visited {
+  color: grey;
+}
+
+
+
 main {
   text-align: center;
   margin-top: 40px;

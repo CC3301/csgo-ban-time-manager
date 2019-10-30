@@ -9,11 +9,13 @@ use warnings;
 
 use Cwd;
 use CGI;
+use Data::Dumper;
 
 # own modules and library
 use lib getcwd() . "/../../lib/perl5/";
 use Utils;
 use SteamAPI;
+use Statistics;
 
 # database file
 use constant DBFILE => getcwd() . "/../../data/database.db";
@@ -65,7 +67,7 @@ sub Index() {
   # get action and subactiom, set vars
   my $action = $cgi->param("action") || "";
   my $subaction = $cgi->param("subaction") || "";
-  my ($form_default, $form_add_suspect) = "";
+  my ($form_default, $form_add_suspect, $form_list_suspects, $form_detail_suspect) = "";
   my $msg = "";
 
   # get default form template
@@ -91,7 +93,7 @@ sub Index() {
         my $steam_last_modified = localtime(time());
 
         # check if we are updating the entry or adding a new one
-        if (DbTool::CheckDoubleSteamID(DBFILE, $steam_id64, 'vacs')) {
+        if (DbTools::CheckDoubleSteamID(DBFILE, $steam_id64, 'vacs')) {
 
           my $query = "
             UPDATE vacs
@@ -118,106 +120,4 @@ sub Index() {
             INSERT INTO vacs(
               steam_id64,
               steam_username,
-              steam_ban_vac,
-              steam_ban_game,
-              steam_ban_trade,
-              steam_ban_community,
-              steam_avatar_url,
-              steam_profile_visibility,
-              steam_last_modified
-            ) VALUES (
-              '$steam_id64',
-              '$steam_profile_name',
-              '$steam_ban_state{vac}',
-              '$steam_ban_state{game}',
-              '$steam_ban_state{trade}',
-              '$steam_ban_state{community}',
-              '$steam_avatar_url',
-              '$steam_profile_visibility',
-              '$steam_last_modified'
-            );
-          ";
-
-          if (DbTools::Custom(DBFILE, $query)) {
-            $msg = "Successfully added steamID: $steam_id64";
-          } else {
-            $msg = "Failed to add steamID: $steam_id64";
-          }
-
-          # increment statistics
-          if ($steam_ban_state{vac}) {
-            Statistics::IncrementStatistics(DBFILE, 'ban_vac');
-          }
-          if ($steam_ban_state{game}) {
-            Statistics::IncrementStatistics(DBFILE, 'ban_game');
-          }
-          if ($steam_ban_state{trade}) {
-            Statistics::IncrementStatistics(DBFILE, 'ban_trade');
-          }
-          if ($steam_ban_state{community}) {
-            Statistics::IncrementStatistics(DBFILE, 'ban_community');
-          }
-
-          Statistics::IncrementStatistics(DBFILE, 'total_users_in_db');
-
-        }
-
-      } else {
-        $msg = "Invalid steam64 ID";
-      }
-
-    } else {
-
-      # get add template
-      my $form_add_suspect_template = HTML::Template->new(
-        filename => "../general/vac-manager/add.tmpl",
-      );
-      $form_add_suspect = $form_add_suspect_template->output();
-
-    }
-
-  } elsif ($action eq "list_suspects") {
-    if ($subaction eq "list_suspect_detail") {
-
-    }
-  }
-
-
-
-  # get main template
-  my $template = HTML::Template->new(
-    filename => "../general/vac-manager/vac-manager.tmpl",
-  );
-
-  # get form default output and set form default vars
-  $form_default_template->param(
-    MSG => $msg,
-  );
-  $form_default = $form_default_template->output();
-
-  # set main template vars
-  $template->param(
-    FORM_DEFAULT => $form_default,
-    FORM_ADD_SUSPECT => $form_add_suspect,
-  );
-  print $template->output();
-
-  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  # Footer and end of page
-  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  print Utils::Footer(
-    template_file => "../general/footer.tmpl",
-    display_user_name => DbTools::GetUserNameBySessionID(DBFILE, $session_id),
-  );
-  print $cgi->end_html();
-
-  # exit the subroutine with a numeric return value
-  return 0;
-
-}
-
-
-################################################################################
-# call the index subroutine
-################################################################################
-exit(Index());
+              steam_ban_

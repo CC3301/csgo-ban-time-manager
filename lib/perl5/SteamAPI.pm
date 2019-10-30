@@ -9,13 +9,22 @@ package SteamAPI {
   use strict;
   use warnings;
   use Cwd;
-  use LWP::Simple;
+  use LWP::UserAgent;
   use JSON;
   use Data::Dumper;
-  use Carp::Always;
+  #use Carp::Always;
 
   use lib getcwd();
   use Utils;
+
+  # turn on request/response warnings in log
+  # ATTENTION: Activating this will result in your steam api key to be shown in
+  # the webservers log files.
+  my $WARN = 1;
+
+  # set the proxy
+  my $PROXY = 'http://tst-proxy.genua.de:8888/';
+  # my $PROXY = "";
 
   ##############################################################################
   # GetUserAvatarUrl subroutine
@@ -173,6 +182,7 @@ package SteamAPI {
     # other vars
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $steam_api_key_file = getcwd() . "/../../data/api_key.txt";
+    #my $steam_api_key_file = getcwd() . "/data/api_key.txt"; # for testing only
     my $steam_api_key = undef;
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -184,24 +194,28 @@ package SteamAPI {
     chomp $steam_api_key;
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    # send the request
+    # send the request and set the proxy
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $request = "$steam_api_url?key=$steam_api_key&steamids=$steam_id64";
-    my $response = get "$request";
-    unless (defined $response) {
+    my $user_agent = LWP::UserAgent->new(
+      timeout => 10,
+    );
+    $user_agent->proxy(
+      ['http'],
+      $PROXY,
+    );
+    my $response = $user_agent->get($request);
+
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    # check for success and then return
+    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    if ($response->is_success()) {
+      return (decode_json($response->decoded_content()));
+    } else {
       Utils::ErrorPage(
-        message => "Request to steam API failed <p>$request</p>",
-        link => "",
-        link_desc => "",
+        message => "Steam API request timed out",
       );
     }
-    $response = decode_json($response);
-
-    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    # return the array ref for the response
-    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    return($response);
-
   }
 
   # perl needs this
