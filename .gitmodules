@@ -1,0 +1,3 @@
+[submodule "csgo-strat-generator"]
+	path = csgo-strat-generator
+	url = https://github.com/CC3301/csgo-strat-generator.git
