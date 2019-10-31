@@ -13,6 +13,7 @@ use CGI;
 # own modules and library
 use lib getcwd() . "/../../lib/perl5/";
 use Utils;
+use Statistics;
 
 # database file
 use constant DBFILE => getcwd() . "/../../data/database.db";
@@ -63,7 +64,8 @@ sub Index() {
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # get action
   my $action = $cgi->param("action") || "";
-  my ($form_default) = "";
+  my $subaction = $cgi->param("subaction") || "";
+  my ($form_default, $form_new_strat) = "";
   my $msg = "";
 
   # get default form template
@@ -73,9 +75,38 @@ sub Index() {
 
   # decide what action needs to be performed
   if ($action eq "new_strat") {
+    if ($subaction eq "confirm") {
 
-  } elsif ($action eq "show_strat") {
+      # get values, if not then set default values, for now only difficulty
+      my $strat_gen_difficulty = $cgi->param("strat_gen_difficulty") || 0;
 
+      if ($strat_gen_difficulty =~ m/[0-9]/) {
+
+        # write the temp cfg file for strat gen
+        open(my $fh, '>', "../../data/tmp/strat_gen_tmp_config.cfg") or $msg = "<span style=\"color: red;\">Failed write temporary strat gen config: <span style=\"color: white;\">$!</span></span>";    
+          print $fh "difficulty:$strat_gen_difficulty";
+        close $fh;
+
+        $msg = "<span style=\"color: orange;\">Strat gen feature not yet implemented</span>";
+
+        
+        # write statistics
+        Statistics::IncrementStatistics(DBFILE, 'total_strats_generated');
+
+
+      } else {
+        $msg = "<span style=\"color: red;\">Please enter a valid difficulty number</span>";
+      }
+
+
+    } else {
+
+      # show the strat gen form
+      my $form_new_strat_template = HTML::Template->new(
+        filename => "../general/strat-gen/new_strat.tmpl",
+      );
+      $form_new_strat = $form_new_strat_template->output();
+    }
   }
 
   # get main template
@@ -92,6 +123,7 @@ sub Index() {
   # set main template vars
   $template->param(
     FORM_DEFAULT => $form_default,
+    FORM_NEW_STRAT => $form_new_strat,
   );
   print $template->output();
 
@@ -106,6 +138,7 @@ sub Index() {
 
   # exit the subroutine with a numeric return value
   return 0;
+
 
 }
 

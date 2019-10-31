@@ -27,7 +27,7 @@ sub Index() {
 
   # create a new CGI object and a new Session
   my $cgi = new CGI;
-  my $session = new CGI::Session(undef, $cgi, {Directory => '../../data/tmp'});
+  my $session = new CGI::Session(undef, $cgi, {Directory => '../../data/tmp/cgisess'});
 
   Utils::PageInit($cgi, undef, DBFILE, 1);
 

@@ -158,7 +158,8 @@ sub _run_setup {
       ban_community INTEGER,
       cooldown_time_total INTEGER,
       cooldown_users_total INTEGER,
-      total_users_in_db INTEGER
+      total_users_in_db INTEGER,
+      total_strats_generated INTEGER
     );
   ";
   $query = $dbh->prepare($query);

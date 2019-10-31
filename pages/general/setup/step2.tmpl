@@ -1,46 +1,54 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <title>Log in</title>
+    <title>Inital setup</title>
+    <link rel="stylesheet" href="../../lib/css/main.css">
+    <style>
+      table {
+        text-align: center;
+      }
+      form input {
+        background-color: #282828;
+        border-radius: 10px;
+        border: 2px solid #32302f;
+        color: darkgrey;
+      }
+      form input:hover {
+        background-color: #32302f;
+      }
+      table tr td input {
+        background-color: #282828;
+        border-radius: 10px;
+        border: 2px solid #32302f;
+        color: darkgrey;
+      }
+      table tr td input:hover {
+        background-color: #32302f;
+      }
+    </style>
   </head>
   <body>
-    <main class="login-form" style="margin-top: 100px;">
-      <div class="cotainer">
-        <div class="row justify-content-center">
-          <div class="col-md-8">
-            <div class="card">
-              <div class="card-header">Please choose an admin password</div>
-                <div class="card-body">
-                  <form action="index.pl" method="POST">
-                    <input type="hidden" name="action" value="init_admin">
-                    <input type="hidden" name="skip" value="true">
-                    <div class="form-group row">
-                      <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-                      <div class="col-md-6">
-                        <input type="password" id="password" class="form-control" name="password" required>
-                      </div>
-                    </div>
-                    <div class="col-md-6 offset-md-4">
-                      <button type="submit" class="btn btn-primary">
-                        Save
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+    <main>
+      <div>
+        <h1>Welcome to the setup page</h1>
+        <div>
+          <p>Please choose an initial admin password</p>
+          <form action="index.pl" method="post">
+            <input type="hidden" name="skip" value="true" />
+            <input type="hidden" name="action" value="init_admin">
+            <table class="no-border">
+              <tr>
+                <td>
+                  Password: 
+                </td>
+                <td>
+                  <input type="password" name="password" required />
+                </td>
+              </tr>
+            </table>
+            <input type="submit" value="Save" />
+          </form>
         </div>
       </div>
     </main>
