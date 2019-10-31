@@ -1,0 +1,13 @@
+<div class="section">
+	<h1>Export Database</h1>
+	<ul class="default">
+		<li>
+			<iframe id="download_db" style="display: none;"></iframe>
+			<form action="index.pl" id="form1" method="post">
+				<input type="hidden" name="action" value="download_db">
+				<input type="hidden" name="subaction" value="confirm">
+				<input type="button" value="Download" onclick="submitForms()" />
+			</form>
+		</li>
+	</ul>
+</div>

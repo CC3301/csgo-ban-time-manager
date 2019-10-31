@@ -1,0 +1,17 @@
+<ul class="default">
+  <li>
+    <form action="index.pl" method="post">
+      <input type="hidden" name="action" value="download_db" />
+      <input type="submit" value="Export Database" />
+    </form>
+  </li>
+  <li>
+    <form action="index.pl" method="post">
+      <input type="hidden" name="action" value="" />
+      <input type="submit" value="Hide all" />
+    </form>
+  </li>
+  <li class="notify">
+    <span><TMPL_VAR NAME=MSG></span>
+  </li>
+</ul>

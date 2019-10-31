@@ -80,12 +80,16 @@ sub Index() {
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   my $action = $cgi->param("action") || "";
   my $subaction = $cgi->param("subaction") || "";
-  my ($form_add_user, $form_del_user, $table_list_users, $form_default) = "";
+  my ($form_add_user, $form_del_user, $table_list_users, $form_default_um, $form_download_db, $form_default_dm) = "";
 
-  # get the default form going
-  my $form_default_template = HTML::Template->new(
-    filename => "../general/admin/default.tmpl"
+  # get the default form user manager going
+  my $form_default_um_template = HTML::Template->new(
+    filename => "../general/admin/default_um.tmpl"
   );
+	# get the defautl form database manager going
+	my $form_default_dm_template = HTML::Template->new(
+		filename => "../general/admin/default_dm.tmpl",
+	);
 
   # decide what action to perform
   if ($action eq "add_user") {
@@ -122,7 +126,7 @@ sub Index() {
       }
 
       # print the msg
-      $form_default_template->param(
+      $form_default_um_template->param(
         MSG => $msg,
       );
 
@@ -150,11 +154,12 @@ sub Index() {
       }
 
       # do all the work required to remove the user
-      $form_default_template->param(
+      $form_default_um_template->param(
         MSG => $msg,
       );
 
     } else {
+			
 
       # load the del user template
       my $form_del_user_template = HTML::Template->new(
@@ -189,17 +194,38 @@ sub Index() {
     # get the template output
     $table_list_users = $table_list_users_template->output();
 
-  }
+  } elsif ($action eq "download_db") {
+		
+		my $msg = "";
+			
+		if ($subaction eq "confirm") {
+			$msg = "<span style=\"color: lightgreen;\">Database export successful</span>";
+		}
+
+		# load the download database form
+		my $form_download_db_template = HTML::Template->new(
+			filename => "../general/admin/download_db.tmpl",
+		);
+		$form_download_db = $form_download_db_template->output();
+
+		$form_default_dm_template->param(
+			MSG => $msg,
+		);
+
+	}
 
   # print the default form
-  $form_default = $form_default_template->output();
+  $form_default_um = $form_default_um_template->output();
+	$form_default_dm = $form_default_dm_template->output();
 
   # set template vars
   $admin_panel_template->param(
-    FORM_DEFAULT => $form_default,
+    FORM_DEFAULT_UM => $form_default_um,
+		FORM_DEFAULT_DM => $form_default_dm,
     FORM_ADD_USER => $form_add_user,
     FORM_DEL_USER => $form_del_user,
     TABLE_LIST_USERS => $table_list_users,
+		FORM_DOWNLOAD_DB => $form_download_db,
   );
 
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

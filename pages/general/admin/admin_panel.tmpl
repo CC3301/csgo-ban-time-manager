@@ -27,16 +27,25 @@
       line-height: 20px;
     }
   </style>
+	<script>
+		function Download(url) {
+			document.getElementById("download_db").src = url;
+		}
+		submitForms = function() {
+			document.getElementById("form1").submit();
+			Download("../../data/database.db");
+		}
+	</script>
   <div class="section" id="user-manager">
     <h1>User Manager</h1>
-    <TMPL_VAR NAME=FORM_DEFAULT>
+    <TMPL_VAR NAME=FORM_DEFAULT_UM>
     <TMPL_VAR NAME=FORM_ADD_USER>
     <TMPL_VAR NAME=FORM_DEL_USER>
     <TMPL_VAR NAME=TABLE_LIST_USERS>
   </div>
-  <!---
   <div class="section" id="database-manager">
     <h1>Database Manager</h1>
+		<TMPL_VAR NAME=FORM_DEFAULT_DM>
+		<TMPL_VAR NAME=FORM_DOWNLOAD_DB>
   </div>
-  --->
 </main>
