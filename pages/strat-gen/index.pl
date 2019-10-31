@@ -91,7 +91,7 @@ sub Index() {
 
         
         # write statistics
-        Statistics::IncrementStatistics(DBFILE, 'total_strats_generated');
+        #Statistics::IncrementStatistics(DBFILE, 'total_strats_generated');
 
 
       } else {
