@@ -23,8 +23,8 @@ package SteamAPI {
   my $WARN = 1;
 
   # set the proxy
-  my $PROXY = 'http://tst-proxy.genua.de:8888/';
-  # my $PROXY = "";
+  # my $PROXY = 'http://tst-proxy.genua.de:8888/';
+  my $PROXY = "";
 
   ##############################################################################
   # GetUserAvatarUrl subroutine
