@@ -1,9 +1,80 @@
 <div class="section">
-  <h1>Detailed view for <TMPL_VAR NAME=SUSPECT_PROFILE_NAME></h1>
+  <h1>Detailed view for: <span style="color: white;"><TMPL_VAR NAME=STEAM_PROFILE_NAME></span></h1>
   <div class="suspect-list">
     <center>
       <ul>
-        <TMPL_VAR NAME=DETAIL_SUSPECT>
+        <li>
+          <table>
+            <tr>
+              <th>
+                Profile Permalink
+              </th>
+              <th>
+                Steam ID 64
+              </th>
+              <th>
+                VAC ban
+              </th>
+              <th>
+                Game ban
+              </th>
+              <th>
+                Trade ban
+              </th>
+              <th>
+                Community ban
+              </th>
+              <th>
+                Last modified
+              </th>
+              <th>
+                Avatar
+              </th>
+              <th>
+                Actions
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <a target="_blank" href="http://steamcommunity.com/profiles/<TMPL_VAR NAME=STEAM_ID64>">Profile (<TMPL_VAR NAME=STEAM_PROFILE_VISIBILITY>)</a>
+              </td>
+              <td>
+                <TMPL_VAR NAME=STEAM_ID64>
+              </td>
+              <td>
+                <TMPL_VAR NAME=STEAM_BAN_VAC>
+              </td>
+              <td>
+                <TMPL_VAR NAME=STEAM_BAN_GAME>
+              </td>
+              <td>
+                <TMPL_VAR NAME=STEAM_BAN_TRADE>
+              </td>
+              <td>
+                <TMPL_VAR NAME=STEAM_BAN_COMMUNITY>
+              </td>
+              <td>
+                <TMPL_VAR NAME=STEAM_LAST_MODIFIED>
+              <td>
+                <img src="<TMPL_VAR NAME=STEAM_AVATAR_URL>" alt="avatar_middle_img" align="middle">
+              </td>
+              </td>
+              <td>
+                <form action="index.pl" method="POST" id="form<TMPL_VAR NAME=STEAM_ID64>.1">
+                  <input type="hidden" name="action" value="del_suspect"/>
+                  <input type="hidden" name="steam_id64" value="<TMPL_VAR NAME=STEAM_ID64>"/>
+                </form>
+                <form action="index.pl" method="POST" id="form<TMPL_VAR NAME=STEAM_ID64>.2">
+                  <input type="hidden" name="action" value="add_suspect"/>
+                  <input type="hidden" name="subaction" value="confirm"/>
+                  <input type="hidden" name="steam_id64" value="<TMPL_VAR NAME=STEAM_ID64>"/>
+                </form>
+                <button type="submit" form="form<TMPL_VAR NAME=STEAM_ID64>.2" value="submit">Refresh</button>
+                <button type="submit" form="form<TMPL_VAR NAME=STEAM_ID64>.1" value="submit">Delete</button>
+              </td>
+            </tr>
+          </table>
+        </li>
       </ul>
     </center>
   </div>

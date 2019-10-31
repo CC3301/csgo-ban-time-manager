@@ -1,0 +1,26 @@
+<tr>
+  <td>
+    <TMPL_VAR NAME=STEAM_ID64>
+  </td>
+  <td>
+    <TMPL_VAR NAME=STEAM_PROFILE_NAME>
+  </td>
+  <td>
+    <form action="index.pl" method="POST" id="form<TMPL_VAR NAME=STEAM_ID64>.1">
+      <input type="hidden" value="list_suspects" name="action"/>
+      <input type="hidden" value="list_suspect_detail" name="subaction"/>
+      <input type="hidden" value="<TMPL_VAR NAME=STEAM_ID64>" name="steam_id64"/>
+    </form>
+    <form action="index.pl" method="POST" id="form<TMPL_VAR NAME=STEAM_ID64>.2">
+        <input type="hidden" value="add_suspect" name="action"/>
+        <input type="hidden" value="confirm" name="subaction"/>
+        <input type="hidden" value="<TMPL_VAR NAME=STEAM_ID64>" name="steam_id64"/>
+    </form>
+    <form action="index.pl" method="POST" id="form<TMPL_VAR NAME=STEAM_ID64>.3">
+        <input type="hidden" value="<TMPL_VAR NAME=STEAM_ID64>" name="steam_id64"/>
+    </form>
+    <button type="submit" form="form<TMPL_VAR NAME=STEAM_ID64>.1" value="submit">Details</button>
+    <button type="submit" form="form<TMPL_VAR NAME=STEAM_ID64>.2" value="submit">Refresh</button>
+    <button type="submit" form="form<TMPL_VAR NAME=STEAM_ID64>.3" value="submit">Delete</button>
+  </td>
+</tr>

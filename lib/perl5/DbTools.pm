@@ -11,6 +11,7 @@ package DbTools {
 
   use Cwd;
   use DBI;
+  use Data::Dumper;
 
   ##############################################################################
   # CheckUserAuthState subroutine
@@ -361,6 +362,7 @@ package DbTools {
     # get data passed to function
     my $dbfile = shift();
     my $query = shift() || die "Need query to run custom query";
+
 
     # get database dbhandle
     my $dbh = DBI->connect("dbi:SQLite:$dbfile");

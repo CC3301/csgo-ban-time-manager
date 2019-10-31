@@ -40,13 +40,16 @@
     .suspect-list button:hover {
       background-color: #32302f;
     }
+    .suspect-list img {
+      border-radius: 8px;
+    }
   </style>
   <div class="section" id="vac-manager">
     <h1>VAC Manager</h1>
     <TMPL_VAR NAME=FORM_DEFAULT>
     <TMPL_VAR NAME=FORM_ADD_SUSPECT>
-    <TMPL_VAR NAME=FORM_LIST_SUSPECTS>
-    <TMPL_VAR NAME=FORM_DETAIL_SUSPECT>
+    <TMPL_VAR NAME=TABLE_LIST_SUSPECTS>
+    <TMPL_VAR NAME=TABLE_SUSPECT_DETAIL>
   </div>
   <!---
   <div class="section" id="database-manager">

@@ -188,10 +188,10 @@ sub _print_login_navbar {
     link_home => "../index.pl",
     link_admin => "../admin/index.pl",
     link_cooldown_manager => "../cooldown-manager/index.pl",
-    link_login => "../login/index.pl?action=login",
+    link_login => "index.pl?action=login",
     link_logout => "../login/index.pl?action=logout",
     link_strat_gen => "../strat-gen/index.pl",
-    link_vac_manager => "index.pl",
+    link_vac_manager => "../vac-manager/index.pl",
     display_user_name => "none",
     template_file => "../general/navbar.tmpl",
   );
