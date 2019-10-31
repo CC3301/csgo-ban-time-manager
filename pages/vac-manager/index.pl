@@ -9,13 +9,13 @@ use warnings;
 
 use Cwd;
 use CGI;
-use Data::Dumper;
 
 # own modules and library
 use lib getcwd() . "/../../lib/perl5/";
 use Utils;
 use SteamAPI;
 use Statistics;
+use DbTools;
 
 # database file
 use constant DBFILE => getcwd() . "/../../data/database.db";
@@ -156,6 +156,7 @@ sub Index() {
               Statistics::IncrementStatistics(DBFILE, 'ban_' . $key);
             }
           }
+          Statistics::IncrementStatistics(DBFILE, 'total_users_in_db');
 
         } else {
           $msg = "<span style=\"color: red;\">Failed to add entry for user <span style=\"color: white;\">$steam_profile_name</span></span>";

@@ -1,11 +1,49 @@
+
 <div class="section">
-  <h1>Add VAC Suspect</h1>
-  <ul class="default">
+  <h1>Add Cooldown</h1>
+  <ul class="default">  
     <li>
-      <form action="index.pl" method="post">
-        <input type="hidden" name="action" value="add-suspect"/>
-        <input type="text" name="steam_id64" value="" maxlength="50" required/>
-        <input type="submit" value="Add Suspect"/>
+      <form action="index.pl" method="POST">
+        <input type="hidden" name="action" value="add_cooldown"/>
+        <input type="hidden" name="subaction" value="confirm" />
+        <table class="no-border">
+          <tr>
+            <td>
+              Steam ID 64: 
+            </td>
+            <td>
+              <input type="text" name="steam_id64" value="" required />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Cooldown Reason:
+            </td>
+            <td>
+              <select name="steam_cooldown_reason">
+                <option value="team_damage">Team Damage</option>
+                <option value="team_kills">Team Kills</option>
+                <option value="team_kills_at_round_start">Team Kills at round start</option>
+                <option value="team_afk_timeout">AFK Timeout</option>
+                <option value="rage_quit">Rage Quit</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Cooldown Time: 
+            </td>
+            <td>
+              <select name="steam_cooldown_time">
+                <option value="30">30 Minute cooldown</option>
+                <option value="120">2 Hour cooldown</option>
+                <option value="1500">24 Hour cooldown</option>
+                <option value="10500">7 Day cooldown</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+        <input type="submit" value="Add cooldown">
       </form>
     </li>
   </ul>

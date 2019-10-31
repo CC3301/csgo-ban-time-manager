@@ -42,16 +42,19 @@ sub Index() {
     'cooldown_reason_team_damage' => 'Amount of cooldowns caused by doing too much team damage',
     'cooldown_reason_team_afk_timeout' => 'Amount of cooldowns caused by a disconnect and the AFK-timer running out',
     'cooldown_reason_rage_quit' => 'Amount of cooldowns caused by a player rage-quitting due to provocation',
-    'cooldown_type_30' => 'Number of 30-minute cooldowns issued',
-    'cooldown_type_120' => 'Number of 2-hour cooldowns issued',
-    'cooldown_type_1500' => 'Number of 1-day cooldowns issued',
-    'cooldown_type_10500' => 'Number of 7-day cooldowns issued',
+    #'cooldown_type_30' => 'Number of 30-minute cooldowns issued',
+    #'cooldown_type_120' => 'Number of 2-hour cooldowns issued',
+    #'cooldown_type_1500' => 'Number of 1-day cooldowns issued',
+    #'cooldown_type_10500' => 'Number of 7-day cooldowns issued',
   );
   my %statistics_vac = (
     'ban_vac' => 'Number of unique accounts with one or more VAC-bans',
     'ban_game' => 'Number of unique accounts with one ore more game-bans',
     'ban_trade' => 'Number of unique accounts with a trade-ban',
     'ban_community' => 'Number of unique accounts with a community-ban',
+  );
+  my %statistics_general = (
+    'total_users_in_db' => 'Number of unique users in the entire database',
   );
 
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -113,16 +116,41 @@ sub Index() {
     <table class=\"statistics-table\" style=\"text-align:left;\">
   ";
   foreach my $key (sort keys %statistics_cooldown) {
+
+    my $value = Statistics::GetStatistic(DBFILE, $key);
+
+    if ($key eq 'cooldown_time_total') {
+      $value = int ($value / 60);
+    }
+
     $table_statistics_cooldown = $table_statistics_cooldown . "<tr>\n";
     $table_statistics_cooldown = $table_statistics_cooldown . "\t<td>\n";
     $table_statistics_cooldown = $table_statistics_cooldown . "\t\t$statistics_cooldown{$key}\n";
     $table_statistics_cooldown = $table_statistics_cooldown . "\t</td>\n";
     $table_statistics_cooldown = $table_statistics_cooldown . "\t<td>\n";
-    $table_statistics_cooldown = $table_statistics_cooldown . "\t\t" . Statistics::GetStatistic(DBFILE, $key) . "\n";
+    $table_statistics_cooldown = $table_statistics_cooldown . "\t\t" . $value . "\n";
     $table_statistics_cooldown = $table_statistics_cooldown . "\t</td>\n";
     $table_statistics_cooldown = $table_statistics_cooldown . "</tr>\n";
   }
   $table_statistics_cooldown = $table_statistics_cooldown . "
+    </table>
+  ";
+
+  # build the general statistics table
+  my $table_statistics_general = "
+    <table class=\"statistics-table\">
+  ";
+  foreach my $key (sort keys %statistics_general) {
+    $table_statistics_general = $table_statistics_general . "<tr>\n";
+    $table_statistics_general = $table_statistics_general . "\t<td>\n";
+    $table_statistics_general = $table_statistics_general . "\t\t$statistics_general{$key}\n";
+    $table_statistics_general = $table_statistics_general . "\t</td>\n";
+    $table_statistics_general = $table_statistics_general . "\t<td>\n";
+    $table_statistics_general = $table_statistics_general . "\t\t" . Statistics::GetStatistic(DBFILE, $key) . "\n";
+    $table_statistics_general = $table_statistics_general . "\t</td>\n";
+    $table_statistics_general = $table_statistics_general . "</tr>\n";
+  }
+  $table_statistics_general = $table_statistics_general . "
     </table>
   ";
 
@@ -131,6 +159,7 @@ sub Index() {
   $start_page_template->param(
     TABLE_STATISTICS_VAC => $table_statistics_vac,
     TABLE_STATISTICS_COOLDOWN => $table_statistics_cooldown,
+    TABLE_STATISTICS_GENERAL => $table_statistics_general,
   );
   print $start_page_template->output();
 

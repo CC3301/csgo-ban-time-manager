@@ -2,13 +2,13 @@
   <style media="screen">
     #right-statistic {
       float: right;
-      width: 30%;
-      margin: 40px;
+      width: 53%;
+      margin-top: 40px;
     }
     #left-statistic {
       float: left;
-      width: 30%;
-      margin: 40px;
+      width: 40%;
+      margin-top: 40px;
     }
   </style>
   <div class="section" id="right-statistic">
@@ -18,5 +18,9 @@
   <div class="section" id="left-statistic">
     <h1>VAC Statistics</h1>
     <TMPL_VAR NAME=TABLE_STATISTICS_VAC>
+  </div>
+  <div class="section" id="left-statistic">
+    <h1>General Statistics</h1>
+    <TMPL_VAR NAME=TABLE_STATISTICS_GENERAL>
   </div>
 </main>

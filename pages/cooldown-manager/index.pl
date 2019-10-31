@@ -13,6 +13,9 @@ use CGI;
 # own modules and library
 use lib getcwd() . "/../../lib/perl5/";
 use Utils;
+use SteamAPI;
+use Statistics;
+use DbTools;
 
 # database file
 use constant DBFILE => getcwd() . "/../../data/database.db";
@@ -63,7 +66,7 @@ sub Index() {
   # get action
   my $action = $cgi->param("action") || "";
   my $subaction = $cgi->param("subaction") || "";
-  my ($form_default) = "";
+  my ($form_default, $table_list_cooldowns, $table_cooldown_detail, $form_add_cooldown) = "";
   my $msg = "";
 
   # get default form template
@@ -72,10 +75,206 @@ sub Index() {
   );
 
   # decide what action needs to be performed
-  if ($action eq "add_suspect") {
+  if ($action eq "add_cooldown") {
+    if ($subaction eq "confirm") {
 
-  } elsif ($action eq "list_suspects") {
-    if ($subaction eq "list_suspect_detail") {
+      # actually add the suspect, get steam_id64 and cooldown information
+      my $steam_id64 = $cgi->param("steam_id64");
+      my $steam_cooldown_reason = $cgi->param("steam_cooldown_reason");
+      my $steam_cooldown_time = $cgi->param("steam_cooldown_time");
+
+      my $old_cooldown_time = 0;
+      my $old_cooldown_reason = 0;
+
+      # error page if not valid steam_id64
+      unless ($steam_id64 =~ m/[0-9]/) {
+        Utils::ErrorPage(
+          message => "Invalid steam ID",
+          link => "index.pl",
+          link_desc => "Back to Cooldown manager"
+        );
+      }
+
+      # get values from steam API
+      my $steam_avatar_url = SteamAPI::GetUserAvatarUrl($steam_id64);
+      my $steam_profile_name = SteamAPI::GetUserProfileName($steam_id64);
+      my $steam_profile_visibility = SteamAPI::GetUserProfileVisibility($steam_id64);
+      my $steam_last_modified = localtime(time());
+
+      # check wether we are updating or adding a new entry
+      if (DbTools::CheckDoubleSteamID(DBFILE, $steam_id64, 'cooldowns')) {
+
+        # here goes the update of an existing user
+
+        # get old cooldown time and add it to the new one
+        $old_cooldown_time = DbTools::CustomFetchRowArray(DBFILE, "SELECT steam_cooldown_time FROM cooldowns WHERE steam_id64 = '$steam_id64'");
+        my $new_cooldown_time = $old_cooldown_time + $steam_cooldown_time;
+
+        # get old cooldown reasons and add new one
+        $old_cooldown_reason = DbTools::CustomFetchRowArray(DBFILE, "SELECT steam_cooldown_reason FROM cooldowns WHERE steam_id64 = '$steam_id64'");
+        my $new_cooldown_reason = $old_cooldown_reason . "<br />" . $steam_cooldown_reason;
+
+        # update the cooldowns table
+        my $query = "
+          UPDATE cooldowns SET
+            steam_username = '$steam_profile_name',
+            steam_cooldown_time = '$new_cooldown_time',
+            steam_cooldown_reason = '$new_cooldown_reason',
+            steam_avatar_url = '$steam_avatar_url',
+            steam_profile_visibility = '$steam_profile_visibility',
+            steam_last_modified = '$steam_last_modified'
+          WHERE steam_id64 = '$steam_id64';
+        ";
+
+        if (DbTools::Custom(DBFILE, $query)) {
+          $msg = "<span style=\"color: lightgreen;\">Successfully updated entry for user <span style=\"color: white;\">$steam_profile_name</span></span>";
+
+          # if the above query succeeds, we can increment some statistics
+          Statistics::IncrementStatistics(DBFILE, 'cooldown_type_' . $steam_cooldown_time);
+          Statistics::IncrementStatistics(DBFILE, 'cooldown_reason_' . $steam_cooldown_reason);
+          Statistics::IncrementStatistics(DBFILE, 'cooldown_time_total', $steam_cooldown_time);
+
+        } else {
+          $msg = "<span style=\"color: red;\">Failed to update entry for user <span style=\"color: white;\">$steam_profile_name</span></span>";
+        }
+
+      } else {
+
+        # here goes the addition of a new user
+        my $query = "
+          INSERT INTO cooldowns(
+            steam_id64, 
+            steam_username,
+            steam_cooldown_time, 
+            steam_cooldown_reason,
+            steam_avatar_url,
+            steam_profile_visibility,
+            steam_last_modified
+          ) VALUES (
+            '$steam_id64',
+            '$steam_profile_name',
+            '$steam_cooldown_time',
+            '$steam_cooldown_reason',
+            '$steam_avatar_url',
+            '$steam_profile_visibility',
+            '$steam_last_modified'
+          );
+        ";
+
+        if (DbTools::Custom(DBFILE, $query)) {
+          $msg = "<span style=\"color: lightgreen;\">Successfully added entry for user <span style=\"color: white;\">$steam_profile_name</span></span>";
+
+          # if the above query succeeds, we can increment some statistics
+          Statistics::IncrementStatistics(DBFILE, 'cooldown_type_' . $steam_cooldown_time);
+          Statistics::IncrementStatistics(DBFILE, 'cooldown_reason_' . $steam_cooldown_reason);
+          Statistics::IncrementStatistics(DBFILE, 'cooldown_time_total', $steam_cooldown_time);
+          Statistics::IncrementStatistics(DBFILE, 'cooldown_users_total');
+          Statistics::IncrementStatistics(DBFILE, 'total_users_in_db');
+
+        } else {
+          $msg = "<span style=\"color: red;\">Failed to add entry for user <span style=\"color: white;\">$steam_profile_name</span></span>";
+        }
+      }
+
+    } else {
+      # get the add template
+      my $form_add_cooldown_template = HTML::Template->new(
+        filename => "../general/cooldown-manager/add.tmpl",
+      );
+      $form_add_cooldown = $form_add_cooldown_template->output();
+    } 
+
+  } elsif ($action eq "list_cooldowns") {
+    if ($subaction eq "list_cooldown_detail") {
+
+      # detailed view for suspect right here
+      my $steam_id64 = $cgi->param("steam_id64");
+
+      # check if steamid is valid
+      unless ($steam_id64 =~ m/[0-9]/) {
+        Utils::ErrorPage(
+          message => "Invalid steam ID",
+          link => "index.pl",
+          link_desc => "Back to Cooldown manager",
+        );
+      }
+
+      # fetch data from database
+      my $data = DbTools::CustomFetchRowArray(DBFILE, "SELECT * FROM cooldowns WHERE steam_id64 = '$steam_id64'");
+      my @data = split (',', @$data[0]);
+
+      # get the detail listing template
+      my $table_cooldown_detail_template = HTML::Template->new(
+        filename => "../general/cooldown-manager/list_cooldown_detail.tmpl",
+      );
+
+      # replace template vars
+      $table_cooldown_detail_template->param(
+        STEAM_PROFILE_NAME => $data[1],
+        STEAM_ID64 => $steam_id64,
+        STEAM_AVATAR_URL => $data[4],
+        STEAM_PROFILE_VISIBILITY => $data[5],
+        STEAM_COOLDOWN_TIME => (int ($data[2]) . " Minutes <br />" . int ($data[2] / 60) . " Hour(s) <br />"),
+        STEAM_COOLDOWN_REASON => $data[3],
+        STEAM_LAST_MODIFIED => $data[6],
+      );
+
+
+      # get the template output
+      $table_cooldown_detail = $table_cooldown_detail_template->output();
+
+      # set the msg
+      $msg = "<span style=\"color: lightgreen;\">Successfully listed details for user <span style=\"color: white;\">$data[1]</span></span>";
+
+    } else {
+      
+      # list suspects right here
+      # get all steam_id64's
+      my $data = DbTools::CustomFetchRowArray(DBFILE, "SELECT steam_id64 FROM cooldowns;");
+
+      # load the list view template and create the table for each of the steam id's
+      my $table_list_cooldowns_rows = "";
+      my $table_list_cooldowns_template = HTML::Template->new(
+        filename => "../general/cooldown-manager/list_cooldowns.tmpl",
+      );
+
+      # get data for each steam id and write to template var
+      foreach my $steam_id64 (@$data) {
+
+        # get the template
+        my $table_list_cooldowns_rows_template = HTML::Template->new(
+          filename => "../general/cooldown-manager/list_cooldowns_row.tmpl",
+        );
+
+        # fetch the username from the database
+        my $steam_profile_name = DbTools::CustomFetchRowArray(DBFILE, "SELECT steam_username FROM cooldowns WHERE steam_id64 = '$steam_id64'");
+
+        # replace template vars
+        $table_list_cooldowns_rows_template->param(
+          STEAM_ID64 => $steam_id64,
+          STEAM_PROFILE_NAME => @$steam_profile_name,
+        );
+
+        # append the table row
+        $table_list_cooldowns_rows = $table_list_cooldowns_rows . $table_list_cooldowns_rows_template->output();
+
+      }
+
+      # replace template vars in the suspect listing template
+      $table_list_cooldowns_template->param(
+        TABLE_LIST_COOLDOWNS => $table_list_cooldowns_rows,
+      );
+      $table_list_cooldowns = $table_list_cooldowns_template->output();
+
+      # set the msg
+      $msg = "<span style=\"color: lightgreen;\">Successfully listed all cooldowns</span>";
+
+    }
+
+  } elsif ($action eq "del_suspect") {
+    if ($subaction eq "confirm") {
+
+    } else {
 
     }
   }
@@ -94,6 +293,9 @@ sub Index() {
   # set main template vars
   $template->param(
     FORM_DEFAULT => $form_default,
+    TABLE_LIST_COOLDOWNS => $table_list_cooldowns,
+    TABLE_COOLDOWN_DETAIL => $table_cooldown_detail,
+    FORM_ADD_COOLDOWN => $form_add_cooldown,
   );
   print $template->output();
 

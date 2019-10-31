@@ -48,6 +48,10 @@ main {
   background-clip: border-box;
 }*/
 
+.no-border tr td {
+  border: none;
+}
+
 /* notify class */
 .notify {
   margin: 5px;

@@ -1,8 +1,24 @@
 <div class="section">
-  <h1>List of all cooldowns</h1>
-  <div class="suspect-list">
-    <ul>
-      <TMPL_VAR NAME=LIST_USERS>
-    </ul>
+    <h1>List of all cooldowns</h1>
+    <div class="cooldown-list">
+      <ul>
+        <li>
+          <table>
+            <tr>
+              <th>
+                STEAM ID 64
+              </th>
+              <th>
+                STEAM PROFILE NAME
+              </th>
+              <th>
+                ACTION
+              </th>
+            </tr>
+            <TMPL_VAR NAME=TABLE_LIST_COOLDOWNS>
+          </table>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
+  

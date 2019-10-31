@@ -1,10 +1,16 @@
 <ul class="default">
   <li>
     <form action="index.pl" method="post">
-      <input type="hidden" name="action" value="add_suspect" />
+      <input type="hidden" name="action" value="gen_strat" />
       <input type="submit" value="Generate new strat" />
     </form>
   </li>
+  <li>
+      <form action="index.pl" method="post">
+        <input type="hidden" name="action" value="" />
+        <input type="submit" value="Hide all" />
+      </form>
+    </li>
   <li class="notify">
     <span><TMPL_VAR NAME=MSG></span>
   </li>
