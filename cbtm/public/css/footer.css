@@ -1,0 +1,28 @@
+#footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    text-align: center;
+    border-top: 1px solid var(--base01);
+}
+
+#footer .content {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#footer a {
+    color: var(--cyan);
+    text-align: center;
+    text-decoration: none;
+}
+
+/* left and right floating footer items */
+#footer .left {
+    float: left;
+}
+#footer .right {
+    float: right;
+}

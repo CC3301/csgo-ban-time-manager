@@ -1,0 +1,12 @@
+<div id="page">
+    <link rel="stylesheet" href="<% request.uri_base %>/css/vacmanager/add_suspect.css">
+    <div id="content">
+        <h1>All VAC Suspects</h1>
+        <div id="add_suspect">
+            <form action="/vacmanager/save_suspect" method="post">
+                <input type="text" name="steam_id64" value="" maxlength="50" required/>
+                <input type="submit" value="Add Suspect"/>
+            </form>
+        </div>
+    </div>
+</div>

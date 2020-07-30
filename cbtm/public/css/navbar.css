@@ -1,0 +1,43 @@
+/* Navbar styling */
+#navbar {
+    background-color: var(--base02);
+    width: 95%;
+    margin: auto;
+    margin-left: auto;
+    padding-left: 0px;
+    margin-right: auto;
+    margin-bottom: 10px;
+
+    /* border */
+    border: 1px solid;
+    border-color: var(--base02);
+    border-radius: 10px;
+}
+
+#navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--base02);
+}
+
+#navbar li a {
+    display: block;
+    color: var(--cyan);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+#navbar li a:hover {
+    background-color: var(--base01);
+}
+
+/* left and right floating navbar buttons */
+#navbar .left {
+    float: left;
+}
+#navbar .right {
+    float: right;
+}

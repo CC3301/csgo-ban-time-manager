@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="<% settings.charset %>">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+      <title><% title %></title>
+      <link rel="stylesheet" href="<% request.uri_base %>/css/style.css">
+      <link rel="stylesheet" href="<% request.uri_base %>/css/navbar.css">
+      <link rel="stylesheet" href="<% request.uri_base %>/css/footer.css">
+    </head>
+    <body>
+        <div id="navbar">
+            <ul>
+                <li class="left"> <a href="<% request.uri_base %>">Home</a></li>
+                <li class="left"> <a href="<% request.uri_base %>/vacmanager/vacmanager">VAC-Manager</a></li>
+                <li class="left"> <a href="<% request.uri_base %>/cdmanager/cdmanager">Cooldown-Manager</a></li>
+                <li class="left"> <a href="<% request.uri_base %>/stratgen/stratgen">Strategy-Generator</a></li>
+                <li class="right"><a href="<% request.uri_base %>/logout">Logout</a></li>
+            </ul>
+        </div>
+        <div id="content">
+            <% content %>
+        </div>
+        <div id="footer">
+            <div class="content">
+                <div class="left">
+                    CSGO Ban-Time Manager v<% version %>, Logged in as: <% current_user %>, current system time: <% sys_time %>
+                </div>
+                <div class="right">
+                    <a href="<% request.uri_base %>/admin">admin panel</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+#controls {
+    margin: 0 auto;
+    margin-top: 100px;
+    width: 200px;
+}
+
+/* general input styling */
+#controls input {
+    background-color: var(--base01);
+    border-color: var(--base01);
+    color: var(--base1);
+    border-radius: 10px;
+}
+#controls input:hover {
+    background-color: var(--base01);
+    border-color: var(--base2);
+    color: var(--base1);
+    border-radius: 10px;
+}
+
+/* submit button styling */
+#controls input[type="submit"] {
+    margin: 0 auto;
+}
+#controls input[type="submit"]:hover {
+    border-color: var(--base2);
+}

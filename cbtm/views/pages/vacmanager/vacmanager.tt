@@ -1,0 +1,21 @@
+<div id="page">
+    <link rel="stylesheet" href="<% request.uri_base %>/css/vacmanager/vacmanager.css">
+    <div id="content">
+        <div id="controls">
+            <table>
+                <tr>
+                    <td>
+                        <form action="<% requst.uri_base %>/vacmanager/add_suspect" method="post">
+                            <input type="submit" value="Add new Suspect" />
+                        </form>
+                    </td>
+                    <td>
+                        <form action="<% requst.uri_base %>/vacmanager/list_suspects" method="post">
+                            <input type="submit" value="List all suspects" />
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
