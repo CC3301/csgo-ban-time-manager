@@ -17,6 +17,7 @@ use Dancer2::Plugin::Database;
 use Data::Dumper;
 use SteamAPI;
 use Utils;
+use Carp::Always;
 
 
 #=======================================================================================================================
@@ -378,7 +379,15 @@ post '/admin_save_steam_api_key' => require_role admin => sub {
     my $sth;
 
     # save the steam api Key
-    my $query = "UPDATE config SET steam_api_key = '$steam_api_key';";
+
+    # try to read the steam api key from the database
+    my $steam_apk = _get_steam_api_key();
+    my $query     = undef;
+    if (!$steam_apk eq '') {
+        $query = "UPDATE config SET steam_api_key = '$steam_api_key';";
+    } else {
+        $query = "INSERT INTO config (steam_api_key) VALUES ('$steam_api_key');";
+    }
     Utils::log("Running SQL query: $query");
     $sth = database->prepare($query);
 
@@ -515,14 +524,13 @@ sub _list_steam_ids($) {
 sub _get_steam_api_key() {
 
     my $query = "SELECT steam_api_key FROM config;";
-    Utils::log("Got steam_api_key from database");
     my $sth = database->prepare($query);
+    $sth->execute();
 
-    if($sth->execute()) {
-        return(join('', $sth->fetchrow_array()));
-    } else {
-        die("Failed to read steam api key from database");
-    }
+    my $steam_api_key = join('', $sth->fetchrow_array());
+    chomp $steam_api_key;
+    Utils::log(Dumper($steam_api_key));
+    return($steam_api_key);
 }
 
 # load data for each suspect from the Database
@@ -568,15 +576,8 @@ sub _get_suspect_data_from_steam() {
 # returns a boolean
 sub _check_db_uninitialized() {
     my $query = "SELECT * FROM config;";
-    if (my $sth   = database->prepare()) {
-        if (!$sth->execute()) {
-            return(0);
-        } else {
-            return(1);
-        }
-    } else {
-        return(0);
-    }
+    my $sth = database->prepare($query) or return(1);
+    return(0);
 }
 
 #=======================================================================================================================

@@ -14,16 +14,12 @@ package SteamAPI {
   use Data::Dumper;
   #use Carp::Always;
 
-  use lib getcwd();
-  #use Utils;
-
   # turn on request/response warnings in log
   # ATTENTION: Activating this will result in your steam api key to be shown in
   # the webservers log files.
   my $WARN = 1;
 
   # set the proxy
-  # my $PROXY = 'http://tst-proxy.genua.de:8888/';
   my $PROXY = "";
 
   ##############################################################################
