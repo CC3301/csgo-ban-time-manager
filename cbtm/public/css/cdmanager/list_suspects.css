@@ -1,0 +1,29 @@
+#content {
+    width: 95%;
+}
+
+#suspect_list table {
+    border-collapse: collapse;
+    background-color: var(--base02);
+}
+
+#suspect_list table, th, td {
+    border: 1px solid var(--base01);
+}
+
+#suspect_list th {
+    color: var(--magenta);
+}
+
+#suspect_list tr:hover {
+    background-color: var(--base03);
+}
+
+#suspect_list th:hover {
+    background-color: var(--base02);
+}
+
+#suspect_list th, td {
+    text-align: left;
+    padding: 5px;
+}

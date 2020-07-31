@@ -1,0 +1,34 @@
+<div id="page">
+    <link rel="stylesheet" href="<% request.uri_base %>/css/vacmanager/list_suspects.css">
+    <div id="content">
+        <center><h1>All VAC Suspects</h1></center>
+        <div id="suspect_list">
+            <table>
+                <tr>
+                    <th>Steam 64 ID</th>
+                    <th>Profile Name</th>
+                    <th>Profile Visibility</th>
+                    <th>Avatar</th>
+                    <th>Actions</th>
+                </tr>
+                <% FOREACH cooldown IN cooldowns %>
+                    <tr>
+                        <td><% suspect.value.steam_id64 %> </td>
+                        <td><a href="https://steamcommunity.com/profiles/<% cooldown.value.steam_id64 %>"><% cooldown.value.steam_username %></a></td>
+                        <td><% cooldown.value.steam_profile_visibility%> </td>
+                        <td><img src="<% cooldown.value.steam_avatar_url %>" alt="cooldown.value.steam_avatar_url"></td>
+                        <td><form action="<% request.uri_base %>/vac_save_suspect" method="post">
+                                <input type="hidden" name="steam_id64" value="<% cooldown.value.steam_id64 %>" />
+                                <input type="submit" value="Update Data"/>
+                            </form>
+                            <form action="<% request.uri_base %>/vac_delete_suspect" method="post">
+                                    <input type="hidden" name="steam_id64" value="<% cooldown.value.steam_id64 %>" />
+                                    <input type="submit" value="Delete from Database"/>
+                            </form>
+                        </td>
+                    </tr>
+                <% END %>
+            </table>
+        </div>
+    </div>
+</div>

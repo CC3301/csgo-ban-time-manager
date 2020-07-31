@@ -5,12 +5,12 @@
             <table>
                 <tr>
                     <td>
-                        <form action="<% requst.uri_base %>/vacmanager/add_suspect" method="post">
+                        <form action="<% requst.uri_base %>/vac_add_suspect" method="get">
                             <input type="submit" value="Add new Suspect" />
                         </form>
                     </td>
                     <td>
-                        <form action="<% requst.uri_base %>/vacmanager/list_suspects" method="post">
+                        <form action="<% requst.uri_base %>/vac_list_suspects" method="get">
                             <input type="submit" value="List all suspects" />
                         </form>
                     </td>

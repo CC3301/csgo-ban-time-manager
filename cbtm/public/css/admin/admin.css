@@ -1,0 +1,43 @@
+#content {
+    width: 650px;
+    color: var(--base2);
+}
+
+#content #form_controls button {
+    background-color: var(--base01);
+    border-color: var(--base01);
+    color: var(--base2);
+    border-radius: 10px;
+}
+
+#content #form_debug_information button {
+    background-color: var(--base01);
+    border-color: var(--base01);
+    color: var(--base2);
+    border-radius: 10px;
+}
+#content #form_add_del_user_account button {
+    background-color: var(--base01);
+    border-color: var(--base01);
+    color: var(--base2);
+    border-radius: 10px;
+}
+#content #form_modify_steam_api_key button {
+    background-color: var(--base01);
+    border-color: var(--base01);
+    color: var(--base2);
+    border-radius: 10px;
+}
+
+#content #form_controls button:hover {
+    border-color: var(--base2);
+}
+#content #form_debug_information button:hover {
+    border-color: var(--base2);
+}
+#content #form_add_del_user_account button:hover {
+    border-color: var(--base2);
+}
+#content #form_modify_steam_api_key button:hover {
+    border-color: var(--base2);
+}

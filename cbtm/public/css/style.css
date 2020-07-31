@@ -1,28 +1,4 @@
 /*====================================================================================================================*/
-/* Variable definition */
-/*====================================================================================================================*/
-:root {
-    /* color definition for solarized theme */
-    --base03:  #002b36; /* should be used as background for the entire page */
-    --base02:  #073642; /* should be used as sub-background for containers inside the page */
-    --base01:  #586e75; /* should be used as sub-sub-background for containers inside containers */
-    --base00:  #657b83; /* should be used as text color against base03 backgrounds */
-    --base0:   #839496; /* should be used as text color against base02 backgrounds */
-    --base1:   #93a1a1; /* should be used as text color against base01 backgrounds */
-    --base2:   #eee8d5;
-    --base3:   #fdf6e3;
-    --yellow:  #b58900;
-    --orange:  #cb4b16;
-    --red:     #dc322f;
-    --magenta: #d33682;
-    --violet:  #6c71c4;
-    --blue:    #268bd2; /* links should remain blue */
-    --cyan:    #2aa198;
-    --green:   #859900;
-}
-
-
-/*====================================================================================================================*/
 /* General Page and body styling
 /*====================================================================================================================*/
 body {
@@ -47,6 +23,7 @@ body {
 #content {
     margin: 0 auto;
     margin-top: 100px;
+    color: var(--base3);
 }
 #content a {
     color: var(--blue);
@@ -57,20 +34,20 @@ body {
     text-decoration: none;
 }
 #content h1 {
-    color: var(--blue);
+    color: var(--violet);
 }
 
 /* general input styling */
 #content input {
     background-color: var(--base01);
     border-color: var(--base01);
-    color: var(--base1);
+    color: var(--base3);
     border-radius: 10px;
 }
 #content input:hover {
     background-color: var(--base01);
     border-color: var(--base2);
-    color: var(--base1);
+    color: var(--base3);
     border-radius: 10px;
 }
 

@@ -1,0 +1,17 @@
+<div id="page">
+    <link rel="stylesheet" href="<% request.uri_base %>/css/admin/setupdb.css">
+    <div id="content">
+        <h1>Initialize Database</h1>
+        <div id="controls">
+            <table>
+                <tr>
+                    <form action="<% requst.uri_base %>/admin_setupdb" method="post">
+                    <td>
+                        <input type="submit" value="Initialize Database" />
+                    </td>
+                    </form>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

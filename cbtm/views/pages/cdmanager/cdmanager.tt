@@ -5,12 +5,12 @@
             <table>
                 <tr>
                     <td>
-                        <form action="vacmanager/add_suspect" method="post">
+                        <form action="/vac_add_suspect" method="post">
                             <input type="submit" value="Add new Suspect" />
                         </form>
                     </td>
                     <td>
-                        <form action="vacmanager/list_suspects" method="post">
+                        <form action="/vac_list_suspects" method="post">
                             <input type="submit" value="List all suspects" />
                         </form>
                     </td>

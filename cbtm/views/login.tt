@@ -1,7 +1,7 @@
 <div id="page">
     <link rel="stylesheet" href="<% request.uri_base %>/css/login.css">
     <div id="login-form">
-        <h1>Please Log in</h1>
+        <center><h1>Please Log in</h1></center>
         <div id="content">
             <form method="post">
                 <table>

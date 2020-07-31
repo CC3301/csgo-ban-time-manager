@@ -35,6 +35,7 @@ package SteamAPI {
     # get vars passed to function
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $steam_id64 = shift || die "Need steam id to get data from";
+    my $steam_apk  = shift || die "Need steam api key to interact with steam api";
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # other vars
@@ -44,7 +45,7 @@ package SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send api request
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $response = _steam_api_request($steam_id64, $steam_api_url);
+    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk);
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # return required value
@@ -62,6 +63,7 @@ package SteamAPI {
     # get vars passed to function
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $steam_id64 = shift || die "Need steam id to get data from";
+    my $steam_apk  = shift || die "Need steam api key to interact with steam api";
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # other vars
@@ -71,7 +73,7 @@ package SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send api request
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $response = _steam_api_request($steam_id64, $steam_api_url);
+    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk);
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # return required value
@@ -89,6 +91,7 @@ package SteamAPI {
     # get vars passed to function
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $steam_id64 = shift || die "Need steam id to get data from";
+    my $steam_apk  = shift || die "Need steam api key to interact with steam api";
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # other vars
@@ -103,7 +106,7 @@ package SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send api request
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $response = _steam_api_request($steam_id64, $steam_api_url);
+    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk);
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # convert data
@@ -126,6 +129,7 @@ package SteamAPI {
     # get vars passed to function
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $steam_id64 = shift || die "Need steam id to get data from";
+    my $steam_apk  = shift || die "Need steam api key to interact with steam api";
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # other vars
@@ -136,7 +140,7 @@ package SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send api request
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $response = _steam_api_request($steam_id64, $steam_api_url);
+    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk);
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # convert data
@@ -163,7 +167,7 @@ package SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # return required value
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    return(%steam_ban_state);
+    return(\%steam_ban_state);
 
   }
 
@@ -175,23 +179,9 @@ package SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # get vars passed to function
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $steam_id64 = shift || die "Need steam id to get data from";
+    my $steam_id64    = shift || die "Need steam id to get data from";
     my $steam_api_url = shift;
-
-    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    # other vars
-    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $steam_api_key_file = getcwd() . "/../../data/api_key.txt";
-    #my $steam_api_key_file = getcwd() . "/data/api_key.txt"; # for testing only
-    my $steam_api_key = undef;
-
-    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    # get the steam api key
-    #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    open (my $fh, '<', $steam_api_key_file) or die "Failed to read steam api key";
-      $steam_api_key = <$fh>;
-    close $fh;
-    chomp $steam_api_key;
+    my $steam_api_key = shift;
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send the request and set the proxy

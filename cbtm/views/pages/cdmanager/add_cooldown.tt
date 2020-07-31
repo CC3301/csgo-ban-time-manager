@@ -1,16 +1,16 @@
 <div id="page">
-    <link rel="stylesheet" href="<% request.uri_base %>/css/vacmanager/add_suspect.css">
+    <link rel="stylesheet" href="<% request.uri_base %>/css/cdmanager/add_suspect.css">
     <div id="add-suspect">
         <h1>Add VAC Suspect</h1>
         <div id="content">
-            <form action="/vac_save_suspect" method="post">
+            <form action="/cd_save_suspect" method="post">
                 <table>
                     <tr>
                         <td><label for="steam_id64">Steam ID 64:</label></td>
                         <td><input type="text" name="steam_id64" value="" maxlength="50" required/></td>
                     </tr>
                     <tr>
-                        <td><input type="submit" value="Add Suspect"/></td>
+                        <td><input type="submit" value="Add Cooldown"/></td>
                     </tr>
                 </table>
             </form>

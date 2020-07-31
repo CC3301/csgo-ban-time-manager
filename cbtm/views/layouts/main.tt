@@ -5,16 +5,35 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
       <title><% title %></title>
       <link rel="stylesheet" href="<% request.uri_base %>/css/style.css">
+      <link rel="stylesheet" href="<% request.uri_base %>/css/colors/solarized-dark.css">
+      <!--<link rel="stylesheet" href="<% request.uri_base %>/css/colors/solarized-light.css">-->
       <link rel="stylesheet" href="<% request.uri_base %>/css/navbar.css">
       <link rel="stylesheet" href="<% request.uri_base %>/css/footer.css">
+      <script src="/javascripts/jquery.js" charset="utf-8"></script>
     </head>
     <body>
         <div id="navbar">
             <ul>
                 <li class="left"> <a href="<% request.uri_base %>">Home</a></li>
-                <li class="left"> <a href="<% request.uri_base %>/vacmanager/vacmanager">VAC-Manager</a></li>
-                <li class="left"> <a href="<% request.uri_base %>/cdmanager/cdmanager">Cooldown-Manager</a></li>
-                <li class="left"> <a href="<% request.uri_base %>/stratgen/stratgen">Strategy-Generator</a></li>
+                <li class="left">
+                    <div class="dropdown">
+                        <button class="dropbtn">VAC-Manager</button>
+                        <div class="dropdown-content">
+                            <a href="<% request.uri_base %>/vac_add_suspect">Add Suspect</a>
+                            <a href="<% request.uri_base %>/vac_list_suspects">List Suspects</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="left">
+                    <div class="dropdown">
+                        <button class="dropbtn">Cooldown-Manager</button>
+                        <div class="dropdown-content">
+                            <a href="<% request.uri_base %>/cd_add_cooldown">Add Cooldown</a>
+                            <a href="<% request.uri_base %>/cd_list_cooldowns">List Cooldowns</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="left"> <a href="<% request.uri_base %>/stratgen">Strategy-Generator</a></li>
                 <li class="right"><a href="<% request.uri_base %>/logout">Logout</a></li>
             </ul>
         </div>

@@ -31,7 +31,14 @@
 }
 
 #navbar li a:hover {
-    background-color: var(--base01);
+    background-color: var(--base02);
+}
+
+#navbar a {
+    font-size: 16px;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
 }
 
 /* left and right floating navbar buttons */
@@ -40,4 +47,38 @@
 }
 #navbar .right {
     float: right;
+}
+
+#navbar .dropdown {
+    overflow: hidden;
+}
+#navbar .dropdown .dropbtn {
+    outline: none;
+    border: none;
+    margin: 0;
+    font-family: inherit;
+    font-size: 16px;
+    padding: 14px 16px;
+    background-color: inherit;
+    color: var(--cyan);
+}
+#navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    min-width: 160px;
+}
+#navbar .dropdown-content a {
+    float: none;
+    display: block;
+    text-align: left;
+    padding: 12px 16px;
+    text-decoration: none;
+}
+#navbar .dropdown-content a:hover {
+    background-color: var(--base02);
+}
+
+#navbar .dropdown:hover .dropdown-content {
+    display: block;
 }
