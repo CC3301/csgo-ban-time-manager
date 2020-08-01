@@ -17,7 +17,6 @@ use Dancer2::Plugin::Database;
 use Data::Dumper;
 use SteamAPI;
 use Utils;
-use Carp::Always;
 
 
 #=======================================================================================================================
