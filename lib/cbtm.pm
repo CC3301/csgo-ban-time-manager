@@ -17,12 +17,18 @@ use Dancer2::Plugin::Database;
 use Data::Dumper;
 use SteamAPI;
 use Utils;
+use File::Basename qw(dirname);
+use Cwd qw(abs_path);
 
 
 #=======================================================================================================================
 # Global vars
 #=======================================================================================================================
 our $VERSION = '0.1';
+
+my $dbfile = dirname(abs_path($0)) . '/../data/db.sqlite';
+database({ driver => 'SQLite', database => $dbfile });
+Utils::log($dbfile);
 
 
 #=======================================================================================================================

@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-docker build -t cbtm docker/.
+time docker build -t cbtm docker/.
