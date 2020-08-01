@@ -16,8 +16,12 @@
     3. Dancer2::Plugin::Database
     4. DBD::SQLite
 
-   Alternatively there you can build a docker image from the included Dockerfile. After building the image (this can take a while depending on a few factors such as your internet speed) you can start a new container with the following command:
+   Alternatively there you can build a docker image from the included Dockerfile. To build the image, from the root directory of this repository run the following command:
 
-   ``` docker run --rm -it -p 3001:5000 -v $(pwd):/opt dancer ```
+   ``` docker build -t cbtm docker/. ```
+
+   After building the image (this can take a while depending on a few factors such as your internet speed) you can start a new container with the following command:
+
+   ``` docker run --rm -it -p 3001:5000 -v $(pwd):/opt cbtm ```
 
    This will map the current working directory to the /opt folder inside the container. As well as it will make the application accesible through port 3001 of the machine running the container. Feel free to adjust these values to your needs.
