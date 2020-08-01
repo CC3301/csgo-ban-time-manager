@@ -3,7 +3,7 @@ RUN apt-get update > /dev/null && \
     apt-get upgrade -y > /dev/null && \
     apt-get install -y less wget build-essential apt-utils git > /dev/null && \
     apt-get install -y libdancer-perl libapache-logformat-compiler-perl libposix-strftime-compiler-perl > /dev/null && \
-    echp "Packages installed. Installing Perl Modules" && \
+    echo "Packages installed. Installing Perl Modules" && \
     cpan -i Plack::Util > /dev/null && \
     cpan -i Plack::Test > /dev/null && \
     cpan -i Plack::Middleware > /dev/null && \
