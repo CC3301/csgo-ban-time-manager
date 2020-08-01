@@ -16,4 +16,4 @@ RUN apt-get update > /dev/null && \
     git clone https://github.com/CC3301/csgo-ban-time-manager > /dev/null && \
     echo "DONE"
 
-ENTRYPOINT plackup csgo-ban-time-manager/bin/app.psgi
+ENTRYPOINT cd csgo-ban-time-manager/ && plackup bin/app.psgi
