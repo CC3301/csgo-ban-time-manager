@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <meta charset="<% settings.charset %>">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fix=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title><% title %></title>
+
+
+        <link href="<% request.uri_base %>/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <link href="<% request.uri_base %>/css/sidebar.css" rel="stylesheet">
+        <link href="<% request.uri_base %>/css/navbar.css" rel="stylesheet">
+        <link href="<% request.uri_base %>/css/style.css" rel="stylesheet">
+
+    </head>
+    <body>
+        <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading" style="font-weight: bold;">CBTM</div>
+            <div class="list-group list-group-flush">
+                <a href="<% request.uri_base %>/vac_add_suspect" class="list-group-item list-group-item-action bg-light">Add VAC Suspect</a>
+                <a href="<% request.uri_base %>/vac_list_suspects" class="list-group-item list-group-item-action bg-light">List VAC Suspects</a>
+                <a href="<% request.uri_base %>/cd_add_cooldown" class="list-group-item list-group-item-action bg-light">Add Cooldown</a>
+                <a href="<% request.uri_base %>/cd_list_cooldowns" class="list-group-item list-group-item-action bg-light">List Cooldowns</a>
+            </div>
+        </div>
+        <!-- /Sidebar -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <% toast %>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<% request.uri_base %>">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<% request.uri_base %>/admin">Admin</a>
+                        </li>
+
+                        <!-- dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="<% request.uri_base %>" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><% current_user %></a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="<% request.uri_base %>/logout">Logout</a>
+                            </div>
+                        </li>
+                        <!-- /dropdown -->
+                    </ul>
+                </div>
+            </nav>
+            <!-- /Navbar -->
+            <!-- Actual Page Content -->
+            <div class="container-fluid">
+                <% content %>
+            </div>
+            <!-- /Actual Page Content -->
+            <!-- Footer -->
+                <!--<footer class="page-footer font-small blue">
+                <div class="container-fluid text-center text-md-left">
+                    <div class="row">
+                        <div class"col-md-6 mt-md-0 mt-3">
+                            <p>CSGO Ban-Time Manager v<% version %>, Logged in as: <% current_user %>, page generation time: <% sys_time %></p>
+                        </div>
+                        <hr class="clearfix w-100 d-md-none pb-3">
+                    </div>
+                </div>
+            </footer>-->
+            <!-- /Footer -->
+        </div>
+        <!-- /Page Content -->
+
+        <script src="<% request.uri_base %>/javascripts/jquery/jquery.min.js"></script>
+        <script src="<% request.uri_base %>/javascripts/bootstrap/bootstrap.bundle.min.js"></script>
+
+        <script>
+            $("#menu-toggle").click(function(e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+.table-wrapper-scroll-y {
+    height: 90vh !important;
+    overflow-y: scroll;
+}
+
+/*
+.table-wrapper-scroll-y th {
+    position: sticky;
+    top: 0;
+}
+*/
+.alert {
+  margin-bottom: 0px;
+  height: 40px;
+  line-height: 40px;
+  padding:0px 40px;
+}

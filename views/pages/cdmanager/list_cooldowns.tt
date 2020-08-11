@@ -1,34 +1,37 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Steam 64 ID</th>
-      <th scope="col">Suspect Name</th>
-      <th scope="col">Profile Visibility</th>
-      <th scope="col">Cooldown Reason</th>
-      <th scope="col">Cooldown Duration</th>
-      <th scope="col">Avatar</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% FOREACH suspect IN suspects %>
-      <tr>
-        <td><% suspect.value.steam_id64 %> </td>
-        <td><a href="https://steamcommunity.com/profiles/<% suspect.value.steam_id64 %>"><% suspect.value.steam_username %></a></td>
-        <td><% suspect.value.steam_profile_visibility%> </td>
-        <td><% suspect.value.steam_cooldown_reason %> </td>
-        <td><% suspect.value.steam_cooldown_duration %> </td>
-        <td><img src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
-        <td>
-          <form action="<% request.uri_base %>/cd_add_cooldown" method="post">
-            <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-            <input type="submit" value="Update Data"/>
-          </form>
-          <form action="<% request.uri_base %>/cd_delete_cooldown" method="post">
-            <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-            <input type="submit" value="Delete from Database"/>
-          </form>
-        </td>
-      </tr>
-    <% END %>
-</table>
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+    <table class="table table-bordered table-striped mb-0">
+        <thead>
+            <tr>
+                <th scope="col">Steam 64 ID</th>
+                <th scope="col">Suspect Name</th>
+                <th scope="col">Profile Visibility</th>
+                <th scope="col">Cooldown Reason</th>
+                <th scope="col">Cooldown Duration</th>
+                <th scope="col">Avatar</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% FOREACH suspect IN cooldowns %>
+                <tr>
+                    <td><% suspect.value.steam_id64 %> </td>
+                    <td><a href="https://steamcommunity.com/profiles/<% suspect.value.steam_id64 %>"><% suspect.value.steam_username %></a></td>
+                    <td><% suspect.value.steam_profile_visibility%> </td>
+                    <td><% suspect.value.steam_cooldown_reason %> </td>
+                    <td><% suspect.value.steam_cooldown_time %> </td>
+                    <td><img src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
+                    <td>
+                        <form action="<% request.uri_base %>/cd_add_cooldown" method="post">
+                            <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
+                            <input type="submit" value="Update Data"/>
+                        </form>
+                        <form action="<% request.uri_base %>/cd_delete_cooldown" method="post">
+                            <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
+                            <input type="submit" value="Delete from Database"/>
+                        </form>
+                    </td>
+                </tr>
+            <% END %>
+        </tbody>
+    </table>
+</div>

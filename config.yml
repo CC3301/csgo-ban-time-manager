@@ -61,22 +61,39 @@ engines:
 #      is_secure: 1
 #      is_http_only: 1
 plugins:
-    Database:
-        driver: SQLite
-        database: 'data/db.sqlite'
     Auth::Extensible:
         realms:
-            config:
-                provider: Config
-                users:
-                    - user: 'test'
-                      pass: 'test'
-                      name: 'Test User'
-                      roles:
-                          - user
-                    - user: 'admin'
-                      pass: 'admin'
-                      name: 'Test Admin'
-                      roles:
-                          - user
-                          - admin
+            users:
+                provider: 'Database'
+                disable_roles: 0
+                users_table: 'users'
+                roles_table: 'roles'
+                user_roles_table: 'user_roles'
+                users_id_column: 'id'
+                users_username_column: 'username'
+                users_password_column: 'password'
+                roles_id_column: 'id'
+                roles_role_column: 'role'
+                user_roles_user_id_column: 'user_id'
+                user_roles_role_id_column: 'role_id'
+    Database:
+        driver: 'SQLite'
+        database: 'data/db.sqlite'
+        dbi_params:
+            PrintError: 1
+            RaiseError: 1
+
+            #config:
+            #    provider: Config
+            #    users:
+            #        - user: 'test'
+            #          pass: 'test'
+            #          name: 'Test User'
+            #          roles:
+            #              - user
+            #        - user: 'admin'
+            #          pass: 'admin'
+            #          name: 'Test Admin'
+            #          roles:
+            #              - user
+            #              - admin

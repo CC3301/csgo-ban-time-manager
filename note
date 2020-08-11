@@ -1,0 +1,18 @@
+nightly check on ALL steam-related data in the database
+    check if vac state changed from 0 to anything else => write timestamp: steam_frist_banned in vac table
+
+
+upon creation => write timestamp: steam_first_added in both tables
+
+
+fix send_file() issue with parent dir descriptor: '/../'
+
+change auth realm provider to database, change resetdb.sh script to add default users
+add user management
+
+add function to import database, only add steam ids from cooldowns and vacs table, don't touch config or statistics
+
+add stratgen feature
+
+
+(mby) add smurf account Manager

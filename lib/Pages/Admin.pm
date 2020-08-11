@@ -1,5 +1,5 @@
 #=======================================================================================================================
-# Admin Page 
+# Admin Page
 #=======================================================================================================================
 package Pages::Admin;
 
@@ -13,7 +13,7 @@ use Dancer2::Plugin::Database;
 
 # other
 use Data::Dumper;
-use SteamAPI;
+use Utils::SteamAPI;
 use Utils;
 use File::Basename qw(dirname);
 use Cwd qw(abs_path);
@@ -38,7 +38,7 @@ get '/admin' => require_role admin => sub {
     my $dbpath = Cwd::getcwd() . '/data/db.sqlite';
 
     # check if we need to initialize the database and if yes then render a different template
-    if (_check_db_uninitialized()) {
+    if (Utils::check_db_uninitialized(database)) {
         template 'pages/admin/setupdb' => {
             'title' => "Set up Database",
             'sys_time'     => qq($time),
@@ -46,7 +46,7 @@ get '/admin' => require_role admin => sub {
         };
     } else {
 
-        $database_data{old_steam_api_key} = _get_steam_api_key();
+        $database_data{old_steam_api_key} = Utils::get_steam_api_key(database);
 
         # render template
         template 'pages/admin/admin' => {
@@ -70,7 +70,7 @@ post '/admin_save_steam_api_key' => require_role admin => sub {
     # save the steam api Key
 
     # try to read the steam api key from the database
-    my $steam_apk = _get_steam_api_key();
+    my $steam_apk = Utils::get_steam_api_key(database);
     my $query     = undef;
     if (!$steam_apk eq '') {
         $query = "UPDATE config SET steam_api_key = '$steam_api_key';";
@@ -88,6 +88,12 @@ post '/admin_save_steam_api_key' => require_role admin => sub {
     }
 };
 
+# export the Database
+get  '/admin_export_db' => require_role admin => sub {
+    my $dbfile = setting('dbfile');
+    Utils::log($dbfile);
+    return(send_file('/home/fink/Projects/csgo-ban-time-manager/data/db.sqlite', system_path => 1, filename => "dbexport_" . time() . ".sqlite"));
+};
 
 # setup db should only be called if there is no database yet
 post '/admin_setupdb' => require_role admin => sub {
@@ -106,6 +112,8 @@ post '/admin_setupdb' => require_role admin => sub {
             steam_avatar_url VARCHAR,
             steam_profile_visibility INTEGER,
             steam_last_modified VARCHAR,
+            steam_first_added VARCHAR,
+            steam_first_bannend VARCHAR,
             UNIQUE(steam_id64)
         );
     ";
@@ -120,6 +128,7 @@ post '/admin_setupdb' => require_role admin => sub {
             steam_avatar_url VARCHAR,
             steam_profile_visibility INTEGER,
             steam_last_modified VARCHAR,
+            steam_first_added VARCHAR,
             UNIQUE(steam_id64)
         );
     ";
@@ -184,25 +193,4 @@ post '/admin_setupdb' => require_role admin => sub {
     redirect '/admin';
 
 };
-
-# load the steam api key from the database
-# returns a string
-sub _get_steam_api_key() {
-
-    my $query = "SELECT steam_api_key FROM config;";
-    my $sth = database->prepare($query);
-    $sth->execute();
-
-    my $steam_api_key = join('', $sth->fetchrow_array());
-    chomp $steam_api_key;
-    return($steam_api_key);
-}
-# check if the database is initialized
-# returns a boolean
-sub _check_db_uninitialized() {
-    my $query = "SELECT * FROM config;";
-    my $sth = database->prepare($query) or return(1);
-    return(0);
-}
-
 1;

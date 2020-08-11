@@ -13,6 +13,7 @@ RUN cpan -i Plack::Middleware
 RUN cpan -i Plack::Builder
 RUN cpan -i Dancer2
 RUN cpan -i Dancer2::Plugin::Auth::Extensible
+RUN cpan -i Dancer2::Plugin::Auth::Extensible::Provider::Database
 RUN cpan -i Dancer2::Plugin::Database
 RUN cpan -i DBD::SQLite
 RUN echo "Perl modules installed. Cloning most recent version of the csgo-ban-time-manager"

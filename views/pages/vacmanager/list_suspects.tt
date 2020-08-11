@@ -1,38 +1,47 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Steam 64 ID</th>
-      <th scope="col">Suspect Name</th>
-      <th scope="col">Profile Visibility</th>
-      <th scope="col">VAC Banned</th>
-      <th scope="col">Game Banned</th>
-      <th scope="col">Trade Banned</th>
-      <th scope="col">Community Banned</th>
-      <th scope="col">Avatar</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% FOREACH suspect IN suspects %>
-      <tr>
-        <td><% suspect.value.steam_id64 %> </td>
-        <td><a href="https://steamcommunity.com/profiles/<% suspect.value.steam_id64 %>"><% suspect.value.steam_username %></a></td>
-        <td><% suspect.value.steam_profile_visibility%> </td>
-        <td><% suspect.value.steam_ban_vac %> </td>
-        <td><% suspect.value.steam_ban_game %> </td>
-        <td><% suspect.value.steam_ban_trade %> </td>
-        <td><% suspect.value.steam_ban_community %> </td>
-        <td><img src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
-        <td>
-          <form action="<% request.uri_base %>/vac_save_suspect" method="post">
-            <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-            <input type="submit" value="Update Data"/>
-          </form>
-          <form action="<% request.uri_base %>/vac_delete_suspect" method="post">
-            <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-            <input type="submit" value="Delete from Database"/>
-          </form>
-        </td>
-      </tr>
-    <% END %>
-</table>
+<div class="table-wrapper-scroll-y">
+    <table class="table table-bordered table-striped mb-0">
+        <thead>
+            <tr>
+                <th scope="col">Steam 64 ID</th>
+                <th scope="col">Suspect Name</th>
+                <th scope="col">Profile Visibility</th>
+                <th scope="col">VAC Banned</th>
+                <!--<th scope="col">Game Banned</th>
+                <th scope="col">Trade Banned</th>
+                <th scope="col">Community Banned</th>-->
+                <th scope="col">Avatar</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% FOREACH suspect IN suspects %>
+                <tr>
+                    <td><% suspect.value.steam_id64 %> </td>
+                    <td><a href="https://steamcommunity.com/profiles/<% suspect.value.steam_id64 %>"><% suspect.value.steam_username %></a></td>
+                    <td><% suspect.value.steam_profile_visibility%> </td>
+                    <td><% IF suspect.value.steam_ban_vac != 0 %>
+                        <strong style="color: red;">&times;</strong>(<% suspect.value.steam_ban_vac %>)
+                        <% ELSE %>
+                        <strong style="color: green;">&#10003;</strong>
+                        <% END %>
+                    </td>
+                    <!--<td><% suspect.value.steam_ban_game %> </td>
+                    <td><% suspect.value.steam_ban_trade %> </td>
+                    <td><% suspect.value.steam_ban_community %> </td>-->
+                    <td><img src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
+                    <td>
+                        <form action="<% request.uri_base %>/vac_save_suspect" method="post">
+                            <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
+                            <input type="hidden" name="redirect"   value="<% request.uri_base %>/vac_list_suspects" />
+                            <input type="submit" value="Update Data"/>
+                        </form>
+                        <form action="<% request.uri_base %>/vac_delete_suspect" method="post">
+                                <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
+                                <input type="submit" value="Delete from Database"/>
+                        </form>
+                    </td>
+                </tr>
+            <% END %>
+        </tbody>
+    </table>
+</div>

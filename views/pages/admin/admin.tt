@@ -7,14 +7,7 @@
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_add_user" aria-selected="false" href="#user_add_user">Add new User</a></li>
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_del_user" aira-selected="false" href="#user_del_user">Delete User</a></li>
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_mod_user" aria-selected="false" href="#user_mod_user">Modify User</a></li>
-    <!--<li class="dropdown">
-      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="tab">User Management<span class="caret"></span></a>
-      <ul class="dropdown-menu">
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_add_user" aria-selected="false" href="#user_add_user">Add new User</a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_del_user" aira-selected="false" href="#user_del_user">Delete User</a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_mod_user" aria-selected="false" href="#user_mod_user">Modify User</a></li>
-      </ul>
-    <li>-->
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="db_mng_db" aria-selected="false" href="#db_mng_db">Database Management</a></li>
   </ul>
 
   <!-- Acutal Menus -->
@@ -50,6 +43,16 @@
         <input id="new_user_username" type="text" name="new_user_username" value="" placeholder="username for new user" required>
         <input  type="password" name="new_user_password" value="" placeholder="password for new user" requierd>
         <button class="btn btn-primary" type="submit" name="" value="">Update User</button>
+      </form>
+    </div>
+    <div id="db_mng_db" class="tab-pane fade" role="tabpanel" aria-labelledby="db_mng_db">
+      <h3>Manage Database</h3>
+      <form action="<% requst.uri_base %>/admin_export_db" method="get" autocomplete="off">
+        <button class="btn btn-primary" type="submit" name="" value="">Export Database</button>
+    </form>
+      <form action="<% requst.uri_base %>/admin_import_db" method="post" autocomplete="off">
+        <input type="file">
+        <button class="btn btn-primary" type="submit" name="" value="">Import Database</button>
       </form>
     </div>
   </div>
