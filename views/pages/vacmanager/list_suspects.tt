@@ -1,42 +1,38 @@
-<div id="page">
-    <link rel="stylesheet" href="<% request.uri_base %>/css/vacmanager/list_suspects.css">
-    <div id="content">
-        <center><h1>All VAC Suspects</h1></center>
-        <div id="suspect_list">
-            <table>
-                <tr>
-                    <th>Steam 64 ID</th>
-                    <th>Suspect Name</th>
-                    <th>Profile Visibility</th>
-                    <th>VAC Banned</th>
-                    <th>Game Banned</th>
-                    <th>Trade Banned</th>
-                    <th>Community Banned</th>
-                    <th>Avatar</th>
-                    <th>Actions</th>
-                </tr>
-                <% FOREACH suspect IN suspects %>
-                    <tr>
-                        <td><% suspect.value.steam_id64 %> </td>
-                        <td><a href="https://steamcommunity.com/profiles/<% suspect.value.steam_id64 %>"><% suspect.value.steam_username %></a></td>
-                        <td><% suspect.value.steam_profile_visibility%> </td>
-                        <td><% suspect.value.steam_ban_vac %> </td>
-                        <td><% suspect.value.steam_ban_game %> </td>
-                        <td><% suspect.value.steam_ban_trade %> </td>
-                        <td><% suspect.value.steam_ban_community %> </td>
-                        <td><img src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
-                        <td><form action="<% request.uri_base %>/vac_save_suspect" method="post">
-                                <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-                                <input type="submit" value="Update Data"/>
-                            </form>
-                            <form action="<% request.uri_base %>/vac_delete_suspect" method="post">
-                                    <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-                                    <input type="submit" value="Delete from Database"/>
-                                </form>
-                        </td>
-                    </tr>
-                <% END %>
-            </table>
-        </div>
-    </div>
-</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Steam 64 ID</th>
+      <th scope="col">Suspect Name</th>
+      <th scope="col">Profile Visibility</th>
+      <th scope="col">VAC Banned</th>
+      <th scope="col">Game Banned</th>
+      <th scope="col">Trade Banned</th>
+      <th scope="col">Community Banned</th>
+      <th scope="col">Avatar</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% FOREACH suspect IN suspects %>
+      <tr>
+        <td><% suspect.value.steam_id64 %> </td>
+        <td><a href="https://steamcommunity.com/profiles/<% suspect.value.steam_id64 %>"><% suspect.value.steam_username %></a></td>
+        <td><% suspect.value.steam_profile_visibility%> </td>
+        <td><% suspect.value.steam_ban_vac %> </td>
+        <td><% suspect.value.steam_ban_game %> </td>
+        <td><% suspect.value.steam_ban_trade %> </td>
+        <td><% suspect.value.steam_ban_community %> </td>
+        <td><img src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
+        <td>
+          <form action="<% request.uri_base %>/vac_save_suspect" method="post">
+            <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
+            <input type="submit" value="Update Data"/>
+          </form>
+          <form action="<% request.uri_base %>/vac_delete_suspect" method="post">
+            <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
+            <input type="submit" value="Delete from Database"/>
+          </form>
+        </td>
+      </tr>
+    <% END %>
+</table>

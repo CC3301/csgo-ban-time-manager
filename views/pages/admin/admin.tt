@@ -1,61 +1,56 @@
-<div id="page">
-    <link rel="stylesheet" href="<% request.uri_base %>/css/admin/admin.css">
-    <script src="/javascripts/admin.js" charset="utf-8"></script>
-    <div id="content">
-        <center><h1>Admin Control Panel</h1></center>
-        <div id="form_controls">
-            <table>
-                <tr>
-                    <td><button id="button_modify_steam_api_key" type="button" name="button">Change/View Steam API Key</button></td>
-                    <td><button id="button_add_del_user_account" type="button" name="button">Add/Delete account       </button></td>
-                    <td><button id="button_debug_information"    type="button" name="button">Show Debug Information   </button></td>
-                </tr>
-            </table>
-        </div>
-        <div id="form_modify_steam_api_key">
-            <form action="<% requst.uri_base %>/admin_save_steam_api_key" method="post" autocomplete="off">
-                <table>
-                    <tr>
-                        <td>Steam API Key:</td>
-                        <td><input  type="text" name="steam_api_key" value="" placeholder="<% old_steam_api_key %>" required></td>
-                        <td><button type="submit" name="" value="">Save</button></td>
-                        <td><button class="button_show_controls" type="button" name="button">Back</button></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-        <div id="form_add_del_user_account">
-            <table>
-                <tr>
-                    <form action="<% request.uri_base %>/admin_add_user" method="post" autocomplete="off">
-                        <td>Add User:</td>
-                        <td><input  type="text" name="new_account_user_name" value="" placeholder="username" required></td>
-                        <td><input  type="password" name="new_account_password" value="" placeholder="password" requierd></td>
-                        <td><button type="submit" name="" value="">Add User </button></td>
-                    </form>
-                </tr>
-                <tr>
-                    <form action="<% request.uri_base %>/admin_del_user" method="post" autocomplete="off">
-                        <td>Delete User:</td>
-                        <td><input  type="text" name="new_account_user_name" value="" placeholder="username" required></td>
-                        <td></td>
-                        <td><button type="submit" name="" value="">Delete User</button></td>
-                    </form>
-                </tr>
-                <tr>
-                    <td><button class="button_show_controls" type="button" name="button">Back</button></td>
-                </tr>
-            </table>
-        </div>
-        <div id="form_debug_information">
-            <table>
-                <tr>
-                    <form action="<% request.uri_base %>/admin_debug_information" method="post" autocomplete="off">
-                        <td><button type="submit" name="button">Show Debug Information</button></td>
-                        <td><button class="button_show_controls" type="button" name="button">Back</button></td>
-                    </form>
-                </tr>
-            </table>
-        </div>
+<div class="container">
+  <h2>Admin Panel</h2>
+
+  <!-- Menu Selector -->
+  <ul class="nav nav-tabs">
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#steam_menu" role="tab" aria-controls="steam_menu" aria-selected="false">Change Steam API Key</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_add_user" aria-selected="false" href="#user_add_user">Add new User</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_del_user" aira-selected="false" href="#user_del_user">Delete User</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_mod_user" aria-selected="false" href="#user_mod_user">Modify User</a></li>
+    <!--<li class="dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="tab">User Management<span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_add_user" aria-selected="false" href="#user_add_user">Add new User</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_del_user" aira-selected="false" href="#user_del_user">Delete User</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_mod_user" aria-selected="false" href="#user_mod_user">Modify User</a></li>
+      </ul>
+    <li>-->
+  </ul>
+
+  <!-- Acutal Menus -->
+  <br>
+  <div class="tab-content">
+    <div id="steam_menu" class="tab-pane fade" role="tabpanel" aria-labelledby="steam_menu">
+      <h3>Steam Settings</h3>
+      <form action="<% Vrequst.uri_base %>/admin_save_steam_api_key" method="post" autocomplete="off">
+        <label for="steam_api_key">Steam API Key</label>
+        <input id="steam_api_key" type="text" name="steam_api_key" value="" placeholder="<% old_steam_api_key %>" required>
+        <button class="btn btn-primary" type="submit" name="" value="">Update Steam API Key</button>
+      </form>
     </div>
+    <div id="user_add_user" class="tab-pane fade" role="tabpanel" aria-labelledby="user_add_user">
+      <h3>Add User</h3>
+      <form action="<% requst.uri_base %>/admin_add_user" method="post" autocomplete="off">
+        <input id="new_user_username" type="text" name="new_user_username" value="" placeholder="username for new user" required>
+        <input  type="password" name="new_user_password" value="" placeholder="password for new user" requierd>
+        <button class="btn btn-primary" type="submit" name="" value="">Add User</button>
+      </form>
+    </div>
+    <div id="user_del_user" class="tab-pane fade" role="tabpanel" aria-labelledby="user_del_user">
+      <h3>Delete User</h3>
+      <form action="<% requst.uri_base %>/admin_add_user" method="post" autocomplete="off">
+        <input id="new_user_username" type="text" name="new_user_username" value="" placeholder="username for new user" required>
+        <input  type="password" name="new_user_password" value="" placeholder="password for new user" requierd>
+        <button class="btn btn-primary" type="submit" name="" value="">Delete User</button>
+      </form>
+    </div>
+    <div id="user_mod_user" class="tab-pane fade" role="tabpanel" aria-labelledby="user_mod_user">
+      <h3>Modify User</h3>
+      <form action="<% requst.uri_base %>/admin_add_user" method="post" autocomplete="off">
+        <input id="new_user_username" type="text" name="new_user_username" value="" placeholder="username for new user" required>
+        <input  type="password" name="new_user_password" value="" placeholder="password for new user" requierd>
+        <button class="btn btn-primary" type="submit" name="" value="">Update User</button>
+      </form>
+    </div>
+  </div>
 </div>

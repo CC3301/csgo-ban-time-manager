@@ -1,15 +1,16 @@
+
 #=======================================================================================================================
-# cbtm package
+# VacManager Page 
 #=======================================================================================================================
-package cbtm;
+package Pages::VacManager;
 
 
 #=======================================================================================================================
-# Import modules
+# Import modules and extend the cbtm app
 #=======================================================================================================================
 
 # Dancer
-use Dancer2;
+use Dancer2 appname => 'cbtm';
 use Dancer2::Plugin::Auth::Extensible;
 use Dancer2::Plugin::Database;
 
@@ -20,10 +21,6 @@ use Utils;
 use File::Basename qw(dirname);
 use Cwd qw(abs_path);
 
-use Pages::Admin;
-use Pages::VacManager;
-use Pages::CooldownManager;
-
 
 #=======================================================================================================================
 # Global vars
@@ -32,44 +29,21 @@ our $VERSION = '0.1';
 
 my $dbfile = dirname(abs_path($0)) . '/../data/db.sqlite';
 database({ driver => 'SQLite', database => $dbfile });
-Utils::log($dbfile);
 
 
 #=======================================================================================================================
-# Index Page handler
+# VAC manager page handler
 #=======================================================================================================================
-get '/' => require_role user => sub {
+
+# vac manager default page
+get '/vac_manager' => require_role user => sub {
 
     # get information
     my $user = logged_in_user();
     my $time = localtime(time());
 
     # render the template
-    template 'pages/index' => {
-         'title'        => 'CSGO Ban Time Manager',
-         'version'      => $VERSION,
-         'sys_time'     => qq($time),
-         'current_user' => $user->{name},
-    };
-};
-
-
-
-
-
-#=======================================================================================================================
-# Strategy generator page handler
-#=======================================================================================================================
-
-# stratgen manager default page
-get '/stratgen' => require_role user => sub {
-
-    # get information
-    my $user = logged_in_user();
-    my $time = localtime(time());
-
-    # render the template
-    template 'pages/stratgen/stratgen' => {
+    template 'pages/vacmanager/vacmanager' => {
         'title'        => 'VAC Manager',
         'version'      => $VERSION,
         'sys_time'     => qq($time),
@@ -78,9 +52,111 @@ get '/stratgen' => require_role user => sub {
 };
 
 
-#=======================================================================================================================
-# Admin Page stuff
-#=======================================================================================================================
+# vac manager add suspect page
+get '/vac_add_suspect' => require_role user => sub {
+
+    # get information
+    my $user   = logged_in_user();
+    my $time   = localtime(time());
+    my $params = request->params();
+    my $status = $params->{status};
+    my $statuscolor = undef;
+
+    # determine what color the status has to be
+    if ($status eq 'Success') {
+        $statuscolor = 'green';
+    } elsif ($status eq "Updated") {
+        $statuscolor = 'orange';
+    } else {
+        $statuscolor = 'red';
+    }
+
+    # render the template
+    template 'pages/vacmanager/add_suspect' => {
+        'title'        => 'Add VAC Suspect',
+        'version'      => $VERSION,
+        'sys_time'     => qq($time),
+        'current_user' => $user->{name},
+        'status'       => $status,
+        'statuscolor'  => $statuscolor,
+    };
+};
+
+# actually save the suspect to the database after collecting data from steam API
+post '/vac_save_suspect' => require_role user => sub {
+
+    # get information
+    my $params  = request->params();
+    my $steam64 = $params->{steam_id64};
+    my $status  = 'Failed';
+    my ($query, $sth);
+
+    # try to receive data from steam
+    my %suspect_data = _get_suspect_data_from_steam($steam64);
+
+    # check if there is valid data
+    if (defined $suspect_data{avatar_url}) {
+        $status = "Success";
+        $query = "INSERT INTO vacs (steam_id64, steam_username, steam_ban_vac, steam_ban_game, steam_ban_trade,
+                                    steam_ban_community, steam_avatar_url, steam_profile_visibility, steam_last_modified)
+                                    VALUES ( '$steam64', '$suspect_data{profile_name}', '$suspect_data{ban_state}{vac}',
+                                    '$suspect_data{ban_state}{game}', '$suspect_data{ban_state}{trade}',
+                                    '$suspect_data{ban_state}{community}', '$suspect_data{avatar_url}',
+                                    '$suspect_data{profile_visi}', '$suspect_data{last_mod}'
+                                    );";
+        $sth    = database->prepare($query);
+
+        # check if we can execute the following query, if not try to update
+        if ($sth->execute()) {
+            $status = "Success";
+        } else {
+            $status = "Failed";
+            $query = "
+              UPDATE vacs SET
+                steam_username = '$suspect_data{profile_name}',
+                steam_ban_vac = '$suspect_data{ban_state}{vac}',
+                steam_ban_game = '$suspect_data{ban_state}{game}',
+                steam_ban_trade = '$suspect_data{ban_state}{trade}',
+                steam_ban_community = '$suspect_data{ban_state}{community}',
+                steam_avatar_url = '$suspect_data{avatar_url}',
+                steam_profile_visibility = '$suspect_data{profile_visi}',
+                steam_last_modified = '$suspect_data{last_mod}'
+              WHERE steam_id64 = '$steam64';
+            ";
+            $sth = database->prepare($query);
+
+            if ($sth->execute()) {
+                $status = "Updated";
+            } else {
+                $status = "Failed";
+            }
+        }
+    } else {
+        $status = "Failed";
+    }
+
+    # redirect back to the add page to show if it was successful or if it failed
+    redirect '/vac_add_suspect?status=' . $status;
+};
+
+
+# vac manager add suspect page
+get '/vac_list_suspects' => require_role user => sub {
+
+    # get information
+    my $user = logged_in_user();
+    my $time = localtime(time());
+    my %suspect_data = _get_suspect_data_from_db('vacs');
+
+    # render the template
+    template 'pages/vacmanager/list_suspects' => {
+        'title'        => 'All VAC Suspects',
+        'version'      => $VERSION,
+        'sys_time'     => qq($time),
+        'current_user' => $user->{name},
+        'suspects'     => \%suspect_data,
+    };
+};
 
 
 #=======================================================================================================================
@@ -166,7 +242,4 @@ sub _check_db_uninitialized() {
     return(0);
 }
 
-#=======================================================================================================================
-# do the perl thing
-#=======================================================================================================================
-true;
+1;

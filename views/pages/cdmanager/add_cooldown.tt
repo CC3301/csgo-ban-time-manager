@@ -1,20 +1,47 @@
-<div id="page">
-    <link rel="stylesheet" href="<% request.uri_base %>/css/cdmanager/add_suspect.css">
-    <div id="add-suspect">
-        <h1>Add VAC Suspect</h1>
-        <div id="content">
-            <form action="/cd_save_suspect" method="post">
-                <table>
-                    <tr>
-                        <td><label for="steam_id64">Steam ID 64:</label></td>
-                        <td><input type="text" name="steam_id64" value="" maxlength="50" required/></td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" value="Add Cooldown"/></td>
-                    </tr>
-                </table>
-            </form>
+<div class="card">
+  <article class="card-body">
+    <h4 class="card-title text-center mb-4 mt-1">Add Cooldown</h4>
+    <hr>
+    <p class="text-center" style="color:<% statuscolor %>"><% status %></p>
+    <form method="post" action="<% request.uri_base %>/cd_save_suspect">
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"> <i class="fa fa-user"></i></span>
+          </div>
+          <input name="steam_id64" class="form-control" placeholder="Steam ID 64" type="text" required>
         </div>
-        <p style="color:var(<% statuscolor %>)"><% status %></p>
-    </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"> <i class="fa fa-user"></i></span>
+          </div>
+          <select name="cooldown_reason" class="form-control" size="1" required>
+            <option value="cdr_team_dmg">Team Damage</option>
+            <option value="cdr_team_kill">More than two Teamkills</option>
+            <option value="cdr_afk">AFK Timeout</option>
+            <option value="cdr_suicide">Too many suicides</option>
+            <option value="cdr_free_will">Quit voluntarly</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"> <i class="fa fa-user"></i></span>
+          </div>
+          <select name="cooldown_duration" class="form-control" size="1" required>
+            <option value="cdd_30">Half Hour Cooldown</option>
+            <option value="cdd_120">Two Hour Cooldown</option>
+            <option value="cdd_1440">One Day Cooldown</option>
+            <option value="cdd_10080">Seven Day Cooldown</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-lock">Add</button>
+      </div>
+    </form>
+  </article>
 </div>

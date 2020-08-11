@@ -1,17 +1,12 @@
-<div id="page">
-    <link rel="stylesheet" href="<% request.uri_base %>/css/admin/setupdb.css">
-    <div id="content">
-        <h1>Initialize Database</h1>
-        <div id="controls">
-            <table>
-                <tr>
-                    <form action="<% requst.uri_base %>/admin_setupdb" method="post">
-                    <td>
-                        <input type="submit" value="Initialize Database" />
-                    </td>
-                    </form>
-                </tr>
-            </table>
-        </div>
-    </div>
+<div class="card">
+  <article class="card-body">
+    <h4 class="card-title text-center mb-4 mt-1">Initialize Database</h4>
+    <hr>
+    <p class="text-center" style="color:<% statuscolor %>"><% status %></p>
+    <form method="post" action="<% request.uri_base %>/admin_setupdb">
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-lock">Initialize</button>
+      </div>
+    </form>
+  </article>
 </div>
