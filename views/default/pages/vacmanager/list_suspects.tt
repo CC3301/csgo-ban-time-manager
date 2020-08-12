@@ -1,3 +1,18 @@
+<div class="card">
+    <article class="card-body">
+    <h4 class="card-title text-center mb-4 mt-1">Search Suspect</h4>
+    <hr>
+    <form>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">    
+                    <span class="input-group-text"> <i class="fa fa-user"></i>Search by Name:</span>
+                </div>
+            <input name="search_input" id="search_input" class="form-control" placeholder="" type="text" onkeyup="searchSuspectCooldownTable()">
+        </div>
+    </article>
+</div>
+<hr>
 <div class="table-wrapper-scroll-y">
     <table class="table table-bordered table-striped mb-0">
         <thead>
@@ -6,8 +21,8 @@
                 <th scope="col">Suspect Name</th>
                 <th scope="col">Profile Visibility</th>
                 <th scope="col">VAC Banned</th>
-                <!--<th scope="col">Game Banned</th>
-                <th scope="col">Trade Banned</th>
+                <th scope="col">Game Banned</th>
+                <!--<th scope="col">Trade Banned</th>
                 <th scope="col">Community Banned</th>-->
                 <th scope="col">Avatar</th>
                 <th scope="col">Actions</th>
@@ -25,8 +40,13 @@
                         <strong style="color: green;">&#10003;</strong>
                         <% END %>
                     </td>
-                    <!--<td><% suspect.value.steam_ban_game %> </td>
-                    <td><% suspect.value.steam_ban_trade %> </td>
+                    <td><% IF suspect.value.steam_ban_game != 0 %>
+                        <strong style="color: red;">&times;</strong>(<% suspect.value.steam_ban_game %>)
+                        <% ELSE %>
+                        <strong style="color: green;">&#10003;</strong>
+                        <% END %>
+                    </td>
+                    <!--<td><% suspect.value.steam_ban_trade %> </td>
                     <td><% suspect.value.steam_ban_community %> </td>-->
                     <td><img class="rounded" src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
                     <td>
