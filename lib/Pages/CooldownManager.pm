@@ -20,9 +20,6 @@ use Utils;
 use File::Basename qw(dirname);
 use Cwd qw(abs_path);
 
-use Pages::Admin;
-use Pages::VacManager;
-
 
 #=======================================================================================================================
 # Database settings 
@@ -84,7 +81,7 @@ get '/cd_list_cooldowns' => require_role user => sub {
             'layout' => 'toast',
             'alert_text'  => $status,
             'alert_time'  => qq($time),
-            'alert_title' => 'VAC Manager',
+            'alert_title' => 'Cooldown Manager',
             'alert_type'  => $statustype,
         };
     }
@@ -143,7 +140,10 @@ post '/cd_save_cooldown' => require_role user => sub {
         $sth    = database->prepare($query);
 
         # check if we can execute the following query, if not try to update
-        if ($sth->execute()) {
+        eval {
+            $sth->execute();
+        };
+        if (! $@) {
             $status = "Success";
         } else {
             $status = "Failed";

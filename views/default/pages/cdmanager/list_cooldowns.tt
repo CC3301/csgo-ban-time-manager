@@ -21,7 +21,7 @@
                     <td><% suspect.value.steam_cooldown_time %> </td>
                     <td><img class="rounded" src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
                     <td>
-                        <form action="<% request.uri_base %>/cd_add_cooldown" method="post" style="float: left; padding-right: 3px;">
+                        <form action="<% request.uri_base %>/cd_save_cooldown" method="post" style="float: left; padding-right: 3px;">
                             <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
                             <button type="submit" class="btn btn-primary btn-sm">Update Data</button>
                         </form>

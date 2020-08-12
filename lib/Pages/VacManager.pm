@@ -91,9 +91,11 @@ post '/vac_save_suspect' => require_role user => sub {
         $sth    = database->prepare($query);
 
         # check if we can execute the following query, if not try to update
-        if ($sth->execute()) {
-            $status = "Success";
-        } else {
+        eval {
+            $sth->execute();
+        };
+        if ($@) {
+            Utils::log("Updating VAC Suspect Entry");
             $status = "Failed";
             $query = "
               UPDATE vacs SET
@@ -114,6 +116,8 @@ post '/vac_save_suspect' => require_role user => sub {
             } else {
                 $status = "Failed";
             }
+        } else {
+            $status = "Success";
         }
     } else {
         $status = "Failed";
