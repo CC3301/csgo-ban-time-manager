@@ -7,7 +7,7 @@
       <div class="form-group">
         <div class="input-group">
           <div class="input-group-prepend">
-            <span class="input-group-text"> <i class="fa fa-user"></i></span>
+            <span class="input-group-text"> <i class="fa fa-user"></i>SteamID 64:</span>
           </div>
           <input name="steam_id64" class="form-control" placeholder="Steam ID 64" type="text" required>
         </div>
@@ -15,13 +15,15 @@
       <div class="form-group">
         <div class="input-group">
           <div class="input-group-prepend">
-            <span class="input-group-text"> <i class="fa fa-user"></i></span>
+            <span class="input-group-text"> <i class="fa fa-user"></i>Cooldown Reason:</span>
           </div>
           <select name="steam_cooldown_reason" class="form-control" size="1" required>
+            <option value=""></option>
             <option value="team_dmg">Team Damage</option>
             <option value="team_kill">More than two Teamkills</option>
             <option value="afk">AFK Timeout</option>
             <option value="suicide">Too many suicides</option>
+            <option value="suicide">Too many disconnects</option>
             <option value="free_will">Quit voluntarly</option>
           </select>
         </div>
@@ -29,9 +31,10 @@
       <div class="form-group">
         <div class="input-group">
           <div class="input-group-prepend">
-            <span class="input-group-text"> <i class="fa fa-user"></i></span>
+            <span class="input-group-text"> <i class="fa fa-user"></i>Cooldown Duration:</span>
           </div>
           <select name="steam_cooldown_duration" class="form-control" size="1" required>
+            <option value=""></option>
             <option value="30">Half Hour Cooldown</option>
             <option value="120">Two Hour Cooldown</option>
             <option value="1440">One Day Cooldown</option>

@@ -28,16 +28,16 @@
                     <!--<td><% suspect.value.steam_ban_game %> </td>
                     <td><% suspect.value.steam_ban_trade %> </td>
                     <td><% suspect.value.steam_ban_community %> </td>-->
-                    <td><img src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
+                    <td><img class="rounded" src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
                     <td>
-                        <form action="<% request.uri_base %>/vac_save_suspect" method="post">
+                        <form action="<% request.uri_base %>/vac_save_suspect" method="post" style="float: left; padding-right: 3px;">
                             <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
                             <input type="hidden" name="redirect"   value="<% request.uri_base %>/vac_list_suspects" />
-                            <input type="submit" value="Update Data"/>
+                            <button type="submit" class="btn btn-primary btn-sm">Update Data</button>
                         </form>
                         <form action="<% request.uri_base %>/vac_delete_suspect" method="post">
                                 <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-                                <input type="submit" value="Delete from Database"/>
+                            <button type="submit" class="btn btn-primary btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>

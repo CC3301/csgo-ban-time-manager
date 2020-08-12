@@ -27,13 +27,10 @@ use Pages::CooldownManager;
 
 
 #=======================================================================================================================
-# Global vars
+# Database setting
 #=======================================================================================================================
-our $VERSION = '0.1';
+database({ driver => 'SQLite', database => setting('dbfile') });
 
-my $dbfile = dirname(abs_path($0)) . '/../data/db.sqlite';
-database({ driver => 'SQLite', database => $dbfile });
-set dbfile => $dbfile;
 
 #=======================================================================================================================
 # Index Page handler
@@ -45,11 +42,11 @@ get '/' => require_role user => sub {
     my $time = localtime(time());
 
     # render the template
-    template 'pages/index' => {
+    template setting('frontend') . '/pages/index' => {
          'title'        => 'CSGO Ban Time Manager',
-         'version'      => $VERSION,
+         'version'      => setting('version'),
          'sys_time'     => qq($time),
-         'current_user' => $user->{name},
+         'current_user' => $user->{username},
     };
 };
 
@@ -66,11 +63,11 @@ get '/stratgen' => require_role user => sub {
     my $time = localtime(time());
 
     # render the template
-    template 'pages/stratgen/stratgen' => {
+    template setting('frontend') . '/pages/stratgen/stratgen' => {
         'title'        => 'VAC Manager',
-        'version'      => $VERSION,
+        'version'      => setting('version'),
         'sys_time'     => qq($time),
-        'current_user' => $user->{name},
+        'current_user' => $user->{username},
         'alert'        => 'hidden',
     };
 };

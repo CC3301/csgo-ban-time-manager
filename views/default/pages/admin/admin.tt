@@ -1,0 +1,128 @@
+<div class="container">
+  <h2>Admin Panel</h2>
+
+  <!-- Menu Selector -->
+  <ul class="nav nav-tabs">
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#steam_menu" role="tab" aria-controls="steam_menu" aria-selected="false">Change Steam API Key</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_add_user" aria-selected="false" href="#user_add_user">Add new User</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_del_user" aira-selected="false" href="#user_del_user">Delete User</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="db_mng_db" aria-selected="false" href="#db_mng_db">Database Management</a></li>
+  </ul>
+
+  <!-- Acutal Menus -->
+  <br>
+  <div class="tab-content">
+    <div id="steam_menu" class="tab-pane fade" role="tabpanel" aria-labelledby="steam_menu">
+        <div class="card">
+            <article class="card-body">
+                <h4 class="card-title text-center mb-4 mt-1">Steam Settings</h4>
+                <hr>
+                <form action="<% requst.uri_base %>/admin_save_steam_api_key" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i>SteamAPI-Key:</span>
+                            </div>
+                            <input name="steam_api_key" value="" placeholder="<% old_steam_api_key %>" type="text" required>
+                        </div>
+                    </div>
+                    <div class="form-group">    
+                        <button class="btn btn-primary" type="submit" name="" value="">Update Steam API Key</button>
+                    </div>
+                </form>
+            </article>
+        </div>
+    </div>
+    <div id="user_add_user" class="tab-pane fade" role="tabpanel" aria-labelledby="user_add_user">
+        <div class="card">
+            <article class="card-body">
+                <h4 class="card-title text-center mb-4 mt-1">Add User</h4>
+                <hr>
+                <form action="<% requst.uri_base %>/admin_save_user_new_user" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i>Username:</span>
+                            </div>
+                            <input type="text" name="new_user_username" value="" placeholder="username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i>Password:</span>
+                            </div>
+                            <input type="password" name="new_user_password" value="" placeholder="*****" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i>Select Role:</span>
+                            </div>        
+                            <select name="new_user_roles" class="form-control" size="1" required>
+                                <option value=""></option>
+                            <% FOREACH user_role IN user_roles %>
+                                <option value="<% user_role.value.id %>"><% user_role.value.role %></option>
+                            <% END %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Add User</button>
+                    </div>
+                </form>
+            </article>
+        </div>
+    </div>
+    <div id="user_del_user" class="tab-pane fade" role="tabpanel" aria-labelledby="user_del_user">
+        <div class="card">
+            <article class="card-body">
+                <h4 class="card-title text-center mb-4 mt-1">Delete User</h4>
+                <hr>
+                <form action="<% requst.uri_base %>/admin_save_user_del_user" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i>Select User:</span>
+                            </div>        
+                            <select name="del_user" class="form-control" size="1" required>
+                                <option value=""></option>
+                            <% FOREACH user_role IN user_roles %>
+                                <option value="<% user_role.value.id %>"><% user_role.value.role %></option>
+                            <% END %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Remove User</button>
+                    </div>
+                </form>
+            </article>
+        </div>
+    </div>
+    <div id="db_mng_db" class="tab-pane fade" role="tabpanel" aria-labelledby="db_mng_db">
+        <div class="card">
+            <article class="card-body">        
+                <h4 class="card-title text-center mb-4 mt-1">Manage Database</h4>
+                <hr>
+                <form action="<% requst.uri_base %>/admin_export_db" method="get" autocomplete="off">
+                    <div class="form-group">        
+                        <button class="btn btn-primary" type="submit" name="" value="">Export Database</button>
+                    </div>
+
+                </form>
+                <form action="<% requst.uri_base %>/admin_import_db" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" name="" value="">Import Database</button>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i>Select Database:</span>
+                            </div>
+                            <input type="file">
+                    </div>
+                </form>
+            </article>
+        </div>
+    </div>
+</div>

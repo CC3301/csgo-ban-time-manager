@@ -51,7 +51,6 @@ sub list_steam_ids($$) {
     my $table = shift();
 
     my $query = "SELECT steam_id64 FROM '$table';";
-    Utils::log("Running SQL query: $query");
     my $sth = $database->prepare($query); $sth->execute();
     my @steam_id64s = ();
     while (my $row = $sth->fetchrow_arrayref()) {
@@ -72,7 +71,6 @@ sub get_suspect_data_from_db($$) {
     my $database = shift();
     my $table = shift();
     my @steam_id64s = list_steam_ids($database, $table);
-    Utils::log("Loading Suspect data from '$table' table");
 
     # get data of every suspect
     my %suspect_data = ();

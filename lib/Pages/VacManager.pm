@@ -23,12 +23,9 @@ use Cwd qw(abs_path);
 
 
 #=======================================================================================================================
-# Global vars
+# Database settings
 #=======================================================================================================================
-our $VERSION = '0.1';
-
-my $dbfile = dirname(abs_path($0)) . '/../data/db.sqlite';
-database({ driver => 'SQLite', database => $dbfile });
+database({ driver => 'SQLite', database => setting('dbfile') });
 
 
 #=======================================================================================================================
@@ -50,7 +47,7 @@ get '/vac_add_suspect' => require_role user => sub {
     my $toast = "";
 
     if(exists $params->{status}) {
-        $toast = template 'toast' => {
+        $toast = template setting('frontend') . '/toast' => {
             'layout' => 'toast',
             'alert_text'  => $status,
             'alert_time'  => qq($time),
@@ -60,11 +57,11 @@ get '/vac_add_suspect' => require_role user => sub {
     }
 
     # draw main template for the add suspect page
-    template 'pages/vacmanager/add_suspect' => {
+    template setting('frontend') . '/pages/vacmanager/add_suspect' => {
         'title'        => 'Add VAC Suspect',
-        'version'      => $VERSION,
+        'version'      => setting('version'),
         'sys_time'     => qq($time),
-        'current_user' => $user->{name},
+        'current_user' => $user->{username},
         'toast'        => $toast,
     };
 };
@@ -140,7 +137,7 @@ get '/vac_list_suspects' => require_role user => sub {
     if (exists $params->{status}) {
 
         my ($status, $statustype) = Utils::determine_status_facts($params->{status});
-        $toast = template 'toast' => {
+        $toast = template setting('frontend') . '/toast' => {
             'layout' => 'toast',
             'alert_text'  => $status,
             'alert_time'  => qq($time),
@@ -150,11 +147,11 @@ get '/vac_list_suspects' => require_role user => sub {
     }
 
     # render the template
-    template 'pages/vacmanager/list_suspects' => {
+    template setting('frontend') . '/pages/vacmanager/list_suspects' => {
         'title'        => 'All VAC Suspects',
-        'version'      => $VERSION,
+        'version'      => setting('version'),
         'sys_time'     => qq($time),
-        'current_user' => $user->{name},
+        'current_user' => $user->{username},
         'suspects'     => \%suspect_data,
         'toast'        => $toast,
     };

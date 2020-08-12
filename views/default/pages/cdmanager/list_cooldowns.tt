@@ -19,15 +19,15 @@
                     <td><% suspect.value.steam_profile_visibility%> </td>
                     <td><% suspect.value.steam_cooldown_reason %> </td>
                     <td><% suspect.value.steam_cooldown_time %> </td>
-                    <td><img src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
+                    <td><img class="rounded" src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
                     <td>
-                        <form action="<% request.uri_base %>/cd_add_cooldown" method="post">
+                        <form action="<% request.uri_base %>/cd_add_cooldown" method="post" style="float: left; padding-right: 3px;">
                             <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-                            <input type="submit" value="Update Data"/>
+                            <button type="submit" class="btn btn-primary btn-sm">Update Data</button>
                         </form>
                         <form action="<% request.uri_base %>/cd_delete_cooldown" method="post">
                             <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-                            <input type="submit" value="Delete from Database"/>
+                            <button type="submit" class="btn btn-primary btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>

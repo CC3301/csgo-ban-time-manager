@@ -25,12 +25,9 @@ use Pages::VacManager;
 
 
 #=======================================================================================================================
-# Global vars
+# Database settings 
 #=======================================================================================================================
-our $VERSION = '0.1';
-
-my $dbfile = dirname(abs_path($0)) . '/../data/db.sqlite';
-database({ driver => 'SQLite', database => $dbfile });
+database({ driver => 'SQLite', database => setting('dbfile') });
 
 
 #=======================================================================================================================
@@ -51,7 +48,7 @@ get '/cd_add_cooldown' => require_role user => sub {
     my $toast = "";
 
     if(exists $params->{status}) {
-        $toast = template 'toast' => {
+        $toast = template setting('frontend') . '/toast' => {
             'layout' => 'toast',
             'alert_text'  => $status,
             'alert_time'  => qq($time),
@@ -60,11 +57,11 @@ get '/cd_add_cooldown' => require_role user => sub {
         };
     }
 
-    template 'pages/cdmanager/add_cooldown' => {
+    template setting('frontend') . '/pages/cdmanager/add_cooldown' => {
         'title'        => 'Add Cooldown',
-        'version'      => $VERSION,
+        'version'      => setting('version'),
         'sys_time'     => qq($time),
-        'current_user' => $user->{name},
+        'current_user' => $user->{username},
         'toast'        => $toast,
     };
 };
@@ -83,7 +80,7 @@ get '/cd_list_cooldowns' => require_role user => sub {
     if (exists $params->{status}) {
 
         my ($status, $statustype) = Utils::determine_status_facts($params->{status});
-        $toast = template 'toast' => {
+        $toast = template setting('frontend') . '/toast' => {
             'layout' => 'toast',
             'alert_text'  => $status,
             'alert_time'  => qq($time),
@@ -94,11 +91,11 @@ get '/cd_list_cooldowns' => require_role user => sub {
 
 
     # render the template
-    template 'pages/cdmanager/list_cooldowns' => {
+    template setting('frontend') . '/pages/cdmanager/list_cooldowns' => {
         'title'        => 'All Cooldowns',
-        'version'      => $VERSION,
+        'version'      => setting('version'),
         'sys_time'     => qq($time),
-        'current_user' => $user->{name},
+        'current_user' => $user->{username},
         'cooldowns'    => \%suspect_data,
         'toast'        => $toast,
     };

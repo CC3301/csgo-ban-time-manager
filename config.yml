@@ -7,9 +7,15 @@
 # Your application's name
 appname: "cbtm"
 
+# the databasefile to use
+dbfile: "data/db.sqlite"
+
+# the frontend to use
+frontend: "default"
+
 # The default layout to use for your application (located in
-# views/layouts/main.tt)
-layout: "main"
+# views/layouts/$FRONTEND/main.tt)
+layout: "default/main"
 
 # when the charset is set to UTF-8 Dancer2 will handle for you
 # all the magic of encoding and decoding. You should not care
@@ -62,6 +68,7 @@ engines:
 #      is_http_only: 1
 plugins:
     Auth::Extensible:
+        login_template: "default/login"
         realms:
             users:
                 provider: 'Database'

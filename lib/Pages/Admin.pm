@@ -14,65 +14,129 @@ use Dancer2::Plugin::Database;
 # other
 use Data::Dumper;
 use Utils::SteamAPI;
+use Utils::AdminPage;
 use Utils;
 use File::Basename qw(dirname);
 use Cwd qw(abs_path);
 
+
 #=======================================================================================================================
-# Global vars
+# Database setting
 #=======================================================================================================================
-our $VERSION = '0.1';
-
-my $dbfile = dirname(abs_path($0)) . '/../data/db.sqlite';
-database({ driver => 'SQLite', database => $dbfile });
+database({ driver => 'SQLite', database => setting('dbfile') });
 
 
+#=======================================================================================================================
+# Main Admin Page 
+#=======================================================================================================================
 get '/admin' => require_role admin => sub {
 
     # get information
     my $user = logged_in_user();
     my $time = localtime(time());
-    my $dbh  = database();
-    my ($sth, $query, %database_data, $state);
+    my $params = request->params();
+    my %database_data = ();
+    my $toast = undef;
 
-    my $dbpath = Cwd::getcwd() . '/data/db.sqlite';
+    # check if we need to make a toast
+    if (exists $params->{status} && exists $params->{statustext}) {
+        my ($status, $statustype) = Utils::determine_status_facts($params->{status});
+        $toast = template setting('frontend') . '/toast' => {
+            'layout' => 'toast',
+            'alert_text'  => $params->{statustext},
+            'alert_time'  => qq($time),
+            'alert_title' => 'Admin',
+            'alert_type'  => $statustype,
+        };
+    }
 
     # check if we need to initialize the database and if yes then render a different template
     if (Utils::check_db_uninitialized(database)) {
-        template 'pages/admin/setupdb' => {
+        template setting('frontend') . '/pages/admin/setupdb' => {
             'title' => "Set up Database",
             'sys_time'     => qq($time),
-            'current_user' => $user->{name},
+            'current_user' => $user->{username},
         };
     } else {
 
         $database_data{old_steam_api_key} = Utils::get_steam_api_key(database);
+        $database_data{user_roles}        = Utils::AdminPage::list_roles(database);
+        Utils::log(Data::Dumper::Dumper(\%database_data));
 
         # render template
-        template 'pages/admin/admin' => {
+        template setting('frontend') . '/pages/admin/admin' => {
             'title'        => 'VAC Manager',
-            'version'      => $VERSION,
+            'version'      => setting('version'),
             'sys_time'     => qq($time),
-            'current_user' => $user->{name},
+            'current_user' => $user->{username},
+            'toast'        => $toast,
             'old_steam_api_key' => $database_data{old_steam_api_key},
+            'user_roles' => Utils::AdminPage::list_roles(database),
         };
     }
 };
 
+
+#=======================================================================================================================
+# save a new user
+#=======================================================================================================================
+post '/admin_save_user_new_user' => require_role admin => sub {
+
+    my $params = request->params();
+    my $query = undef;
+    my %sths = ();
+
+    Utils::log(Data::Dumper::Dumper($params));
+
+    if (exists $params->{new_user_username} && exists $params->{new_user_password} && exists $params->{new_user_roles}) {
+
+        # check if the user with this username already exists
+        if (Utils::AdminPage::check_duplicate_user(database, $params->{username})) {
+            redirect '/admin?status=Failed&statustext=Failed to add user: A user with this username already exists';
+        } else {
+            $query = "INSERT INTO users (username, password) VALUES ($params->{username}, $params->{password})";
+            $sths{user_table_insertion} = database->prepare($query) or redirect '/admin?status=Failed&statustext=Failed to add user';
+
+            my $user_id = Utils::AdminPage::get_userid_by_username(database, $params->{username});
+
+            foreach my $role (split(',', $params->{new_user_roles})) {
+                $query = "INSERT INTO user_roles (user_id, role_id) VALUES ($user_id, $role);";
+                $sths{'role'.$role} = database->prepare($query) or redirect '/admin?status=Failed&statustext=Failed to save role data for new user';
+            }
+
+            # if we get here, all querys were successfully perpared. Now execute them in bulk
+            foreach my $key (keys %sths) {
+                $sths{$key}->execute();
+            }
+
+            redirect '/admin?status=Success&statustext=User ' . $params->{username} . ' added.';
+
+        }
+
+    } else {
+        redirect '/admin?status=Failed&statustext=Failed to add user: missing parameters';
+    }
+
+};
+
+
+#=======================================================================================================================
 # save the new steam api key
+#=======================================================================================================================
 post '/admin_save_steam_api_key' => require_role admin => sub {
 
     # get information
     my $params = request->params();
     my $steam_api_key = $params->{steam_api_key};
     my $sth;
+    my $update_flag = undef;
 
-    # save the steam api Key
 
     # try to read the steam api key from the database
     my $steam_apk = Utils::get_steam_api_key(database);
     my $query     = undef;
     if (!$steam_apk eq '') {
+        $update_flag = 1;
         $query = "UPDATE config SET steam_api_key = '$steam_api_key';";
     } else {
         $query = "INSERT INTO config (steam_api_key) VALUES ('$steam_api_key');";
@@ -82,9 +146,13 @@ post '/admin_save_steam_api_key' => require_role admin => sub {
 
     # internal server error if database query didnt work
     if ($sth->execute()) {
-        redirect '/admin';
+        if ($update_flag) {
+            redirect '/admin?status=Updated&statustext=Successfully updated SteamAPI-Key';
+        } else {
+            redirect '/admin?status=Success&statustext=Successfully added SteamAPI-Key';
+        }
     } else {
-        redirect '/500';
+        redirect '/admin?status=Failed&statustext=Failed to add/update SteamAPI-Key';
     }
 };
 
@@ -95,6 +163,9 @@ get  '/admin_export_db' => require_role admin => sub {
     return(send_file('/home/fink/Projects/csgo-ban-time-manager/data/db.sqlite', system_path => 1, filename => "dbexport_" . time() . ".sqlite"));
 };
 
+#=======================================================================================================================
+# setup database routine
+#=======================================================================================================================
 # setup db should only be called if there is no database yet
 post '/admin_setupdb' => require_role admin => sub {
 
@@ -176,21 +247,21 @@ post '/admin_setupdb' => require_role admin => sub {
     # execute all querys
     Utils::log("Running SQL query: $vacsquery");
     $sth = database->prepare($vacsquery);
-    $sth->execute();
+    $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
 
     Utils::log("Running SQL query: $cdquery");
     $sth = database->prepare($cdquery);
-    $sth->execute();
+    $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
 
     Utils::log("Running SQL query: $statsquery");
     $sth = database->prepare($statsquery);
-    $sth->execute();
+    $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
 
     Utils::log("Running SQL query: $cfgquery");
     $sth = database->prepare($cfgquery);
-    $sth->execute();
+    $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
 
-    redirect '/admin';
+    redirect '/admin?status=Success&statustext=Initialized Database';
 
 };
 1;
