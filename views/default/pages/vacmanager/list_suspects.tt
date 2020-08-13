@@ -5,7 +5,7 @@
     <form>
         <div class="form-group">
             <div class="input-group">
-                <div class="input-group-prepend">    
+                <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-user"></i>Search by Name:</span>
                 </div>
             <input name="search_input" id="search_input" class="form-control" placeholder="" type="text" onkeyup="searchSuspectCooldownTable()">
@@ -14,7 +14,7 @@
 </div>
 <hr>
 <div class="table-wrapper-scroll-y">
-    <table class="table table-bordered table-striped mb-0">
+    <table class="table table-bordered table-striped mb-0" id="table_to_search">
         <thead>
             <tr>
                 <th scope="col">Steam 64 ID</th>

@@ -7,6 +7,7 @@
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_add_user" aria-selected="false" href="#user_add_user">Add new User</a></li>
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_del_user" aira-selected="false" href="#user_del_user">Delete User</a></li>
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="db_mng_db" aria-selected="false" href="#db_mng_db">Database Management</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="nw_mng_net" aria-selected="false" href="#nw_mng_net">Network Settings</a></li>
   </ul>
 
   <!-- Acutal Menus -->
@@ -26,7 +27,7 @@
                             <input name="steam_api_key" value="" placeholder="<% old_steam_api_key %>" type="text" required>
                         </div>
                     </div>
-                    <div class="form-group">    
+                    <div class="form-group">
                         <button class="btn btn-primary" type="submit" name="" value="">Update Steam API Key</button>
                     </div>
                 </form>
@@ -59,7 +60,7 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-user"></i>Select Role:</span>
-                            </div>        
+                            </div>
                             <select name="new_user_roles" class="form-control" size="1" required>
                                 <option value=""></option>
                             <% FOREACH user_role IN user_roles %>
@@ -85,7 +86,7 @@
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-user"></i>Select User:</span>
-                            </div>        
+                            </div>
                             <select name="del_user" class="form-control" size="1" required>
                                 <option value=""></option>
                             <% FOREACH user_role IN user_roles %>
@@ -103,14 +104,13 @@
     </div>
     <div id="db_mng_db" class="tab-pane fade" role="tabpanel" aria-labelledby="db_mng_db">
         <div class="card">
-            <article class="card-body">        
+            <article class="card-body">
                 <h4 class="card-title text-center mb-4 mt-1">Manage Database</h4>
                 <hr>
                 <form action="<% requst.uri_base %>/admin_export_db" method="get" autocomplete="off">
-                    <div class="form-group">        
+                    <div class="form-group">
                         <button class="btn btn-primary" type="submit" name="" value="">Export Database</button>
                     </div>
-
                 </form>
                 <form action="<% requst.uri_base %>/admin_import_db" method="post" autocomplete="off">
                     <div class="form-group">
@@ -120,6 +120,30 @@
                                 <span class="input-group-text"><i class="fa fa-user"></i>Select Database:</span>
                             </div>
                             <input type="file">
+                        </div>
+                    </div>
+                </form>
+            </article>
+        </div>
+    </div>
+    <div id="nw_mng_net" class="tab-pane fade" role="tabpanel" aria-labelledby="nw_mng_net">
+        <div class="card">
+            <article class="card-body">
+                <h4 class="card-title text-center mb-4 mt-1">Change Network Settings</h4>
+                <hr>
+                <form action="<% requst.uri_base %>/admin_save_proxy" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i>Proxy Address:</span>
+                            </div>
+                            <input id="proxy_input" type="text" name="proxy_addr" value="" placeholder="Leave blank for no proxy">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" name="" value="">Save Proxy Settings</button>
+                        </div>
                     </div>
                 </form>
             </article>

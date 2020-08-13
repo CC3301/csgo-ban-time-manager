@@ -15,6 +15,7 @@ use Dancer2::Plugin::Database;
 use Data::Dumper;
 use Utils::SteamAPI;
 use Utils::AdminPage;
+use Utils::DbConf;
 use Utils;
 use File::Basename qw(dirname);
 use Cwd qw(abs_path);
@@ -27,7 +28,7 @@ database({ driver => 'SQLite', database => setting('dbfile') });
 
 
 #=======================================================================================================================
-# Main Admin Page 
+# Main Admin Page
 #=======================================================================================================================
 get '/admin' => require_role admin => sub {
 
@@ -59,9 +60,9 @@ get '/admin' => require_role admin => sub {
         };
     } else {
 
-        $database_data{old_steam_api_key} = Utils::get_steam_api_key(database);
-        $database_data{user_roles}        = Utils::AdminPage::list_roles(database);
-        Utils::log(Data::Dumper::Dumper(\%database_data));
+        $database_data{old_steam_api_key}      = Utils::get_steam_api_key(database);
+        $database_data{user_roles}             = Utils::AdminPage::list_roles(database);
+        $database_data{current_outgoing_proxy} = Utils::DbConf::get_proxy(database);
 
         # render template
         template setting('frontend') . '/pages/admin/admin' => {
@@ -160,8 +161,27 @@ post '/admin_save_steam_api_key' => require_role admin => sub {
 get  '/admin_export_db' => require_role admin => sub {
     my $dbfile = setting('dbfile');
     Utils::log($dbfile);
-    return(send_file('/home/fink/Projects/csgo-ban-time-manager/data/db.sqlite', system_path => 1, filename => "dbexport_" . time() . ".sqlite"));
+    return(send_file(setting('dbfile'), system_path => 1, filename => "dbexport_" . time() . ".sqlite"));
 };
+
+#=======================================================================================================================
+# set proxy routine
+#=======================================================================================================================
+post '/admin_save_proxy' => require_role admin => sub {
+
+    my $params = request->params();
+    if ($params->{proxy_addr} eq "") {
+        $params->{proxy_addr} = 'NULL';
+    }
+
+    if (Utils::DbConf::update_proxy(database, $params->{proxy_addr})) {
+        redirect '/admin?status=Updated&statustext=Successfully updated/changed proxy settings';
+    } else {
+        redirect '/admin?status=Failed&statustext=Failed to update/change proxy settings';
+    }
+
+};
+
 
 #=======================================================================================================================
 # setup database routine
@@ -240,7 +260,8 @@ post '/admin_setupdb' => require_role admin => sub {
     my $cfgquery = "
         CREATE TABLE config (
             id INTEGER PRIMARY KEY,
-            steam_api_key VARCHAR
+            steam_api_key VARCHAR,
+            outgoing_proxy VARCHAR
         );
     ";
 

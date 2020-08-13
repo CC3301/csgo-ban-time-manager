@@ -3,7 +3,7 @@ function searchSuspectCooldownTable() {
     var input, filter, table, tr, td, i, txtValue;
     input = document.getElementById("search_input");
     filter = input.value.toUpperCase();
-    table = document.getElementById("cooldown_list");
+    table = document.getElementById("table_to_search");
     tr = table.getElementsByTagName("tr");
 
     // Loop through all table rows, and hide those who don't match the query

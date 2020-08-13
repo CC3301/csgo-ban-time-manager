@@ -10,6 +10,7 @@ package Utils;
 use strict;
 use warnings;
 use Utils::SteamAPI;
+use Utils::DbConf;
 use Data::Dumper;
 
 
@@ -98,10 +99,10 @@ sub get_suspect_data_from_steam($$) {
     my %suspect_data  = ();
 
     # get data from steam
-    $suspect_data{avatar_url}   = Utils::SteamAPI::GetUserAvatarUrl(        $steam64, $steam_api_key);
-    $suspect_data{profile_name} = Utils::SteamAPI::GetUserProfileName(      $steam64, $steam_api_key);
-    $suspect_data{profile_visi} = Utils::SteamAPI::GetUserProfileVisibility($steam64, $steam_api_key);
-    $suspect_data{ban_state}    = Utils::SteamAPI::GetUserBanState(         $steam64, $steam_api_key);
+    $suspect_data{avatar_url}   = Utils::SteamAPI::GetUserAvatarUrl(        $steam64, $steam_api_key, Utils::DbConf::get_proxy($database));
+    $suspect_data{profile_name} = Utils::SteamAPI::GetUserProfileName(      $steam64, $steam_api_key, Utils::DbConf::get_proxy($database));
+    $suspect_data{profile_visi} = Utils::SteamAPI::GetUserProfileVisibility($steam64, $steam_api_key, Utils::DbConf::get_proxy($database));
+    $suspect_data{ban_state}    = Utils::SteamAPI::GetUserBanState(         $steam64, $steam_api_key, Utils::DbConf::get_proxy($database));
     $suspect_data{last_mod}     = localtime(time());
 
     return(%suspect_data);

@@ -5,7 +5,7 @@
     <form>
         <div class="form-group">
             <div class="input-group">
-                <div class="input-group-prepend">    
+                <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-user"></i>Search by Name:</span>
                 </div>
             <input name="search_input" id="search_input" class="form-control" placeholder="" type="text" onkeyup="searchSuspectCooldownTable()">
@@ -14,7 +14,7 @@
 </div>
 <br>
 <div class="table-wrapper-scroll-y my-custom-scrollbar">
-    <table class="table table-bordered table-striped mb-0" id="cooldown_list">
+    <table class="table table-bordered table-striped mb-0" id="table_to_search">
         <thead>
             <tr>
                 <th scope="col">Steam 64 ID</th>
@@ -33,7 +33,7 @@
                     <td><a href="https://steamcommunity.com/profiles/<% suspect.value.steam_id64 %>"><% suspect.value.steam_username %></a></td>
                     <td><% suspect.value.steam_profile_visibility%> </td>
                     <td><% suspect.value.steam_cooldown_reason %> </td>
-                    <td><% suspect.value.steam_cooldown_time %> </td>
+                    <td><% suspect.value.steam_cooldown_time / 60 %>h</td>
                     <td><img class="rounded" src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>
                     <td>
                         <form action="<% request.uri_base %>/cd_save_cooldown" method="post" style="float: left; padding-right: 3px;">

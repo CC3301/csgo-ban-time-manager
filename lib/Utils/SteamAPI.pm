@@ -8,20 +8,8 @@ package Utils::SteamAPI {
   ##############################################################################
   use strict;
   use warnings;
-  use Cwd;
   use LWP::UserAgent;
   use JSON;
-  use Data::Dumper;
-  #use Carp::Always;
-
-  # turn on request/response warnings in log
-  # ATTENTION: Activating this will result in your steam api key to be shown in
-  # the webservers log files.
-  my $WARN = 1;
-
-  # set the proxy
-  my $PROXY = "http://tst-proxy.genua.de:8888";
-  #my $PROXY = "";
 
   ##############################################################################
   # GetUserAvatarUrl subroutine
@@ -33,6 +21,7 @@ package Utils::SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $steam_id64 = shift || die "Need steam id to get data from";
     my $steam_apk  = shift || die "Need steam api key to interact with steam api";
+    my $proxy      = shift();
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # other vars
@@ -42,7 +31,7 @@ package Utils::SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send api request
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk);
+    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk, $proxy);
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # return required value
@@ -61,6 +50,8 @@ package Utils::SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $steam_id64 = shift || die "Need steam id to get data from";
     my $steam_apk  = shift || die "Need steam api key to interact with steam api";
+    my $proxy      = shift();
+
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # other vars
@@ -70,7 +61,7 @@ package Utils::SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send api request
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk);
+    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk, $proxy);
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # return required value
@@ -89,6 +80,7 @@ package Utils::SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $steam_id64 = shift || die "Need steam id to get data from";
     my $steam_apk  = shift || die "Need steam api key to interact with steam api";
+    my $proxy      = shift();
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # other vars
@@ -103,7 +95,7 @@ package Utils::SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send api request
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk);
+    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk, $proxy);
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # convert data
@@ -127,6 +119,7 @@ package Utils::SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     my $steam_id64 = shift || die "Need steam id to get data from";
     my $steam_apk  = shift || die "Need steam api key to interact with steam api";
+    my $proxy      = shift();
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # other vars
@@ -137,7 +130,7 @@ package Utils::SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send api request
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk);
+    my $response = _steam_api_request($steam_id64, $steam_api_url, $steam_apk, $proxy);
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # convert data
@@ -179,6 +172,7 @@ package Utils::SteamAPI {
     my $steam_id64    = shift || die "Need steam id to get data from";
     my $steam_api_url = shift;
     my $steam_api_key = shift;
+    my $proxy         = shift();
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # send the request and set the proxy
@@ -189,7 +183,7 @@ package Utils::SteamAPI {
     );
     $user_agent->proxy(
       ['http'],
-      $PROXY,
+      $proxy,
     );
     my $response = $user_agent->get($request);
 
@@ -198,10 +192,6 @@ package Utils::SteamAPI {
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     if ($response->is_success()) {
       return (decode_json($response->decoded_content()));
-    } else {
-      #Utils::ErrorPage(
-    #    message => "Steam API request timed out",
-    #  );
     }
   }
 
