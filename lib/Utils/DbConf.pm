@@ -65,7 +65,11 @@ sub get_proxy($) {
         if ($@) {
             return($ENV{'http_proxy'});
         } else {
-            return($proxy[0]);
+            if ($proxy[0] eq 'NULL') {
+                return("");
+            } else {
+                return($proxy[0]);    
+            }
         }
     }
 }

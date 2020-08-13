@@ -1,15 +1,18 @@
 <div class="card">
     <article class="card-body">
-    <h4 class="card-title text-center mb-4 mt-1">Search Suspect</h4>
-    <hr>
-    <form>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-user"></i>Search by Name:</span>
+        <h4 class="card-title text-center mb-4 mt-1">Search Suspect</h4>
+        <p id="search_result_count" class="text-success text-center"></p>
+        <hr>
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i>Search by Name:</span>
+                    </div>
+                    <input name="search_input" id="search_input" class="form-control" placeholder="" type="text" onkeyup="searchSuspectCooldownTable()">
                 </div>
-            <input name="search_input" id="search_input" class="form-control" placeholder="" type="text" onkeyup="searchSuspectCooldownTable()">
-        </div>
+            </div>
+        </form>
     </article>
 </div>
 <hr>
