@@ -22,10 +22,11 @@
         <div class="bg-light border-right" id="sidebar-wrapper">
             <div class="sidebar-heading" style="font-weight: bold;">CBTM</div>
             <div class="list-group list-group-flush">
-                <a href="<% request.uri_base %>/vac_add_suspect" class="list-group-item list-group-item-action bg-light">Add VAC Suspect</a>
-                <a href="<% request.uri_base %>/vac_list_suspects" class="list-group-item list-group-item-action bg-light">List VAC Suspects</a>
-                <a href="<% request.uri_base %>/cd_add_cooldown" class="list-group-item list-group-item-action bg-light">Add Cooldown</a>
-                <a href="<% request.uri_base %>/cd_list_cooldowns" class="list-group-item list-group-item-action bg-light">List Cooldowns</a>
+                <!--<a href="<% request.uri_base %>/vac_add_suspect" class="list-group-item list-group-item-action bg-light">Add VAC Suspect</a>-->
+                <a href="<% request.uri_base %>/vac_list_suspects" class="list-group-item list-group-item-action bg-light">VAC Manager</a>
+                <!--<a href="<% request.uri_base %>/cd_add_cooldown" class="list-group-item list-group-item-action bg-light">Add Cooldown</a> -->
+                <a href="<% request.uri_base %>/cd_list_cooldowns" class="list-group-item list-group-item-action bg-light">Cooldown Manager</a>
+                <!--<a href="<% request.uri_base %>/sm_list_smurfs" class="list-group-item list-group-item-action bg-light">Smurf Manager</a> -->
             </div>
         </div>
         <!-- /Sidebar -->

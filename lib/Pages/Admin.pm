@@ -247,12 +247,14 @@ post '/admin_setupdb' => require_role admin => sub {
     ";
 
     # create users table
-    my $usersquery = "
-        CREATE TABLE users (
-            username VARCHAR,
-            password VARCHAR,
-            roles VARCHAR,
-            UNIQUE(username)
+    my $smurfsquery = "
+        CREATE TABLE smurfs (
+            steam_username VARCHAR,
+            steam_password VARCHAR,
+            email VARCHAR,
+            email_password VARCHAR,
+            steam_guard BOOLEAN,
+            UNIQUE(steam_username)
         );
     ";
 
@@ -266,19 +268,18 @@ post '/admin_setupdb' => require_role admin => sub {
     ";
 
     # execute all querys
-    Utils::log("Running SQL query: $vacsquery");
     $sth = database->prepare($vacsquery);
     $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
 
-    Utils::log("Running SQL query: $cdquery");
     $sth = database->prepare($cdquery);
     $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
 
-    Utils::log("Running SQL query: $statsquery");
     $sth = database->prepare($statsquery);
     $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
 
-    Utils::log("Running SQL query: $cfgquery");
+    $sth = database->prepare($smurfsquery);
+    $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
+
     $sth = database->prepare($cfgquery);
     $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
 

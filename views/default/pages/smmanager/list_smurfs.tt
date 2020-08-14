@@ -1,0 +1,62 @@
+
+<div class="card">
+    <article class="card-body">
+        <h4 class="card-title text-center mb-4 mt-1">Search Smurf</h4>
+        <p id="search_result_count" class="text-success text-center"></p>
+        <hr>
+        <form action="<% request.uri_base %>/sm_add_smurf" method="get">
+            <div class="form-group">
+                <div class="input-group">
+                    <button class="btn btn-primary" type="submit">New Entry</button>
+                </div>
+            </div>
+        </form>
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i>Search by Name:</span>
+                    </div>
+                    <input name="search_input" id="search_input" class="form-control" placeholder="" type="text" onkeyup="searchSuspectCooldownTable()">
+                </div>
+            </div>
+        </form>
+    </article>
+</div>
+<br>
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+    <table class="table table-bordered table-striped mb-0" id="table_to_search">
+        <thead>
+            <tr>
+                <th scope="col">Steam username</th>
+                <th scope="col">Steam Password</th>
+                <th scope="col">E-Mail</th>
+                <th scope="col">E-Mail Password</th>
+                <th scope="col">Steam Guard</th>
+                <!--<th scope="col">Avatar</th>
+                <th scope="col">Actions</th>-->
+            </tr>
+        </thead>
+        <tbody>
+            <% FOREACH smurf IN smurfs %>
+                <tr>
+                    <td><% smurf.value.steam_username %> </td>
+                    <td><% smurf.value.steam_password %> </td>
+                    <td><% smurf.value.email %> </td>
+                    <td><% smurf.value.email_password %></td>
+                    <!--<td><img class="rounded" src="<% suspect.value.steam_avatar_url %>" alt="suspect.value.steam_avatar_url"></td>-->
+                    <td>
+                        <form action="<% request.uri_base %>/sm_edit_smurf" method="post" style="float: left; padding-right: 3px;">
+                            <input type="hidden" name="steam_username" value="<% smurf.value.steam_username %>" />
+                            <button type="submit" class="btn btn-primary btn-sm">Edit Smurf</button>
+                        </form>
+                        <form action="<% request.uri_base %>/sm_delete_smurf" method="post">
+                            <input type="hidden" name="steam_id64" value="<% smurf.value.steam_username %>" />
+                            <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% END %>
+        </tbody>
+    </table>
+</div>

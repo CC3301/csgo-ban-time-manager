@@ -18,8 +18,6 @@ use Dancer2::Plugin::Database;
 use Data::Dumper;
 use Utils::SteamAPI;
 use Utils;
-use File::Basename qw(dirname);
-use Cwd qw(abs_path);
 
 
 #=======================================================================================================================
