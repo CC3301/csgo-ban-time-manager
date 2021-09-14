@@ -22,7 +22,7 @@
         </form>
     </article>
 </div>
-<hr>
+<br>
 <div class="table-wrapper-scroll-y">
     <table class="table table-bordered table-striped mb-0" id="table_to_search">
         <thead>

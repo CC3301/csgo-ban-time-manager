@@ -95,7 +95,7 @@ post '/admin_save_user_new_user' => require_role admin => sub {
         if (Utils::AdminPage::check_duplicate_user(database, $params->{username})) {
             redirect '/admin?status=Failed&statustext=Failed to add user: A user with this username already exists';
         } else {
-            $query = "INSERT INTO users (username, password) VALUES ($params->{username}, $params->{password})";
+            $query = "INSERT INTO users (username, password) VALUES ($params->{new_user_username}, $params->{new_user_password})";
             $sths{user_table_insertion} = database->prepare($query) or redirect '/admin?status=Failed&statustext=Failed to add user';
 
             my $user_id = Utils::AdminPage::get_userid_by_username(database, $params->{username});
@@ -105,7 +105,7 @@ post '/admin_save_user_new_user' => require_role admin => sub {
                 $sths{'role'.$role} = database->prepare($query) or redirect '/admin?status=Failed&statustext=Failed to save role data for new user';
             }
 
-            # if we get here, all querys were successfully perpared. Now execute them in bulk
+            # if we get here, all queries were successfully prepared. Now execute them in bulk
             foreach my $key (keys %sths) {
                 $sths{$key}->execute();
             }
@@ -145,9 +145,9 @@ post '/admin_save_steam_api_key' => require_role admin => sub {
     Utils::log("Running SQL query: $query");
     $sth = database->prepare($query);
 
-    # internal server error if database query didnt work
+    # internal server error if database query didn't work
     if ($sth->execute()) {
-        if ($update_flag) {
+        if (defined $update_flag) {
             redirect '/admin?status=Updated&statustext=Successfully updated SteamAPI-Key';
         } else {
             redirect '/admin?status=Success&statustext=Successfully added SteamAPI-Key';
@@ -204,7 +204,7 @@ post '/admin_setupdb' => require_role admin => sub {
             steam_profile_visibility INTEGER,
             steam_last_modified VARCHAR,
             steam_first_added VARCHAR,
-            steam_first_bannend VARCHAR,
+            steam_first_banned VARCHAR,
             UNIQUE(steam_id64)
         );
     ";
@@ -224,7 +224,7 @@ post '/admin_setupdb' => require_role admin => sub {
         );
     ";
 
-    # create statistics talbe
+    # create statistics table
     my $statsquery = "
         CREATE TABLE statistics (
             cooldown_reason_team_kills_at_round_start INTEGER,
@@ -267,7 +267,7 @@ post '/admin_setupdb' => require_role admin => sub {
         );
     ";
 
-    # execute all querys
+    # execute all queries
     $sth = database->prepare($vacsquery);
     $sth->execute() or redirect '/admin?status=Failed&statustext=Failed to initialize database';
 
