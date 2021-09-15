@@ -8,7 +8,7 @@
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_del_user" aira-selected="false" href="#user_del_user">Delete User</a></li>
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="db_mng_db" aria-selected="false" href="#db_mng_db">Database Management</a></li>
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="nw_mng_net" aria-selected="false" href="#nw_mng_net">Network Settings</a></li>
-    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="git_update" aria-selected="false" href="#nw_mng_net">Update</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="git_update" aria-selected="false" href="#git_update">Update</a></li>
   </ul>
 
   <!-- Acutal Menus -->
