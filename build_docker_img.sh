@@ -1,2 +1,3 @@
 #!/usr/bin/env sh
-time docker build -t cbtm docker/. --output type=tar,dest=cbtm.tar
+time docker build -t cbtm docker/.
+time docker save cbtm -o cbtm.tar
