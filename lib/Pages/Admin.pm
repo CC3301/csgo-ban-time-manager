@@ -286,4 +286,13 @@ post '/admin_setupdb' => require_role admin => sub {
     redirect '/admin?status=Success&statustext=Initialized Database';
 
 };
+
+post '/admin_git_update' => require_role admin => sub {
+
+    my $command = "cd " + appdir() + "; git pull";
+    system($command);
+
+    redirect '/admin?status=Success&statustext=Updated to latest version';
+
+};
 1;

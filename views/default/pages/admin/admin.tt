@@ -8,6 +8,7 @@
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="user_del_user" aira-selected="false" href="#user_del_user">Delete User</a></li>
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="db_mng_db" aria-selected="false" href="#db_mng_db">Database Management</a></li>
     <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="nw_mng_net" aria-selected="false" href="#nw_mng_net">Network Settings</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="git_update" aria-selected="false" href="#nw_mng_net">Update</a></li>
   </ul>
 
   <!-- Acutal Menus -->
@@ -143,6 +144,21 @@
                     <div class="form-group">
                         <div class="input-group">
                             <button class="btn btn-primary" type="submit" name="" value="">Save Proxy Settings</button>
+                        </div>
+                    </div>
+                </form>
+            </article>
+        </div>
+    </div>
+    <div id="git_update" class="tab-pane fade" role="tabpanel" aria-labelledby="git_update">
+        <div class="card">
+            <article class="card-body">
+                <h4 class="card-title text-center mb-4 mt-1">Update to latest version</h4>
+                <hr>
+                <form action="<% requst.uri_base %>/admin_git_update" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" name="" value="">Update from git repository</button>
                         </div>
                     </div>
                 </form>
