@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build docker image when new code is pushed
     steps:
+      - uses: actions/checkout@v1
       - name: build docker image
-        run: ${{ github.action_path }}/build_docker_img.sh
+        run: ./build_docker_img.sh
         shell: bash
