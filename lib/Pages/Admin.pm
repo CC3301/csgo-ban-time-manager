@@ -18,13 +18,16 @@ use Utils::AdminPage;
 use Utils::DbConf;
 use Utils;
 use File::Basename qw(dirname);
-use Cwd qw(abs_path);
+use Cwd qw(abs_path realpath);
+use FindBin;
 
 
 #=======================================================================================================================
 # Database setting
 #=======================================================================================================================
 database({ driver => 'SQLite', database => setting('dbfile') });
+my $appdir = realpath("$FindBin::Bin/..");
+Dancer2::Config::setting('appdir',$appdir);
 
 
 #=======================================================================================================================
@@ -289,7 +292,7 @@ post '/admin_setupdb' => require_role admin => sub {
 
 post '/admin_git_update' => require_role admin => sub {
 
-    my $command = "cd " + appdir() + "; git pull";
+    my $command = "cd " + $appdir + "; git pull";
     system($command);
 
     redirect '/admin?status=Success&statustext=Updated to latest version';
