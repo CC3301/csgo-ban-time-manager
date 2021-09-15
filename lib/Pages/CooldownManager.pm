@@ -192,4 +192,38 @@ post '/cd_save_cooldown' => require_role user => sub {
     redirect '/cd_list_cooldowns?status=' . $status;
 };
 
+
+# delete a suspect from the database
+post '/cd_delete_cooldown' => require_role user => sub {
+
+    # get information
+    my $params  = request->params();
+    my $steam64 = $params->{steam_id64};
+    my $status  = 'Failed';
+    my ($query, $sth);
+
+
+    # check if there is valid data
+    if (defined $steam64) {
+        $status = 'Deleted';
+        $query = "DELETE FROM cooldowns WHERE steam_id64 = '$steam64'";
+        $sth    = database->prepare($query);
+
+        # check if we can execute the following query, if not try to update
+        eval {
+            $sth->execute();
+        };
+        if ($@) {
+            Utils::log("Tried deleting non-existent suspect");
+            $status = 'Failed';
+        }
+    } else {
+        $status = 'Failed';
+    }
+
+    # redirect back to the add page to show if it was successful or if it failed
+    redirect '/cd_list_cooldowns?status=' . $status;
+};
+
+
 1;

@@ -190,7 +190,7 @@ post '/vac_delete_suspect' => require_role user => sub {
 
     # check if there is valid data
     if (defined $steam64) {
-        $status = "Success";
+        $status = 'Deleted';
         $query = "DELETE FROM vacs WHERE steam_id64 = '$steam64'";
         $sth    = database->prepare($query);
 
@@ -200,10 +200,10 @@ post '/vac_delete_suspect' => require_role user => sub {
         };
         if ($@) {
             Utils::log("Tried deleting non-existent suspect");
-            $status = "Failed";
+            $status = 'Failed';
         }
     } else {
-        $status = "Failed";
+        $status = 'Failed';
     }
 
     # redirect back to the add page to show if it was successful or if it failed

@@ -52,7 +52,7 @@
                         </form>
                         <form action="<% request.uri_base %>/cd_delete_cooldown" method="post">
                             <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-                            <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+                            <button type="submit" onclick="clicked(event)" class="btn btn-primary btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -60,3 +60,12 @@
         </tbody>
     </table>
 </div>
+<script type="text/javascript">
+    function clicked() {
+        if (confirm("Are you sure to delete the selected suspect?")) {
+            document.getElementById("delete_form").submit();
+        } else {
+            return false;
+        }
+    }
+</script>
