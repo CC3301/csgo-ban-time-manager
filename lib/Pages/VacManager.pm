@@ -178,4 +178,36 @@ get '/vac_list_suspects' => require_role user => sub {
     }
 };
 
+# delete a suspect from the database
+post '/vac_delete_suspect' => require_role user => sub {
+
+    # get information
+    my $params  = request->params();
+    my $steam64 = $params->{steam_id64};
+    my $status  = 'Failed';
+    my ($query, $sth);
+
+
+    # check if there is valid data
+    if (defined $steam64) {
+        $status = "Success";
+        $query = "DELETE FROM vacs WHERE steam_id64 = '$steam64'";
+        $sth    = database->prepare($query);
+
+        # check if we can execute the following query, if not try to update
+        eval {
+            $sth->execute();
+        };
+        if (defined $@) {
+            Utils::log("Tried deleting non-existent suspect");
+            $status = "Failed";
+        }
+    } else {
+        $status = "Failed";
+    }
+
+    # redirect back to the add page to show if it was successful or if it failed
+    redirect '/vac_list_suspects?status=' . $status;
+};
+
 1;
