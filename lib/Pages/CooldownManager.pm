@@ -46,30 +46,31 @@ get '/cd_add_cooldown' => require_role user => sub {
             'sys_time'     => qq($time),
             'current_user' => $user->{username},
         };
-    }
+    } else {
 
-    my ($status, $statustype) = Utils::determine_status_facts($params->{status});
+        my ($status, $statustype) = Utils::determine_status_facts($params->{status});
 
-    # render the template
-    my $toast = "";
+        # render the template
+        my $toast = "";
 
-    if(exists $params->{status}) {
-        $toast = template setting('frontend') . '/toast' => {
-            'layout' => 'toast',
-            'alert_text'  => $status,
-            'alert_time'  => qq($time),
-            'alert_title' => 'Cooldown Manager',
-            'alert_type'  => $statustype,
+        if (exists $params->{status}) {
+            $toast = template setting('frontend') . '/toast' => {
+                'layout'      => 'toast',
+                'alert_text'  => $status,
+                'alert_time'  => qq($time),
+                'alert_title' => 'Cooldown Manager',
+                'alert_type'  => $statustype,
+            };
+        }
+
+        template setting('frontend') . '/pages/cdmanager/add_cooldown' => {
+            'title'        => 'Add Cooldown',
+            'version'      => setting('version'),
+            'sys_time'     => qq($time),
+            'current_user' => $user->{username},
+            'toast'        => $toast,
         };
     }
-
-    template setting('frontend') . '/pages/cdmanager/add_cooldown' => {
-        'title'        => 'Add Cooldown',
-        'version'      => setting('version'),
-        'sys_time'     => qq($time),
-        'current_user' => $user->{username},
-        'toast'        => $toast,
-    };
 };
 
 
@@ -89,31 +90,32 @@ get '/cd_list_cooldowns' => require_role user => sub {
             'sys_time'     => qq($time),
             'current_user' => $user->{username},
         };
-    }
+    } else {
 
-    if (exists $params->{status}) {
+        if (exists $params->{status}) {
 
-        my ($status, $statustype) = Utils::determine_status_facts($params->{status});
-        $toast = template setting('frontend') . '/toast' => {
-            'layout' => 'toast',
-            'alert_text'  => $status,
-            'alert_time'  => qq($time),
-            'alert_title' => 'Cooldown Manager',
-            'alert_type'  => $statustype,
+            my ($status, $statustype) = Utils::determine_status_facts($params->{status});
+            $toast = template setting('frontend') . '/toast' => {
+                'layout'      => 'toast',
+                'alert_text'  => $status,
+                'alert_time'  => qq($time),
+                'alert_title' => 'Cooldown Manager',
+                'alert_type'  => $statustype,
+            };
+        }
+
+
+        # render the template
+        my %suspect_data = Utils::get_suspect_data_from_db(database, 'cooldowns');
+        template setting('frontend') . '/pages/cdmanager/list_cooldowns' => {
+            'title'        => 'All Cooldowns',
+            'version'      => setting('version'),
+            'sys_time'     => qq($time),
+            'current_user' => $user->{username},
+            'cooldowns'    => \%suspect_data,
+            'toast'        => $toast,
         };
     }
-
-
-    # render the template
-    my %suspect_data = Utils::get_suspect_data_from_db(database, 'cooldowns');
-    template setting('frontend') . '/pages/cdmanager/list_cooldowns' => {
-        'title'        => 'All Cooldowns',
-        'version'      => setting('version'),
-        'sys_time'     => qq($time),
-        'current_user' => $user->{username},
-        'cooldowns'    => \%suspect_data,
-        'toast'        => $toast,
-    };
 };
 
 # actually save the suspect to the database after collecting data from steam API

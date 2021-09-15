@@ -45,31 +45,32 @@ get '/vac_add_suspect' => require_role user => sub {
             'sys_time'     => qq($time),
             'current_user' => $user->{username},
         };
-    }
+    } else {
 
-    my ($status, $statustype) = Utils::determine_status_facts($params->{status});
+        my ($status, $statustype) = Utils::determine_status_facts($params->{status});
 
-    # render the template
-    my $toast = "";
+        # render the template
+        my $toast = "";
 
-    if(exists $params->{status}) {
-        $toast = template setting('frontend') . '/toast' => {
-            'layout' => 'toast',
-            'alert_text'  => $status,
-            'alert_time'  => qq($time),
-            'alert_title' => 'VAC Manager',
-            'alert_type'  => $statustype,
+        if (exists $params->{status}) {
+            $toast = template setting('frontend') . '/toast' => {
+                'layout'      => 'toast',
+                'alert_text'  => $status,
+                'alert_time'  => qq($time),
+                'alert_title' => 'VAC Manager',
+                'alert_type'  => $statustype,
+            };
+        }
+
+        # draw main template for the add suspect page
+        template setting('frontend') . '/pages/vacmanager/add_suspect' => {
+            'title'        => 'Add VAC Suspect',
+            'version'      => setting('version'),
+            'sys_time'     => qq($time),
+            'current_user' => $user->{username},
+            'toast'        => $toast,
         };
     }
-
-    # draw main template for the add suspect page
-    template setting('frontend') . '/pages/vacmanager/add_suspect' => {
-        'title'        => 'Add VAC Suspect',
-        'version'      => setting('version'),
-        'sys_time'     => qq($time),
-        'current_user' => $user->{username},
-        'toast'        => $toast,
-    };
 };
 
 # actually save the suspect to the database after collecting data from steam API
@@ -150,30 +151,31 @@ get '/vac_list_suspects' => require_role user => sub {
             'sys_time'     => qq($time),
             'current_user' => $user->{username},
         };
-    }
+    } else {
 
-    if (exists $params->{status}) {
+        if (exists $params->{status}) {
 
-        my ($status, $statustype) = Utils::determine_status_facts($params->{status});
-        $toast = template setting('frontend') . '/toast' => {
-            'layout' => 'toast',
-            'alert_text'  => $status,
-            'alert_time'  => qq($time),
-            'alert_title' => 'VAC Manager',
-            'alert_type'  => $statustype,
+            my ($status, $statustype) = Utils::determine_status_facts($params->{status});
+            $toast = template setting('frontend') . '/toast' => {
+                'layout'      => 'toast',
+                'alert_text'  => $status,
+                'alert_time'  => qq($time),
+                'alert_title' => 'VAC Manager',
+                'alert_type'  => $statustype,
+            };
+        }
+
+        # render the template
+        my %suspect_data = Utils::get_suspect_data_from_db(database, 'vacs');
+        template setting('frontend') . '/pages/vacmanager/list_suspects' => {
+            'title'        => 'All VAC Suspects',
+            'version'      => setting('version'),
+            'sys_time'     => qq($time),
+            'current_user' => $user->{username},
+            'suspects'     => \%suspect_data,
+            'toast'        => $toast,
         };
     }
-
-    # render the template
-    my %suspect_data = Utils::get_suspect_data_from_db(database, 'vacs');
-    template setting('frontend') . '/pages/vacmanager/list_suspects' => {
-        'title'        => 'All VAC Suspects',
-        'version'      => setting('version'),
-        'sys_time'     => qq($time),
-        'current_user' => $user->{username},
-        'suspects'     => \%suspect_data,
-        'toast'        => $toast,
-    };
 };
 
 1;
