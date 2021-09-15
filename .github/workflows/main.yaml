@@ -9,3 +9,9 @@ jobs:
       - name: build docker image
         run: ./build_docker_img.sh
         shell: bash
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: csgo-ban-time-manager-docker-image
+          path: ./cbtm.tar
+          retention-days: 5
