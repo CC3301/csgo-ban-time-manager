@@ -100,7 +100,7 @@ post '/vac_save_suspect' => require_role user => sub {
         eval {
             $sth->execute();
         };
-        if ($@) {
+        if (defined $@) {
             Utils::log("Updating VAC Suspect Entry");
             $status = "Failed";
             $query = "
@@ -141,9 +141,8 @@ get '/vac_list_suspects' => require_role user => sub {
     my $user = logged_in_user();
     my $params = request->params();
     my $time = localtime(time());
-    my %suspect_data = Utils::get_suspect_data_from_db(database, 'vacs');
     my $toast  = undef;
-    
+
     # check if we need to initialize the database and if yes then render a different template
     if (Utils::check_db_uninitialized(database)) {
         template setting('frontend') . '/pages/setupdb' => {
@@ -166,6 +165,7 @@ get '/vac_list_suspects' => require_role user => sub {
     }
 
     # render the template
+    my %suspect_data = Utils::get_suspect_data_from_db(database, 'vacs');
     template setting('frontend') . '/pages/vacmanager/list_suspects' => {
         'title'        => 'All VAC Suspects',
         'version'      => setting('version'),

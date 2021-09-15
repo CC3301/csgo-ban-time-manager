@@ -80,7 +80,6 @@ get '/cd_list_cooldowns' => require_role user => sub {
     my $user = logged_in_user();
     my $params = request->params();
     my $time = localtime(time());
-    my %suspect_data = Utils::get_suspect_data_from_db(database, 'cooldowns');
     my $toast = undef;
 
     # check if we need to initialize the database and if yes then render a different template
@@ -106,6 +105,7 @@ get '/cd_list_cooldowns' => require_role user => sub {
 
 
     # render the template
+    my %suspect_data = Utils::get_suspect_data_from_db(database, 'cooldowns');
     template setting('frontend') . '/pages/cdmanager/list_cooldowns' => {
         'title'        => 'All Cooldowns',
         'version'      => setting('version'),
