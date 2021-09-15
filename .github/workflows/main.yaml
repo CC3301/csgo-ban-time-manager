@@ -1,0 +1,10 @@
+on: [push]
+
+jobs:
+  build_docker_image_job:
+    runs-on: ubuntu-latest
+    name: Build docker image when new code is pushed
+    steps:
+      - name: build docker image
+      - run: build_docker_img.sh
+        shell: bash
