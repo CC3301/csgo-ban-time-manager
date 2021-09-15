@@ -53,7 +53,7 @@ get '/admin' => require_role admin => sub {
 
     # check if we need to initialize the database and if yes then render a different template
     if (Utils::check_db_uninitialized(database)) {
-        template setting('frontend') . '/pages/admin/setupdb' => {
+        template setting('frontend') . '/pages/setupdb' => {
             'title' => "Set up Database",
             'sys_time'     => qq($time),
             'current_user' => $user->{username},

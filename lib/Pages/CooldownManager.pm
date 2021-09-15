@@ -67,6 +67,15 @@ get '/cd_add_cooldown' => require_role user => sub {
 # vac manager add suspect page
 get '/cd_list_cooldowns' => require_role user => sub {
 
+    # check if we need to initialize the database and if yes then render a different template
+    if (Utils::check_db_uninitialized(database)) {
+        template setting('frontend') . '/pages/setupdb' => {
+            'title' => "Set up Database",
+            'sys_time'     => qq($time),
+            'current_user' => $user->{username},
+        };
+    }
+
     # get information
     my $user = logged_in_user();
     my $params = request->params();
