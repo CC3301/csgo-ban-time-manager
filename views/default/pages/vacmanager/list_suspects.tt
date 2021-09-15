@@ -67,7 +67,7 @@
                         </form>
                         <form action="<% request.uri_base %>/vac_delete_suspect" method="post" id="delete_form">
                             <input type="hidden" name="steam_id64" value="<% suspect.value.steam_id64 %>" />
-                            <button type="submit" onclick="clicked(event)" class="btn btn-primary btn-sm">Delete</button>
+                            <button type="button" onclick="clicked(event)" class="btn btn-primary btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>
