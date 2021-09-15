@@ -39,6 +39,15 @@ get '/cd_add_cooldown' => require_role user => sub {
     my $time   = localtime(time());
     my $params = request->params();
 
+    # check if we need to initialize the database and if yes then render a different template
+    if (Utils::check_db_uninitialized(database)) {
+        template setting('frontend') . '/pages/setupdb' => {
+            'title' => "Set up Database",
+            'sys_time'     => qq($time),
+            'current_user' => $user->{username},
+        };
+    }
+
     my ($status, $statustype) = Utils::determine_status_facts($params->{status});
 
     # render the template
@@ -67,6 +76,13 @@ get '/cd_add_cooldown' => require_role user => sub {
 # vac manager add suspect page
 get '/cd_list_cooldowns' => require_role user => sub {
 
+    # get information
+    my $user = logged_in_user();
+    my $params = request->params();
+    my $time = localtime(time());
+    my %suspect_data = Utils::get_suspect_data_from_db(database, 'cooldowns');
+    my $toast = undef;
+
     # check if we need to initialize the database and if yes then render a different template
     if (Utils::check_db_uninitialized(database)) {
         template setting('frontend') . '/pages/setupdb' => {
@@ -75,13 +91,6 @@ get '/cd_list_cooldowns' => require_role user => sub {
             'current_user' => $user->{username},
         };
     }
-
-    # get information
-    my $user = logged_in_user();
-    my $params = request->params();
-    my $time = localtime(time());
-    my %suspect_data = Utils::get_suspect_data_from_db(database, 'cooldowns');
-    my $toast = undef;
 
     if (exists $params->{status}) {
 

@@ -38,6 +38,14 @@ get '/vac_add_suspect' => require_role user => sub {
     my $time   = localtime(time());
     my $params = request->params();
 
+    # check if we need to initialize the database and if yes then render a different template
+    if (Utils::check_db_uninitialized(database)) {
+        template setting('frontend') . '/pages/setupdb' => {
+            'title' => "Set up Database",
+            'sys_time'     => qq($time),
+            'current_user' => $user->{username},
+        };
+    }
 
     my ($status, $statustype) = Utils::determine_status_facts($params->{status});
 
@@ -135,6 +143,15 @@ get '/vac_list_suspects' => require_role user => sub {
     my $time = localtime(time());
     my %suspect_data = Utils::get_suspect_data_from_db(database, 'vacs');
     my $toast  = undef;
+    
+    # check if we need to initialize the database and if yes then render a different template
+    if (Utils::check_db_uninitialized(database)) {
+        template setting('frontend') . '/pages/setupdb' => {
+            'title' => "Set up Database",
+            'sys_time'     => qq($time),
+            'current_user' => $user->{username},
+        };
+    }
 
     if (exists $params->{status}) {
 
