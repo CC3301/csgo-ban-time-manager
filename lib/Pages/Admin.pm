@@ -161,7 +161,8 @@ post '/admin_save_steam_api_key' => require_role admin => sub {
 
 # export the Database
 get  '/admin_export_db' => require_role admin => sub {
-    my $dbfile = setting('dbfile');
+    my $dbfile = "/" . setting('dbfile');
+    print($dbfile);
     Utils::log($dbfile);
     return(send_file(setting('dbfile'), system_path => 1, filename => "dbexport_" . time() . ".sqlite"));
 };
@@ -291,7 +292,7 @@ post '/admin_setupdb' => require_role admin => sub {
 
 post '/admin_git_update' => require_role admin => sub {
 
-    my $command = "cd " + $appdir + "; git pull";
+    my $command = "cd " . $appdir . "; git pull";
     system($command);
 
     redirect '/admin?status=Success&statustext=Updated to latest version';
