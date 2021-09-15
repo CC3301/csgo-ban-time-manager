@@ -161,7 +161,7 @@ post '/admin_save_steam_api_key' => require_role admin => sub {
 
 # export the Database
 get  '/admin_export_db' => require_role admin => sub {
-    my $dbfile = "/" . setting('dbfile');
+    my $dbfile = $appdir . "/" . setting('dbfile');
     Utils::log($dbfile);
     send_file($dbfile, system_path => 1, filename => "dbexport_" . time() . ".sqlite");
 };
