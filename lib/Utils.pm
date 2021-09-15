@@ -141,13 +141,16 @@ sub determine_status_facts($) {
     # choose what type of status needs to be returned
     if ($status eq 'Success') {
         $statustype = 'alert-success';
-        $status     = 'Successfully added new Suspect';
-    } elsif ($status eq "Updated") {
+        $status     = 'Successfully added new suspect';
+    } elsif ($status eq 'Updated') {
         $statustype = 'alert-info';
-        $status     = 'Successfully updated Suspect';
+        $status = 'Successfully updated suspect';
+    } elsif ($status eq 'Deleted') {
+        $statustype = 'alert-info';
+        $status = 'Successfully deleted suspect'
     } else {
         $statustype = 'alert-danger';
-        $status     = 'Failed to add or update Suspect';
+        $status     = 'Failed to add or update suspect';
     }
 
     return($status, $statustype);

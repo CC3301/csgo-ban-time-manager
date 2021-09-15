@@ -198,7 +198,7 @@ post '/vac_delete_suspect' => require_role user => sub {
         eval {
             $sth->execute();
         };
-        if (defined $@) {
+        if ($@) {
             Utils::log("Tried deleting non-existent suspect");
             $status = "Failed";
         }
